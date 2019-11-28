@@ -1,0 +1,37 @@
+{
+    "pns_to_topic_bookmarked_users_on_question_asked": {
+        "title": "New Question",
+        "message": "<user_name> has just posted a new question on a topic you are following. Check it out now!",
+        "pns_type": "topic_updated"
+    },
+    "pns_to_question_followed_users_on_answer_given": {
+        "title": "New Answer",
+        "message": "<user_name> has answered your question. Check it out now!",
+        "pns_type": "question_updated"
+    },
+    "pns_to_answer_owner_when_upvoted": {
+        "title": "Answer Upvoted",
+        "message": "<user_name> just upvoted your answer on <topic_name>. Check it out now!",
+        "pns_type": "answer_updated"
+    },
+    "pns_when_commented_on_answer": {
+        "title": "New Comment",
+        "message": "<user_name> commented on your answer. Check it out now!",
+        "pns_type": "question_updated"
+    },
+    "pns_when_user_became_an_expert_on_topic": {
+        "title": "Expert on Topic",
+        "message": "Congratulations ! You just became an expert on <topic_name>. Check out your expert rank!",
+        "pns_type": "expertise_updated"
+    },
+    "pns__weekly_when_new_topic_created": {
+        "title": "New Topic",
+        "message": "<new_topic_count> new topics added for Discussion in the last week, share your expertise on food with the FoodyBuddy community and win rewards!",
+        "pns_type": "topic"
+    },
+    "pns__daily_to_buddies_of_top_responsed_question": {
+        "title": "New Topic",
+        "message": "",
+        "pns_type": "question_updated"
+    }
+}

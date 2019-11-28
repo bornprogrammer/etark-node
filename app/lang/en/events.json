@@ -1,0 +1,10 @@
+{
+    "cooking-class-get-success": "Successfully fetched",
+    "cooking-class-get-failed": "No active events found",
+    "curated-products-get-success": "Successfully fetched",
+    "curated-products-get-failed": "No active events found",
+    "carousel-get-success": "Successfully fetched",
+    "carousel-get-failed": "No active events found",
+    "carousel-v1-get-success": "Successfully fetched",
+    "carousel-v1-get-failed": "No active events found"
+}

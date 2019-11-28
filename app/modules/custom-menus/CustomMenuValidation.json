@@ -1,0 +1,18 @@
+{
+    "create":{
+        "type":"object",
+        "required":[
+            "buddyId",
+            "dishes",
+            "name",
+            "description"
+
+        ]
+        
+    }
+    
+    
+}
+
+
+

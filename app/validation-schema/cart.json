@@ -1,0 +1,14 @@
+{
+    "cash_free_response": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+            "orderId"
+        ],
+        "items": {
+            "orderId": {
+                "type": "string"
+            }
+        }
+    }
+}

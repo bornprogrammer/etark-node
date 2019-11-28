@@ -1,0 +1,20 @@
+{
+    "user-added-hubs-get-success": "User added hubs",
+    "user-added-hubs-get-failed": "There is no user added hub found",
+    "home-get-success": "Successfully fetched user hub details",
+    "home-get-failed": "unable to fetch the user details",
+    "hubs-get-success": "successfully fetched the data",
+    "hubs-get-failed": "unable to the fetch the data",
+    "slot-post-success": "successfully purchased slot",
+    "slot-post-failed": "Failed to add new slot",
+    "hub-post-success": "successfully purchased secondary hub",
+    "hub-post-failed": "Failed to add new secondary hub",
+    "hubs-delete-success": "successfully deleted user added secondary hub",
+    "hubs-delete-failed": "Failed to delete user added secondary hub",
+    "admin-added-hubs-get-success": "successfully fetched hubs",
+    "admin-added-hubs-get-failed": "unable to fetched hubs",
+    "private-kitchen-hubs-get-success": "successfully fetched hubs",
+    "private-kitchen-hubs-get-failed": "unable to fetched hubs",
+    "hubs-v1-get-success": "successfully fetched the data",
+    "hubs-v1-get-failed": "unable to the fetch the data"
+}

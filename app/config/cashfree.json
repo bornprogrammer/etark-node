@@ -1,0 +1,10 @@
+{
+    "cf_domain": "https://test.cashfree.com/api/",
+    "cf_token_url": "v2/cftoken/order",
+    "app_id": "4176711f8ca088bff5eec1b714",
+    "secret_key": "5a06469bec476d24da9f1c992be31e504d109052",
+    "cf_payment_link_url": "v1/order/create",
+    "cf_payment_return_url": "https://nodestage.foodybuddy.in/ts/cashfree/web-return",
+    "webapp_sucess_return_url": "http://webapptest.foodybuddy.in/goodies/order/success",
+    "webapp_failure_return_url": "http://webapptest.foodybuddy.in/goodies/order/failure"
+}

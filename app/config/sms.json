@@ -1,0 +1,9 @@
+{
+    "is_sms_allowed": true,
+    "text_local": {
+        "apikey": "zrWV3lrBf7o-pmPKvrkpkH021Vfhzw231TFKw887QF",
+        "sender": "FOODYB",
+        "uri": "https://api.textlocal.in/send/"
+    },
+    "value_leaf": {}
+}
