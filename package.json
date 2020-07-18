@@ -1,7 +1,7 @@
 {
-  "name": "foodybuddy-ts",
+  "name": "ETark",
   "version": "1.0.0",
-  "description": "foodybuddy revamped codebase",
+  "description": "ETark Codebase",
   "private": true,
   "main": "dist/server.js",
   "scripts": {
