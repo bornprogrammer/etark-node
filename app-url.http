@@ -1,0 +1,6 @@
+@host  = http://localhost:5000/
+
+# @name test api
+GET {{host}}ts/health-check
+
+###

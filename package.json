@@ -1,115 +1,39 @@
 {
-  "name": "foodybuddy-ts",
+  "name": "etark",
   "version": "1.0.0",
-  "description": "foodybuddy revamped codebase",
-  "private": true,
-  "main": "dist/server.js",
-  "scripts": {
-    "lint:check": "tslint -c tslint.json -p tsconfig.json",
-    "build": "tsc && tspath -f",
-    "prodstart": "node ./dist/server.js",
-    "start": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./server.ts",
-    "start:watch": "./node_modules/.bin/nodemon --watch ./app --exec npm run start -e ts",
-    "lint:fix": "tslint -c tslint.json -p tsconfig.json --fix",
-    "lint:sonar": "tslint -c sonarlint.json -p tsconfig.json",
-    "db:migrate": "./node_modules/.bin/sequelize db:migrate",
-    "dev:populateBuddyAccountTransactions": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./app/scripts/PopulateBuddyAccountTransactions.ts",
-    "dev:updateAccSummary": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./app/scripts/UpdateAccSummary.ts",
-    "dev:updatePkPlansInAcc": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./app/scripts/UpdatePkPlansInAcc.ts",
-    "dev:duplicateBuddyWalletDebits": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./app/scripts/DuplicateBuddyWalletDebits.ts",
-    "dev:accSumaryOldNewComparision": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./app/tests/integration/AccSumaryOldNewComparision.ts",
-    "dev:accSumaryOrdersComparision": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./app/tests/integration/AccSumaryOrderApiTest.ts",
-    "dev:accSumaryPkOrdersComparision": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./app/tests/integration/AccSummaryPkOrderApiTest.ts",
-    "dev:updateMissingStatusInPk": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./app/scripts/UpdateMissingStatusInPk.ts",
-    "dev:processAccountSettlements": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./app/scripts/ProcessAccountSettlements.ts",
-    "dev:updateBulkPayoutsStatus": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./app/scripts/UpdateBulkPayoutsStatus.ts",
-    "prod:updateAccSummary": "node ./dist/app/scripts/UpdateAccSummary.js",
-    "prod:updatePkPlansInAcc": "node ./dist/app/scripts/UpdatePkPlansInAcc.js",
-    "prod:updateMissingStatusInPk": "node ./dist/app/scripts/UpdateMissingStatusInPk.js",
-    "dev:fixCodOrders": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./app/scripts/FixCodOrders.ts",
-    "test:unit": "NODE_ENV=testing ./node_modules/.bin/_mocha --timeout 10000 -r ts-node/register -r tsconfig-paths/register app/tests/unit/**/**.test.ts"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "description": "Believe in argument",
+  "main": "index.js",
   "dependencies": {
-    "@firebase/app": "^0.4.15",
-    "@firebase/database": "^0.5.1",
-    "@types/node": "^12.0.4",
-    "ajv": "^6.10.0",
-    "async": "^2.6.2",
-    "body-parser": "^1.18.3",
-    "cors": "^2.8.5",
-    "dotenv": "^6.2.0",
-    "express": "^4.16.4",
-    "firebase-admin": "^8.4.0",
-    "node": "^12.3.1",
-    "node-cron": "^2.0.3",
-    "moment": "^2.24.0",
-    "mysql2": "^1.6.5",
-    "promise-request-retry": "^1.0.1",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.4",
-    "sequelize": "^4.42.0",
-    "sequelize-cli": "^5.4.0",
-    "winston": "^3.1.0"
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
   },
   "devDependencies": {
-    "@types/chai": "^4.1.7",
-    "@types/chai-as-promised": "^7.1.0",
-    "@types/express": "^4.16.0",
-    "@types/mocha": "^5.2.5",
-    "@types/sequelize": "^4.27.41",
-    "@types/sinon": "^7.0.5",
-    "chai": "^4.2.0",
-    "chai-as-promised": "^7.1.1",
-    "chai-http": "^4.2.1",
-    "mocha": "^5.2.0",
-    "nodemon": "^1.18.9",
-    "nyc": "^13.3.0",
-    "sinon-express-mock": "^2.1.0",
-    "ts-node": "^8.2.0",
-    "tsconfig-paths": "^3.7.0",
-    "tslint": "^5.12.0",
-    "tslint-clean-code": "^0.2.9",
-    "tslint-sonarts": "^1.9.0",
-    "typescript": "^3.5.1"
+    "@types/express": "^4.17.7",
+    "@types/node": "^14.0.23",
+    "@types/sequelize": "4.28.9",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "moment": "^2.27.0",
+    "mysql2": "^2.1.0",
+    "nodemon": "^2.0.4",
+    "sequelize": "6.3.3",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.7"
   },
-  "nodemonConfig": {
-    "ignore": [
-      "**/*.test.ts",
-      "**/*.spec.ts",
-      ".git",
-      "node_modules"
-    ],
-    "watch": [
-      "app"
-    ],
-    "exec": "npm start",
-    "ext": "ts"
+  "scripts": {
+    "test": "mocha",
+    "start": "node dist/app.js",
+    "dev": "nodemon src/app.ts",
+    "build": "tsc -p ."
   },
-  "nyc": {
-    "include": [
-      "app/**/*.ts",
-      "app/**/*.tsx"
-    ],
-    "exclude": [
-      "app/tests/*"
-    ],
-    "extension": [
-      ".ts",
-      ".tsx"
-    ],
-    "require": [
-      "ts-node/register"
-    ],
-    "reporter": [
-      "text-summary",
-      "html",
-      "text-lcov",
-      "lcov"
-    ],
-    "sourceMap": true,
-    "instrument": true
-  }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bornprogrammer/etark-node.git"
+  },
+  "author": "Sandeep Kosta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bornprogrammer/etark-node/issues"
+  },
+  "homepage": "https://github.com/bornprogrammer/etark-node#readme"
 }

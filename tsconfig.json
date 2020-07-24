@@ -10,14 +10,15 @@
     "preserveConstEnums": true,
     // "resolveJsonModule": true,
     "sourceMap": true,
-    "outDir": "dist",
+    "strict": true,
+    "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
       "*": [
         "./node_modules/*"
       ],
       "@app/*": [
-        "./app/*"
+        "src/*"
       ]
     },
     "lib": [
@@ -27,9 +28,9 @@
   },
   "include": [
     "*",
-    "app/**/*"
+    "src/**/*"
   ],
   "exclude": [
-    "app/locales"
+    "src/locales"
   ],
 }
