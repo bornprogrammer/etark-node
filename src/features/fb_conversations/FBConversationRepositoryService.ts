@@ -3,7 +3,7 @@ import { AirthmeticOperatorEnum } from '@app/enums/AirthmeticOperatorEnum';
 import { chainingMethodHandlerIns } from '@app/method-handler/ChainingMethodHandler';
 import { ChainingMethodParamsEntity } from '@app/method-handler/ChainingMethodParamsEntity';
 import { repositoryServiceMethodHandlerIns } from '@app/method-handler/RepositoryServiceMethodHandler';
-import BaseRepositoryService from '@app/services/BaseRepositoryService';
+import BaseRepositoryService from '@app/services/BaseRepository';
 import { afterEntityActionsEventEmitterIns } from './after-entity-actions/AfterEntityActionsEventEmitter';
 import { IAfterEntityActionsEntity } from './after-entity-actions/IAfterEntityActionsEntity';
 import { IMarkEntitySeenEntity } from './after-entity-actions/IMarkEntitySeenEntity';

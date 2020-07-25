@@ -10,7 +10,7 @@
     "preserveConstEnums": true,
     // "resolveJsonModule": true,
     "sourceMap": true,
-    "strict": true,
+    // "strict": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
@@ -18,7 +18,7 @@
         "./node_modules/*"
       ],
       "@app/*": [
-        "src/*"
+        "./src/*"
       ]
     },
     "lib": [
@@ -28,9 +28,11 @@
   },
   "include": [
     "*",
-    "src/**/*"
+    "src/**/*.ts"
   ],
   "exclude": [
-    "src/locales"
+    "src/locales",
+    "node_modules",
+    ".vscode"
   ],
 }

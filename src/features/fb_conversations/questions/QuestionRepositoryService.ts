@@ -2,7 +2,7 @@ import { chainingMethodHandlerIns } from '@app/method-handler/ChainingMethodHand
 import { ChainingMethodParamsEntity } from '@app/method-handler/ChainingMethodParamsEntity';
 import { repositoryServiceMethodHandlerIns } from '@app/method-handler/RepositoryServiceMethodHandler';
 import { inputHelperIns } from '@app/modules/helper/InputHelper';
-import BaseRepositoryService from '@app/services/BaseRepositoryService';
+import BaseRepositoryService from '@app/services/BaseRepository';
 import { afterEntityActionsEventEmitterIns } from '../after-entity-actions/AfterEntityActionsEventEmitter';
 import { IAfterEntityActionsEntity } from '../after-entity-actions/IAfterEntityActionsEntity';
 import { AfterEntityCrudActionEnum } from '../AfterEntityCrudActionEnum';

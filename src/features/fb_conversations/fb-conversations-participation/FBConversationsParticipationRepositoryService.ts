@@ -1,5 +1,5 @@
 import { repositoryServiceMethodHandlerIns } from '@app/method-handler/RepositoryServiceMethodHandler';
-import BaseRepositoryService from '@app/services/BaseRepositoryService';
+import BaseRepositoryService from '@app/services/BaseRepository';
 import { FBConversationsParticipationRepository, fbConversationsParticipationRepositoryIns } from './FBConversationsParticipationRepository';
 import { IFBConversationsParticipationQuestDetailsByMetricTypeEntity } from './IFBConversationsParticipationQuestDetailsByMetricTypeEntity';
 import { IFbConversationsParticipatioQuestTaskUpdatedEntity } from './IFbConversationsParticipatioQuestTaskUpdatedEntity';

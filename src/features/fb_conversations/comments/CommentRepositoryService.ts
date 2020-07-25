@@ -1,7 +1,7 @@
 import { chainingMethodHandlerIns } from '@app/method-handler/ChainingMethodHandler';
 import { ChainingMethodParamsEntity } from '@app/method-handler/ChainingMethodParamsEntity';
 import { repositoryServiceMethodHandlerIns } from '@app/method-handler/RepositoryServiceMethodHandler';
-import BaseRepositoryService from '@app/services/BaseRepositoryService';
+import BaseRepositoryService from '@app/services/BaseRepository';
 import { AfterEntityCrudActionEnum } from '../AfterEntityCrudActionEnum';
 import { fbConversationRepositoryIns } from '../FBConversationRepository';
 import { FbConversationsEvents } from '../FbConversationsEvents';

@@ -1,19 +1,20 @@
 import { Request, Response } from "express";
-import { BaseController } from "./../../controllers/BaseController";
+import MethodCordinator from "@app/coordinators/method-cordinators/MethodCordinator";
+import { BaseController } from "@app/controllers/BaseController";
 
 class AuthController extends BaseController {
 
     /**
      *
      */
-    constructor() {
-        super();
+    constructor(methodCordinator: MethodCordinator) {
+        super(methodCordinator);
     }
 
     public login = async (req: Request, res: Response) => {
-        res.send("logged in successfully");
+        // this.methodCordinator.setMethod(this.)
     }
 
 }
 
-export const authControllerIns = new AuthController();
+export const authControllerIns = new AuthController(new MethodCordinator());

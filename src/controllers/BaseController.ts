@@ -1,9 +1,12 @@
+import MethodCordinator from "@app/coordinators/method-cordinators/MethodCordinator";
 
 
 export class BaseController {
 
-    constructor() {
+    protected methodCordinator: MethodCordinator
 
+    constructor(methodCordinator: MethodCordinator) {
+        this.methodCordinator = methodCordinator;
     }
 
 }

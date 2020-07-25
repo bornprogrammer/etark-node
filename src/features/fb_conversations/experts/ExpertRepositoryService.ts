@@ -3,7 +3,7 @@ import { chainingMethodHandlerIns } from '@app/method-handler/ChainingMethodHand
 import { ChainingMethodParamsEntity } from '@app/method-handler/ChainingMethodParamsEntity';
 import { repositoryServiceMethodHandlerIns } from '@app/method-handler/RepositoryServiceMethodHandler';
 import { inputHelperIns } from '@app/modules/helper/InputHelper';
-import BaseRepositoryService from '@app/services/BaseRepositoryService';
+import BaseRepositoryService from '@app/services/BaseRepository';
 import { IMarkEntitySeenEntity } from '../after-entity-actions/IMarkEntitySeenEntity';
 import { fbConversationRepositoryIns } from '../FBConversationRepository';
 import { FbConversationsEvents } from '../FbConversationsEvents';

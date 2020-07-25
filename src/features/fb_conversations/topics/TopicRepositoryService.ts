@@ -2,7 +2,7 @@ import CustomError from '@app/errors/CustomError';
 import ExpectationFailedError from '@app/errors/ExpectationFailedError';
 import { repositoryServiceMethodHandlerIns } from '@app/method-handler/RepositoryServiceMethodHandler';
 import AppMiddlewareBootstrapper from '@app/middleware-bootstrapper/AppMiddlewareBootstrapper';
-import BaseRepositoryService from '@app/services/BaseRepositoryService';
+import BaseRepositoryService from '@app/services/BaseRepository';
 import { TopicRepository, topicRepositoryIns } from './TopicRepository';
 import { chainingMethodHandlerIns } from '@app/method-handler/ChainingMethodHandler';
 import { fbConversationRepositoryIns } from '../FBConversationRepository';
