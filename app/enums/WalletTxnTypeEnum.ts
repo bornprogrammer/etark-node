@@ -1,7 +1,0 @@
-
-export enum WalletTxnTypeEnum {
-    DEBIT = 'DEBIT',
-    CREDIT = 'CREDIT',
-    PROMOTIONS_CREDIT = 'PROMOTIONS_CREDIT',
-    PROMOTIONS_DEBIT = 'PROMOTIONS_DEBIT',
-}
