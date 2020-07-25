@@ -2,21 +2,23 @@
 import { Request } from "express";
 import RequestParamsCoordinator from "@app/coordinators/request-params-cordinators/RequestParamsCoordinator";
 
-export default class AuthRequestParamCoordinator extends RequestParamsCoordinator {
-
+export class AuthRequestParamCoordinator extends RequestParamsCoordinator {
     /**
      *
      */
-    constructor(request: Request) {
+    protected constructor(request: Request) {
         super(request);
     }
 
-    public getLoginParams() {
+    public static getInstance(request: Request): AuthRequestParamCoordinator {
+        return new AuthRequestParamCoordinator(request);
+    }
+
+    public getLoginParams(): any {
         return this.setParamFromBody("phone_number").setParamFromBody("password").coordinate();
     }
 
-    public getSignParams() {
+    public getSignParams(): any {
         return this.setParamFromBody("phone_number").setParamFromBody("password").coordinate();
     }
-
 }

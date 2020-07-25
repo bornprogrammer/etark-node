@@ -1,20 +1,24 @@
 import { Request, Response } from "express";
-import MethodCordinator from "@app/coordinators/method-cordinators/MethodCordinator";
 import { BaseController } from "@app/controllers/BaseController";
+import { AuthService, authServiceIns } from "./AuthService";
+import { AuthRequestParamCoordinator } from "./AuthRequestParamCoordinator";
 
 class AuthController extends BaseController {
 
+    protected mService: AuthService;
     /**
      *
      */
-    constructor(methodCordinator: MethodCordinator) {
-        super(methodCordinator);
+    constructor(authService: AuthService) {
+        super();
+        this.mService = authService;
     }
 
     public login = async (req: Request, res: Response) => {
-        // this.methodCordinator.setMethod(this.)
+        let params = AuthRequestParamCoordinator.getInstance(req).getLoginParams();
+        this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mService.login, callableFunctionParams: params }).send(req, res);
     }
 
 }
 
-export const authControllerIns = new AuthController(new MethodCordinator());
+export const authControllerIns = new AuthController(authServiceIns);

@@ -18,8 +18,9 @@ export default class App {
 
         this.app = express();
 
-        this.app.listen(5000, () => {
-            console.log('node app started');
+        let port = process.env.PORT || 5000;
+        this.app.listen(port, () => {
+            console.log(`node app started at ${port}`);
         });
         // this.app.use(cors({ origin: true, credentials: true }));
         this.dbSetup();
