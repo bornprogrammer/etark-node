@@ -1,9 +1,9 @@
-import MethodCoordinatorEntity from "./MethodCoordinatorEntity";
-import MethodParamEntity from "./MethodParamEntity";
+import MethodCoordinatorEntity from "../../entities/MethodCoordinatorEntity";
+import MethodParamEntity from "../../entities/MethodParamEntity";
 import { Coordinator } from "../Coordinator";
 import ArrayHelper from "@app/helpers/ArrayHelper";
 
-export default class MethodCordinator implements Coordinator {
+export default class MethodCoordinator implements Coordinator {
 
     private callableFunctionContainer: MethodCoordinatorEntity[];
 
@@ -11,7 +11,7 @@ export default class MethodCordinator implements Coordinator {
         this.callableFunctionContainer = [];
     }
 
-    public setMethod(methodCoordinatorEntity: MethodCoordinatorEntity): MethodCordinator {
+    public setMethod(methodCoordinatorEntity: MethodCoordinatorEntity): MethodCoordinator {
         this.callableFunctionContainer.push(methodCoordinatorEntity);
         return this;
     }

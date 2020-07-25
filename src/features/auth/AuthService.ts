@@ -1,7 +1,6 @@
-
 import BaseService from "@app/services/BaseService";
 import { AuthRepository, authRepositoryIns } from "./AuthRepository";
-import MethodParamEntity from "@app/coordinators/method-cordinators/MethodParamEntity";
+import MethodParamEntity from "@app/entities/MethodParamEntity";
 import BadHttpRequestError from "@app/errors/BadHttpRequestError";
 
 export class AuthService extends BaseService {
@@ -18,6 +17,11 @@ export class AuthService extends BaseService {
 
     public login = async (methodParamEntity: MethodParamEntity) => {
         throw new BadHttpRequestError();
+    }
+
+    public createUser = async (methodParamEntity: MethodParamEntity) => {
+        const result = await this.getMethodCoordinator().setMethod({ callableFunction: this.authRepository.doesUserNotExist, callableFunctionParams: methodParamEntity.topMethodParam }).setMethod({ callableFunction: this.authRepository.createUser }).coordinate();
+        return result;
     }
 }
 

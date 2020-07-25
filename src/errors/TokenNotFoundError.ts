@@ -1,10 +1,11 @@
 import { HttpResponseCode } from '@app/enums/HttpResponseCodes';
 import BaseError from '@app/errors/BaseError';
+import { HttpResponseError } from './HttpResponseError';
 
-export class TokenNotFoundError extends BaseError {
+export class TokenNotFoundError extends HttpResponseError {
 
     constructor() {
-        super('Token Not Found Error', 'UNAUTHORIZED', 401);
+        super(HttpResponseCode.UNAUTHORIZED, "token is invalid");
 
     }
 

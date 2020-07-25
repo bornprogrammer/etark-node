@@ -4,12 +4,6 @@ const username = process.env.DB_USERNAME;
 const password = process.env.DB_PASSWORD;
 const host = process.env.DB_HOST;
 
-let logSetting: any = true;
-if (process.env.ENABLE_SQL_LOG === 'true') {
-    logSetting = (str) => {
-        console.log(str);
-    };
-}
 
 export const sequelize = new Sequelize.Sequelize(
     // database,
