@@ -6,7 +6,7 @@ import { UserStatusEnum } from "@app/enums/UserStatusEnum";
 interface UserAttributes {
     id: number;
     name: string;
-    mobileNumber: string;
+    mobile_number: string;
     password: string;
     status: string;
     email: string;
@@ -20,7 +20,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
 
     id: number;
     name: string;
-    mobileNumber: string;
+    mobile_number: string;
     password: string;
     created_at: string;
     status: string;
@@ -42,10 +42,10 @@ User.init({
         type: DataTypes.STRING(255),
         allowNull: false
     },
-    mobileNumber: {
+    mobile_number: {
         type: DataTypes.STRING(20),
         allowNull: false,
-        field: "mobile_number"
+        // field: "mobile_number"
     },
     password: {
         type: DataTypes.STRING(128),
@@ -60,8 +60,7 @@ User.init({
         tableName: "users",
         sequelize: sequelizeConnection.connection,
         timestamps: true,
-        createdAt: "created_at",
-        updatedAt: false
-
+        updatedAt: false,
+        underscored: true,
     }
 );

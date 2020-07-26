@@ -5,7 +5,6 @@ import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { User } from "@app/models/User";
 import { Op } from "sequelize";
 import { UserAlreadyExists } from "@app/errors/UserAlreadyExists";
-import { UserStatusEnum } from "@app/enums/UserStatusEnum";
 
 export class AuthRepository extends BaseRepository {
     /**
@@ -16,7 +15,9 @@ export class AuthRepository extends BaseRepository {
     }
 
     public isUserActive = async (methodParamEntity: MethodParamEntity) => {
-        return methodParamEntity.topMethodParam;
+        let isUserActive = await User.count({
+
+        })
     }
 
     /**
@@ -29,7 +30,7 @@ export class AuthRepository extends BaseRepository {
             where: {
                 [Op.or]: [
                     {
-                        mobileNumber: params.mobileNumber,
+                        mobile_number: params.mobile_number,
                         email: params.email
                     }
                 ]
@@ -43,8 +44,8 @@ export class AuthRepository extends BaseRepository {
 
     public createUser = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let data = await User.create(params);
-        return params;
+        let user = await User.create(params);
+        return user;
     }
 }
 

@@ -19,6 +19,6 @@ export class AuthRequestParamCoordinator extends RequestParamsCoordinator {
     }
 
     public getCreateUserParams(): any {
-        return this.setParamFromBody("mobileNumber").setParamFromBody("password").setParamFromBody("name").setParamFromBody("email").coordinate();
+        return this.setParamFromBody("mobile_number").setParamFromBody("password").setParamFromBody("name").setParamFromBody("email").coordinate();
     }
 }
