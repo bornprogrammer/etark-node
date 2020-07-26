@@ -1,10 +1,11 @@
 import BaseRepository from "@app/services/BaseRepository";
-
 import MethodParamEntity from "@app/entities/MethodParamEntity";
-
 import { User } from "@app/models/User";
 import { Op } from "sequelize";
 import { UserAlreadyExists } from "@app/errors/UserAlreadyExists";
+import { UserStatusEnum } from "@app/enums/UserStatusEnum";
+import { UserSuspended } from "@app/errors/UserSuspended";
+import UnAuthorized from "@app/errors/UnAuthorized";
 
 export class AuthRepository extends BaseRepository {
     /**
@@ -14,10 +15,22 @@ export class AuthRepository extends BaseRepository {
         super();
     }
 
-    public isUserActive = async (methodParamEntity: MethodParamEntity) => {
-        let isUserActive = await User.count({
-
-        })
+    public loginUser = async (methodParamEntity: MethodParamEntity) => {
+        const params = methodParamEntity.topMethodParam;
+        const result = await User.findOne({
+            where: {
+                mobile_number: params.mobile_number,
+                password: params.password
+            }
+        });
+        if (!result) {
+            throw new UnAuthorized();
+        } else {
+            if (result.status === UserStatusEnum.SUSPENDED) {
+                throw new UserSuspended();
+            }
+        }
+        return result;
     }
 
     /**

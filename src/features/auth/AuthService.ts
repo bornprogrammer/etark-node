@@ -5,22 +5,23 @@ import BadHttpRequestError from "@app/errors/BadHttpRequestError";
 
 export class AuthService extends BaseService {
 
-    protected authRepository: AuthRepository;
+    protected mAuthRepository: AuthRepository;
 
     /**
      *
      */
     constructor(authRepository: AuthRepository) {
         super();
-        this.authRepository = authRepository;
+        this.mAuthRepository = authRepository;
     }
 
     public login = async (methodParamEntity: MethodParamEntity) => {
-        throw new BadHttpRequestError();
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.mAuthRepository.loginUser, callableFunctionParams: methodParamEntity.topMethodParam }).coordinate();
+        return result;
     }
 
     public createUser = async (methodParamEntity: MethodParamEntity) => {
-        const result = await this.getMethodCoordinator().setMethod({ callableFunction: this.authRepository.doesUserNotExist, callableFunctionParams: methodParamEntity.topMethodParam }).setMethod({ callableFunction: this.authRepository.createUser }).coordinate();
+        const result = await this.getMethodCoordinator().setMethod({ callableFunction: this.mAuthRepository.doesUserNotExist, callableFunctionParams: methodParamEntity.topMethodParam }).setMethod({ callableFunction: this.mAuthRepository.createUser }).coordinate();
         return result;
     }
 }
