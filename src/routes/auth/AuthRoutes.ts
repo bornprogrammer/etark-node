@@ -7,6 +7,8 @@ export class AuthRoutes {
 
         router.post("/login", authControllerIns.login);
 
+        router.post("/", authControllerIns.createUser);
+
         return router;
 
     }

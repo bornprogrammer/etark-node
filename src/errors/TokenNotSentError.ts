@@ -1,10 +1,10 @@
 import { HttpResponseCode } from '@app/enums/HttpResponseCodes';
-import BaseError from '@app/errors/BaseError';
+import { HttpResponseError } from './HttpResponseError';
 
-export class TokenNotSentError extends BaseError {
+export class TokenNotSentError extends HttpResponseError {
 
     constructor() {
-        super('BAD_REQUEST', 'Token not sent error', HttpResponseCode.BAD_REQUEST);
+        super(HttpResponseCode.BAD_REQUEST, "token is not sent");
     }
 
 }

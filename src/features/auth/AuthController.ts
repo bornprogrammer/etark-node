@@ -19,6 +19,11 @@ class AuthController extends BaseController {
         this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mService.login, callableFunctionParams: params }).send(req, res);
     }
 
+    public createUser = async (req: Request, res: Response) => {
+        let params = AuthRequestParamCoordinator.getInstance(req).getCreateUserParams();
+        this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mService.createUser, callableFunctionParams: params }).send(req, res);
+    }
+
 }
 
 export const authControllerIns = new AuthController(authServiceIns);
