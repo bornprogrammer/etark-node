@@ -1,7 +1,7 @@
 import { Request } from "express";
 import RequestParamsCoordinator from "@app/coordinators/request-params-cordinators/RequestParamsCoordinator";
 
-export class AuthRequestParamCoordinator extends RequestParamsCoordinator {
+export class AuthRequestParamsCoordinator extends RequestParamsCoordinator {
     /**
      *
      */
@@ -9,8 +9,8 @@ export class AuthRequestParamCoordinator extends RequestParamsCoordinator {
         super(request);
     }
 
-    public static getInstance(request: Request): AuthRequestParamCoordinator {
-        return new AuthRequestParamCoordinator(request);
+    public static getInstance(request: Request): AuthRequestParamsCoordinator {
+        return new AuthRequestParamsCoordinator(request);
     }
 
     public getLoginParams(): any {

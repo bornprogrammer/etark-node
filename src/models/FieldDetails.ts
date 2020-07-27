@@ -13,7 +13,7 @@ interface FieldDetailsCreationAttributes extends Optional<FieldDetailsAttributes
 
 }
 
-class FieldDetails extends Model<FieldDetailsAttributes, FieldDetailsCreationAttributes> implements FieldDetailsAttributes {
+export class FieldDetails extends Model<FieldDetailsAttributes, FieldDetailsCreationAttributes> implements FieldDetailsAttributes {
     id: number;
     field_id: number;
     details: string;

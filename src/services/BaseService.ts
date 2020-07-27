@@ -4,7 +4,6 @@ import MethodCoordinator from "@app/coordinators/method-cordinators/MethodCordin
 export default abstract class BaseService {
 
     constructor() {
-
     }
 
     public getMethodCoordinator(): MethodCoordinator {

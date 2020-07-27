@@ -14,7 +14,7 @@ interface ComplaintAttributes {
 
 interface ComplaintCreationAttributes extends Optional<ComplaintAttributes, 'id'> { }
 
-class Complaint extends Model<ComplaintAttributes, ComplaintCreationAttributes> implements ComplaintAttributes {
+export class Complaint extends Model<ComplaintAttributes, ComplaintCreationAttributes> implements ComplaintAttributes {
     id: number;
     user_id: number;
     maker_detail_id: number;
