@@ -17,7 +17,7 @@ export class MakerController extends BaseController {
 
     public getMakerListByCategoryId = async (req: Request, res: Response) => {
         let params = MakerRequestParamsCooridnator.getInstance(req).getMakerListByCategoryIdParams();
-        this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.makerService.getMakerListByCategoryId, callableFunctionParams: params });
+        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.makerService.getMakerListByCategoryId, callableFunctionParams: params }).send(req, res);
     }
 }
 

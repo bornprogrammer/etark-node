@@ -1,6 +1,6 @@
-import { Optional, DataTypes } from "sequelize/types";
-import { Model } from "sequelize";
+import { Model, DataTypes, Optional } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
+import { Maker } from "./Maker";
 
 interface MakerDetailsAttributes {
     id: number;
@@ -48,3 +48,6 @@ MakerDetails.init({
     sequelize: sequelizeConnection.connection
 })
 
+Maker.hasMany(MakerDetails);
+
+MakerDetails.belongsTo(Maker);
