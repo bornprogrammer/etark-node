@@ -13,10 +13,9 @@ interface CategoryAttributes {
 
 interface CategoryCreationAttributes extends Optional<CategoryAttributes, 'id' | 'status'> { }
 
-export class Category extends Model<CategoryAttributes, CategoryCreationAttributes> implements CategoryAttributes {
-    id: number;
-    category_name: string;
-    status: string;
+// export class Category extends Model<CategoryAttributes, CategoryCreationAttributes> implements CategoryAttributes {
+export class Category extends Model {
+
 }
 
 Category.init({

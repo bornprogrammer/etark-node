@@ -16,8 +16,8 @@ interface UserCreationAttributes extends Optional<UserAttributes, "id" | "status
 
 }
 
-export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-
+// export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+export class User extends Model {
     id: number;
     name: string;
     mobile_number: string;

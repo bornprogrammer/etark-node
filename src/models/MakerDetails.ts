@@ -1,6 +1,19 @@
-import { Model, DataTypes, Optional } from "sequelize";
+// import { Model, DataTypes, Optional } from "sequelize";
+
+import {
+    Sequelize,
+    Model,
+    ModelDefined,
+    DataTypes,
+    HasManyGetAssociationsMixin,
+    HasManyAddAssociationMixin,
+    HasManyHasAssociationMixin,
+    Association,
+    HasManyCountAssociationsMixin,
+    HasManyCreateAssociationMixin,
+    Optional,
+} from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
-import { Maker } from "./Maker";
 
 interface MakerDetailsAttributes {
     id: number;
@@ -12,7 +25,8 @@ interface MakerDetailsAttributes {
 
 interface MakerDetailsCreationAttributes extends Optional<MakerDetailsAttributes, 'id'> { }
 
-export class MakerDetails extends Model<MakerDetailsAttributes, MakerDetailsCreationAttributes> implements MakerDetailsAttributes {
+// export class MakerDetails extends Model<MakerDetailsAttributes, MakerDetailsCreationAttributes> implements MakerDetailsAttributes {
+export class MakerDetails extends Model {
     id: number;
     maker_id: number;
     category_id: number;
@@ -47,7 +61,3 @@ MakerDetails.init({
     underscored: true,
     sequelize: sequelizeConnection.connection
 })
-
-Maker.hasMany(MakerDetails);
-
-MakerDetails.belongsTo(Maker);

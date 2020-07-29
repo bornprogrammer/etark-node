@@ -1,4 +1,4 @@
-import { Optional, DataTypes, Model, Association } from "sequelize";
+import { Optional, DataTypes, Model, Association, HasManyGetAssociationsMixin } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { MakerDetails } from "./MakerDetails";
 
@@ -9,13 +9,16 @@ interface MakerAttribute {
 
 interface MakerCreationAttribute extends Optional<MakerAttribute, 'id'> { }
 
-export class Maker extends Model<MakerAttribute, MakerCreationAttribute> implements MakerAttribute {
+// export class Maker extends Model<MakerAttribute, MakerCreationAttribute> implements MakerAttribute {
+export class Maker extends Model {
     id: number;
     maker_name: string;
 
     public static associations: {
-        makerDetails: Association<Maker, MakerDetails>;
+        projects: Association<Maker, MakerDetails>;
     };
+
+    public getMakerDetails!: HasManyGetAssociationsMixin<MakerDetails>
 }
 
 Maker.init({
@@ -34,3 +37,6 @@ Maker.init({
     sequelize: sequelizeConnection.connection
 })
 
+Maker.hasMany(MakerDetails);
+
+MakerDetails.belongsTo(Maker);

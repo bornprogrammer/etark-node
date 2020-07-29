@@ -15,7 +15,8 @@ interface FieldAttributes {
 interface FieldCreationAttributes extends Optional<FieldAttributes, 'id'> {
 }
 
-export class Field extends Model<FieldAttributes, FieldCreationAttributes> implements FieldAttributes {
+// export class Field extends Model<FieldAttributes, FieldCreationAttributes> implements FieldAttributes {
+export class Field extends Model {
     id: number;
     field_name: string;
     field_lookup_id: number;

@@ -13,11 +13,13 @@ export class MakerRepository extends BaseRepository {
 
     public getMakerListByCategoryId = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let result = await MakerDetails.findAll({
-            where: {
-                category_id: params.id
+        let result = await Maker.findAll({
+            include: {
+                model: MakerDetails,
+                where: {
+
+                }
             },
-            include: "Maker"
         })
         return result;
     }

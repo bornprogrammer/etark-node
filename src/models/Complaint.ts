@@ -14,13 +14,14 @@ interface ComplaintAttributes {
 
 interface ComplaintCreationAttributes extends Optional<ComplaintAttributes, 'id'> { }
 
-export class Complaint extends Model<ComplaintAttributes, ComplaintCreationAttributes> implements ComplaintAttributes {
-    id: number;
-    user_id: number;
-    maker_detail_id: number;
-    // created_at: string;
-    // updated_at: string;
-    status: string;
+// export class Complaint extends Model<ComplaintAttributes, ComplaintCreationAttributes> implements ComplaintAttributes {
+export class Complaint extends Model {
+    // id: number;
+    // user_id: number;
+    // maker_detail_id: number;
+    // // created_at: string;
+    // // updated_at: string;
+    // status: string;
 }
 
 Complaint.init({

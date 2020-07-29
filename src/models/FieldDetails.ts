@@ -13,7 +13,8 @@ interface FieldDetailsCreationAttributes extends Optional<FieldDetailsAttributes
 
 }
 
-export class FieldDetails extends Model<FieldDetailsAttributes, FieldDetailsCreationAttributes> implements FieldDetailsAttributes {
+// export class FieldDetails extends Model<FieldDetailsAttributes, FieldDetailsCreationAttributes> implements FieldDetailsAttributes {
+export class FieldDetails extends Model {
     id: number;
     field_id: number;
     details: string;
@@ -37,5 +38,4 @@ FieldDetails.init({
     sequelize: sequelizeConnection.connection,
     tableName: "field_details",
     underscored: true
-
 })

@@ -11,7 +11,8 @@ interface FieldLookupAttributes {
 interface FieldLookupCreationAttributes extends Optional<FieldLookupAttributes, 'id'> {
 }
 
-export class FieldLookup extends Model<FieldLookupAttributes, FieldLookupCreationAttributes> implements FieldLookupAttributes {
+// export class FieldLookup extends Model<FieldLookupAttributes, FieldLookupCreationAttributes> implements FieldLookupAttributes {
+export class FieldLookup extends Model {
     id: number;
     field_lookup_name: string;
     status: string;
