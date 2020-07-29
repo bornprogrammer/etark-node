@@ -6,13 +6,12 @@ export class SequelizeConnection {
     public connection: Sequelize;
 
     constructor() {
-
         this.connection = new Sequelize(
             "etark",
             "root",
-            "Divyani_1990",
+            "YCombi2020",
             {
-                host: "localhost",
+                host: "etark.c7yr7myjbwov.ap-south-1.rds.amazonaws.com",
                 dialect: "mysql",
             },
         );
@@ -21,7 +20,6 @@ export class SequelizeConnection {
     public async connect() {
         try {
             await this.connection.authenticate();
-            console.log('connected');
         } catch (error) {
             console.log(error);
         }
