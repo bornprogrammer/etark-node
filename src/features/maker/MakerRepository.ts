@@ -17,8 +17,9 @@ export class MakerRepository extends BaseRepository {
             include: {
                 model: MakerDetails,
                 where: {
-
-                }
+                    category_id: params.id
+                },
+                required: true
             },
         })
         return result;

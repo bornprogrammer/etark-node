@@ -1,16 +1,8 @@
 // import { Model, DataTypes, Optional } from "sequelize";
 
 import {
-    Sequelize,
     Model,
-    ModelDefined,
     DataTypes,
-    HasManyGetAssociationsMixin,
-    HasManyAddAssociationMixin,
-    HasManyHasAssociationMixin,
-    Association,
-    HasManyCountAssociationsMixin,
-    HasManyCreateAssociationMixin,
     Optional,
 } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
@@ -22,9 +14,7 @@ interface MakerDetailsAttributes {
     display_name: string;
     status: string;
 }
-
 interface MakerDetailsCreationAttributes extends Optional<MakerDetailsAttributes, 'id'> { }
-
 // export class MakerDetails extends Model<MakerDetailsAttributes, MakerDetailsCreationAttributes> implements MakerDetailsAttributes {
 export class MakerDetails extends Model {
     id: number;
@@ -59,5 +49,6 @@ MakerDetails.init({
 }, {
     tableName: "maker_detail",
     underscored: true,
-    sequelize: sequelizeConnection.connection
+    sequelize: sequelizeConnection.connection,
+    timestamps: false
 })
