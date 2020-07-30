@@ -2,8 +2,10 @@ import BaseRepository from "@app/repositories/BaseRepository";
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { MakerDetails } from "@app/models/MakerDetails";
 import { Maker } from "@app/models/Maker";
+import { Merchant } from "@app/models/Merchant";
+import { Op } from "sequelize";
 
-export class MakerRepository extends BaseRepository {
+export class MasterRepository extends BaseRepository {
     /**
      *
      */
@@ -24,5 +26,23 @@ export class MakerRepository extends BaseRepository {
         })
         return result;
     }
+
+    public getMerchantList = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let result = await Merchant.findAll({
+            where: {
+                [Op.or]: [
+                    {
+                        merchant_type: params.type
+                    },
+                    {
+                        merchant_type: "both"
+                    }
+                ]
+            }
+        })
+        return result;
+    }
 }
-export const makerRepositoryIns = new MakerRepository();
+
+export const masterRepositoryIns = new MasterRepository();

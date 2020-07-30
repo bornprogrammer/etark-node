@@ -2,7 +2,8 @@
 import express from 'express';
 
 import { AuthRoutes } from './auth/AuthRoutes';
-import { CategoryRoutes } from './category/CategoryRoutes';
+import { MasterRoutes } from './master/MasterRoutes';
+
 export default class AppRoutes {
 
     public static routes() {
@@ -11,7 +12,7 @@ export default class AppRoutes {
 
         router.use("/auth", AuthRoutes.setRoutes(router));
 
-        router.use("/categories", CategoryRoutes.setRoutes(router));
+        router.use("/masters", MasterRoutes.setRoutes(router));
 
         return router;
     }

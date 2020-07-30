@@ -2,7 +2,7 @@
 import RequestParamsCoordinator from "@app/coordinators/request-params-cordinators/RequestParamsCoordinator";
 import { Request } from "express";
 
-export class MakerRequestParamsCooridnator extends RequestParamsCoordinator {
+export class MasterRequestParamCoordinator extends RequestParamsCoordinator {
 
     /**
      *
@@ -11,12 +11,16 @@ export class MakerRequestParamsCooridnator extends RequestParamsCoordinator {
         super(request);
     }
 
-    public static getInstance(request: Request): MakerRequestParamsCooridnator {
-        return new MakerRequestParamsCooridnator(request);
+    public static getInstance(request: Request): MasterRequestParamCoordinator {
+        return new MasterRequestParamCoordinator(request);
     }
 
     public getMakerListByCategoryIdParams() {
         return this.setParamFromParams("id").coordinate();
+    }
+
+    public getMerchantListParams() {
+        return this.setParamFromParams("type").coordinate();
     }
 
 
