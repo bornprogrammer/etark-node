@@ -1,5 +1,5 @@
-import { Optional, DataTypes } from "sequelize/types";
-import { Model } from "sequelize";
+
+import { Model, Optional, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 
 interface ComplaintDetailsAttributes {
@@ -38,6 +38,7 @@ ComplaintDetails.init({
 }, {
     sequelize: sequelizeConnection.connection,
     underscored: true,
-    tableName: "complaint_details"
+    tableName: "complaint_details",
+    timestamps: false
 })
 

@@ -1,9 +1,11 @@
-import { Router } from "express";
+import express, { Router } from "express";
 import { masterControllerIns } from "@app/features/master/MasterController";
 
 export class MasterRoutes {
 
-    public static setRoutes(router: Router): Router {
+    public static setRoutes(): Router {
+
+        let router: express.Router = express.Router();
 
         router.get("/categories/:id/makers", masterControllerIns.getMakerListByCategoryId);
 
