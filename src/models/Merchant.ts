@@ -1,7 +1,6 @@
 import { Optional, DataTypes, Model } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 
-
 interface MerchantAttributes {
     id: number,
     merchant_type: string,
