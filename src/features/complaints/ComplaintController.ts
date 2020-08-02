@@ -15,6 +15,10 @@ export class ComplaintController extends BaseController {
         let params = ComplainRequestParamsCoordinator.getInstance(req).getAddComplaintsParams();
         await this.getCtrlMethodCoordinator().setMethod({ callableFunction: complaintServiceIns.addComplaints, callableFunctionParams: params }).send(req, res);
     }
+
+    public uploadInvoice = async (req: Request, res: Response) => {
+        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: complaintServiceIns.uploadInvoice, callableFunctionParams: req['file'] }).send(req, res);
+    }
 }
 
 export const complaintControllerIns = new ComplaintController();
