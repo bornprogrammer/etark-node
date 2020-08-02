@@ -17,6 +17,12 @@ export class ComplaintService extends BaseService {
         return result;
     }
 
+    public uploadInvoice = (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let uploadedInvoiceParams = { file_name: params.filename };
+        return uploadedInvoiceParams;
+    }
+
 }
 
 
