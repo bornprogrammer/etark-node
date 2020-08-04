@@ -11,6 +11,8 @@ export class MasterRoutes {
 
         router.get("/merchants/:type", masterControllerIns.getMerchantList);
 
+        router.get("/plans", masterControllerIns.getPlans);
+
         return router;
 
     }

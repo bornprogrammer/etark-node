@@ -25,6 +25,11 @@ export class MasterService extends BaseService {
         let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.mMasterRepository.getMerchantList, callableFunctionParams: params }).coordinate();
         return result;
     }
+
+    public getPlans = async (methodParamEntity: MethodParamEntity) => {
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.mMasterRepository.getPlans }).coordinate();
+        return result;
+    }
 }
 
 export const masterServiceIns = new MasterService(masterRepositoryIns);

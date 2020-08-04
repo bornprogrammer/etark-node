@@ -1,7 +1,6 @@
 
 import { Optional, DataTypes } from "sequelize/types";
 import { Model } from "sequelize";
-import { CategoryRoutes } from "@app/routes/category/CategoryRoutes";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 
 

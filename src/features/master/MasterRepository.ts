@@ -4,6 +4,7 @@ import { MakerDetails } from "@app/models/MakerDetails";
 import { Maker } from "@app/models/Maker";
 import { Merchant } from "@app/models/Merchant";
 import { Op } from "sequelize";
+import { Plan } from "@app/models/Plan";
 
 export class MasterRepository extends BaseRepository {
     /**
@@ -41,6 +42,11 @@ export class MasterRepository extends BaseRepository {
                 ]
             }
         })
+        return result;
+    }
+
+    public getPlans = async (methodParamEntity: MethodParamEntity) => {
+        let result = await Plan.findAll();
         return result;
     }
 }

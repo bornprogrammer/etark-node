@@ -30,6 +30,10 @@ export class CtrlMethodCoordinator extends MethodCoordinator {
         }
     }
 
+    public sendData = async (request: Request, res: Response, data: any) => {
+        responseServiceIns.sendResponse(request, res, data);
+    }
+
     private sendError = (response: Response, error: any) => {
         if (error instanceof HttpResponseError) {
             responseServiceIns.sendErrorResponse(response, error);
