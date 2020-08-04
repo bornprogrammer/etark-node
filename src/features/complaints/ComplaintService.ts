@@ -17,6 +17,12 @@ export class ComplaintService extends BaseService {
         return result;
     }
 
+    public addDeviceImages = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: complaintRepositoryIns.addDeviceImages, callableFunctionParams: params }).coordinate();
+        return result;
+    }
+
     public uploadInvoice = (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
         let uploadedInvoiceParams = { file_name: params.filename };

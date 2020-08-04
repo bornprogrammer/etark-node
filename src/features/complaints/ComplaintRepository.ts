@@ -23,10 +23,19 @@ export class ComplaintRepository extends BaseRepository {
         let lastInvokedMethodParam = methodParamEntity.lastInvokedMethodParam;
         let params = methodParamEntity.topMethodParam;
         for (const complaintDetailsObj of params.complaints_details) {
-            console.log(complaintDetailsObj);
             await ComplaintDetails.create({ complaint_id: lastInvokedMethodParam.id, field_id: complaintDetailsObj.field_id, field_val: complaintDetailsObj.field_val });
         }
         return lastInvokedMethodParam;
+    }
+
+    public addDeviceImages = async (methodParamEntity: MethodParamEntity) => {
+        // let lastInvokedMethodParam = methodParamEntity.topMethodParam;
+        let params = methodParamEntity.topMethodParam;
+        let result = null;
+        for (const complaintDetailsObj of params.complaints_details) {
+            result = await ComplaintDetails.create({ complaint_id: params.complaint_id, field_id: complaintDetailsObj.field_id, field_val: complaintDetailsObj.field_val });
+        }
+        return result;
     }
 
 

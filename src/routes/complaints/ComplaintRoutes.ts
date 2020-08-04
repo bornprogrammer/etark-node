@@ -1,7 +1,7 @@
 
 import { complaintControllerIns } from "@app/features/complaints/ComplaintController";
 import express, { Router } from 'express';
-import multer from 'multer';
+import { multerUploadFileMiddlewareIns } from "@app/middlewares/MulterUploadFileMiddleware";
 
 export class ComplaintRoutes {
 
@@ -11,17 +11,11 @@ export class ComplaintRoutes {
 
         router.post("/", complaintControllerIns.addComplaints);
 
-        var storage = multer.diskStorage({
-            destination: (req, file, cb) => {
-                cb(null, 'uploads/');
-            },
-            filename: (req, file, cb) => {
-                cb(null, file.fieldname + '-' + Date.now() + ".png");
-            }
-        })
-        let multers = multer({ storage: storage });
-        router.post("/upload-invoice", multers.single("invoice"), complaintControllerIns.uploadInvoice);
+        router.post("/:id/device-images", complaintControllerIns.addDeviceImages);
 
+        router.post("/upload-invoice", multerUploadFileMiddlewareIns.uploadSingle("invoice"), complaintControllerIns.uploadInvoice);
+
+        router.post("/upload-device-image", multerUploadFileMiddlewareIns.uploadSingle("device-image"), complaintControllerIns.uploadInvoice);
         return router;
     }
 
