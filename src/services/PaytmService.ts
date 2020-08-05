@@ -1,7 +1,6 @@
 
 import paytmchecksum from 'paytmchecksum';
 import { PaytmChecksumEntity } from '@app/entities/PaytmChecksumEntity';
-import { throws } from 'assert';
 import { httpPostServiceIns } from '@app/http-services/HttpPostService';
 
 class PaytmService {
@@ -42,7 +41,6 @@ class PaytmService {
             let paytmParams = { head: { "signature": checkSum }, body: this.paytmParamsBody };
             let url = this.urlStag + "theia/api/v1/initiateTransaction?mid=weoglH66146360524361&orderId=" + this.paytmParamsBody.orderId;
             let response = await httpPostServiceIns(url).setPayload(paytmParams).call();
-            console.log(response);
             return response;
         } catch (error) {
             console.log(error);

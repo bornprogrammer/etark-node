@@ -8,4 +8,6 @@ export default interface MethodParamEntity {
 
     lastInvokedMethodParam?: any;
 
+    methodReturnedVal?: any;
+
 }

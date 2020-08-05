@@ -12,9 +12,13 @@ export class UserPlanService extends BaseService {
     }
 
     public paytmCallback = async (methodParamEntity: MethodParamEntity) => {
-
         let result = await this.getMethodCoordinator().setMethod({ callableFunction: userPlanRepositoryIns.paytmCallback, callableFunctionParams: methodParamEntity.topMethodParam }).coordinate();
+    }
 
+    public addPlan = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: userPlanRepositoryIns.addPlan, callableFunctionParams: params }).setMethod({ callableFunction: userPlanRepositoryIns.addUserPlanComponents }).coordinate();
+        return result;
     }
 
 }

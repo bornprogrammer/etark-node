@@ -3,7 +3,7 @@ import { MasterRequestParamCoordinator } from "./MasterRequestParamCoordinator";
 import { MasterService, masterServiceIns } from "./MasterService";
 import { Request, Response } from "express";
 import { paytmServiceIns } from "@app/services/PaytmService";
-
+import { UtilsHelper } from "@app/helpers/UtilsHelper";
 
 export class MasterController extends BaseController {
 
@@ -18,6 +18,8 @@ export class MasterController extends BaseController {
 
     public getMakerListByCategoryId = async (req: Request, res: Response) => {
         let params = MasterRequestParamCoordinator.getInstance(req).getMakerListByCategoryIdParams();
+        let distance = UtilsHelper.getDistanceFromLatLonInKm("22.9897", "72.6284", "22.9952", "72.6041");
+        console.log(distance);
         let s = paytmServiceIns.getSum({ amount: 3, orderId: "3", userId: 3 });
         await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getMakerListByCategoryId, callableFunctionParams: params }).send(req, res);
     }

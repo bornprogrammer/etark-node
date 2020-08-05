@@ -11,7 +11,7 @@ export class UtilsHelper {
         return isMethodReturnValueTruthy;
     }
 
-    public static getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+    public static getDistanceFromLatLonInKm(lat1: any, lon1: any, lat2: any, lon2: any) {
         var R = 6371; // Radius of the earth in km
         var dLat = deg2rad(lat2 - lat1);  // deg2rad below
         var dLon = deg2rad(lon2 - lon1);

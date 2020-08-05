@@ -22,6 +22,11 @@ export default abstract class RequestParamsCoordinator implements Coordinator {
         return this;
     }
 
+    public setParamFromParamsAs(key: string, as: string): RequestParamsCoordinator {
+        this.reqParamsContainer[as] = this.request.params[key];
+        return this;
+    }
+
     public setParamFromQueryStr(key: string): RequestParamsCoordinator {
         this.reqParamsContainer[key] = this.request.query[key];
         return this;

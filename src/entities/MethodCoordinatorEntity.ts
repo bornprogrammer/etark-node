@@ -6,4 +6,6 @@ export default interface MethodCoordinatorEntity {
 
     callableFunctionParams?: any;
 
+    storeResultAs?: string;
+
 }  

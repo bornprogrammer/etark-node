@@ -10,6 +10,8 @@ export class UserPlanRoutes {
 
         let router = express.Router();
 
+        router.post("/", userPlanControllerIns.addPlan);
+
         router.post("/paytm-callback", userPlanControllerIns.paytmCallback);
 
         return router;
