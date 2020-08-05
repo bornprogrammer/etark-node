@@ -18,7 +18,7 @@ export class MasterController extends BaseController {
 
     public getMakerListByCategoryId = async (req: Request, res: Response) => {
         let params = MasterRequestParamCoordinator.getInstance(req).getMakerListByCategoryIdParams();
-        let s = paytmServiceIns.getSum({ amount: 2, orderId: "2", userId: 2 });
+        let s = paytmServiceIns.getSum({ amount: 3, orderId: "3", userId: 3 });
         await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getMakerListByCategoryId, callableFunctionParams: params }).send(req, res);
     }
 

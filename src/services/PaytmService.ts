@@ -20,7 +20,7 @@ class PaytmService {
             "mid": "weoglH66146360524361",
             "websiteName": "WEBSTAGING",
             "orderId": "",
-            "callbackUrl": "http://etark.s3-website.ap-south-1.amazonaws.com/",
+            "callbackUrl": "http://13.235.67.24:5000/api/user-plan/paytm-callback",
             "txnAmount": {
                 "value": "",
                 "currency": "INR",
