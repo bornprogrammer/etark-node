@@ -4,6 +4,8 @@ import { UserAddress } from "@app/models/UserAddress";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { QueryTypes } from "sequelize";
 import { UserPlanComponent } from "@app/models/UserPlanComponent";
+import { UpdateUserPlanComponentPriceParamEntity } from "@app/method-param-entities/UpdateUserPlanComponentPriceParamEntity";
+import { GetServiceCenterListParamsEntity } from "@app/method-param-entities/GetClosestServiceCenterDetailsParamsEntity";
 
 export class UserRepository extends BaseRepository {
     /**
@@ -25,10 +27,8 @@ export class UserRepository extends BaseRepository {
         })
     }
 
-    public getServiceCenterDetails = async (methodParamEntity: MethodParamEntity) => {
-        let params = methodParamEntity.topMethodParam;
-
-        let result = await sequelizeConnection.connection.query(`select service_centers.lat as service_centers_lat,service_centers.lon as service_centers_long,user_address.lat as user_address_lat,user_address.lon as user_address_long,swiggy_genie_price.base_fare,swiggy_genie_price.base_km,swiggy_genie_price.per_km_above_base_km from user_address inner join service_centers on user_address.city_id = service_centers.city_id inner join maker_detail on service_centers.maker_id = maker_detail.maker_id inner join complaints on maker_detail.id = complaints.maker_detail_id inner join swiggy_genie_price on user_address.city_id = swiggy_genie_price.city_id where user_address.id = ${params.user_address_id} and complaints.id = ${params.complain_id}`, { type: QueryTypes.SELECT });
+    public getServiceCenterList = async (params: GetServiceCenterListParamsEntity) => {
+        let result = await sequelizeConnection.connection.query(`select service_centers.lat as service_centers_lat,service_centers.lon as service_centers_long,user_address.lat as user_address_lat,user_address.lon as user_address_long,swiggy_genie_price.base_fare,swiggy_genie_price.base_km,swiggy_genie_price.per_km_above_base_km from user_address inner join service_centers on user_address.city_id = service_centers.city_id inner join maker_detail on service_centers.maker_id = maker_detail.maker_id inner join complaints on maker_detail.id = complaints.maker_detail_id inner join swiggy_genie_price on user_address.city_id = swiggy_genie_price.city_id where user_address.id = ${params.userAddressId} and complaints.id = ${params.complainId}`, { type: QueryTypes.SELECT });
         return result;
     }
 
@@ -42,14 +42,25 @@ export class UserRepository extends BaseRepository {
         return result;
     }
 
-    public updatePickupNDeliveryComponent = async (methodParamEntity: MethodParamEntity) => {
-        let userPlanComponentObj = methodParamEntity.methodParam;
-        let pickupNDeliveryPrice = methodParamEntity.lastInvokedMethodParam;
+    // public updatePickupNDeliveryComponent = async (methodParamEntity: MethodParamEntity) => {
+    //     let userPlanComponentObj = methodParamEntity.methodParam;
+    //     let pickupNDeliveryPrice = methodParamEntity.lastInvokedMethodParam;
+    //     let result = await UserPlanComponent.update({
+    //         component_price: pickupNDeliveryPrice
+    //     }, {
+    //         where: {
+    //             id: userPlanComponentObj.user_plan_component_id
+    //         }
+    //     });
+    //     return result;
+    // }
+
+    public updateUserPlanComponentPrice = async (params: UpdateUserPlanComponentPriceParamEntity) => {
         let result = await UserPlanComponent.update({
-            component_price: pickupNDeliveryPrice
+            component_price: params.componentPrice
         }, {
             where: {
-                id: userPlanComponentObj.user_plan_component_id
+                id: params.userPlanComponentId
             }
         });
         return result;

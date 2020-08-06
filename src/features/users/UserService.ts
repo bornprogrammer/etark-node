@@ -3,8 +3,8 @@ import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { userRepositoryIns } from "./UserRepository";
 import { StoreResultAs } from "@app/enums/StoreResultAs";
 import { UtilsHelper } from "@app/helpers/UtilsHelper";
-import { AppConstants } from "@app/constants/AppConstants";
 import { PlanComponents } from "@app/enums/PlanComponents";
+import { AppConstants } from "@app/constants/AppConstants";
 
 class UserService extends BaseService {
     /**
@@ -15,21 +15,50 @@ class UserService extends BaseService {
     }
 
     public addAddress = async (meth: MethodParamEntity) => {
-        return await this.getMethodCoordinator().setMethod({ callableFunction: userRepositoryIns.addAddress, callableFunctionParams: meth.topMethodParam, storeResultAs: StoreResultAs.ADD_ADDRESS_RESULTS }).setMethod({ callableFunction: userRepositoryIns.getUserPlanComponentDetailsByComplaintId }).setMethod({ callableFunction: this.filterUserPlanComponentForPriceToBeUpdatedDynamically }).coordinate();
+        return await this.getMethodCoordinator().setMethod({ callableFunction: userRepositoryIns.addAddress, callableFunctionParams: meth.topMethodParam, storeResultAs: StoreResultAs.ADD_ADDRESS_RESULTS }).setMethod({ callableFunction: userRepositoryIns.getUserPlanComponentDetailsByComplaintId }).setMethod({ callableFunction: this.updateUserPlanComponentPriceDynamicallyIfAny }).coordinate();
     }
 
-    public filterUserPlanComponentForPriceToBeUpdatedDynamically = async (methodParamEntity: MethodParamEntity) => {
+    public updateUserPlanComponentPriceDynamicallyIfAny = async (methodParamEntity: MethodParamEntity) => {
         let userPlanComponentDetails = methodParamEntity.lastInvokedMethodParam;
         let topParams = methodParamEntity.topMethodParam;
         let addAddressResult = methodParamEntity.methodReturnedValContainer[StoreResultAs.ADD_ADDRESS_RESULTS];
-        topParams.user_address_id = addAddressResult.id;
+        topParams.userAddressId = addAddressResult.id;
+        let totalComponentPrice = 0;
         for (const userPlanComponent of userPlanComponentDetails) {
             if (userPlanComponent.component_type === PlanComponents.PICKUP_DELIVERY) {
-                let updatedResult = await this.getMethodCoordinator().setMethod({ callableFunction: userRepositoryIns.getServiceCenterDetails, callableFunctionParams: topParams }).setMethod({ callableFunction: this.getClosestServiceCenterNPickupNDeliveryPrice, storeResultAs: StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE }).setMethod({ callableFunction: userRepositoryIns.updatePickupNDeliveryComponent, callableFunctionParams: { user_plan_component_id: userPlanComponent.user_plan_component_id } }).coordinate();
-                userPlanComponent.component_price = updatedResult.component_price;
+                topParams.userPlanComponentId = userPlanComponent.user_plan_component_id;
+                let updatedPrice = await this.updateComponentPriceForPickupNDelivery(topParams);
+                userPlanComponent.component_price = updatedPrice;
             }
+            totalComponentPrice += userPlanComponent.component_price;
         }
-        return userPlanComponentDetails;
+        return this.updateTax(totalComponentPrice, userPlanComponentDetails);
+        // return userPlanComponentDetails;
+    }
+
+    public updateComponentPriceForPickupNDelivery = async (params: any) => {
+        let updatedResult = await this.getMethodCoordinator().setMethod({ callableFunction: this.getServiceCenterList, callableFunctionParams: params }).setMethod({ callableFunction: this.getClosestServiceCenterNPickupNDeliveryPrice, storeResultAs: StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE }).setMethod({ callableFunction: this.updatePickupNDeliveryComponent }).coordinate();
+        return updatedResult;
+    }
+
+    public getServiceCenterList = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let serviceCenterList = await userRepositoryIns.getServiceCenterList({ complainId: params.complain_id, userAddressId: params.userAddressId });
+        return serviceCenterList;
+    }
+
+    public updatePickupNDeliveryComponent = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let closestServiceCenterNPickupNDeliveryPrice = methodParamEntity.methodReturnedValContainer[StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE];
+        let result = userRepositoryIns.updateUserPlanComponentPrice({ componentPrice: closestServiceCenterNPickupNDeliveryPrice, userPlanComponentId: params.userPlanComponentId });
+        return closestServiceCenterNPickupNDeliveryPrice;
+    }
+
+    public updateTax = async (allComponentPrice: number, userPlanComponentDetails: any) => {
+        let object = { sub_total: allComponentPrice, tax: 0, total: 0, component_details: userPlanComponentDetails };
+        object.tax = Math.round((18 / 100) * allComponentPrice);
+        object.total = object.sub_total + object.tax;
+        return object;
     }
 
     public getClosestServiceCenterNPickupNDeliveryPrice = (methodParamEntity: MethodParamEntity) => {
@@ -43,6 +72,7 @@ class UserService extends BaseService {
                 serviceCenterObj = item;
             }
         });
+
         let price = (serviceCenterObj.base_fare * serviceCenterObj.base_km) + AppConstants.DELIVERY_PRICE_MARGIN;
         let remainingDist = distance - serviceCenterObj.base_km;
         if (remainingDist > 0) {

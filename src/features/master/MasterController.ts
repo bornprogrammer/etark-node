@@ -2,6 +2,7 @@ import { BaseController } from "@app/controllers/BaseController";
 import { MasterRequestParamCoordinator } from "./MasterRequestParamCoordinator";
 import { MasterService, masterServiceIns } from "./MasterService";
 import { Request, Response } from "express";
+import { paytmServiceIns } from "@app/services/PaytmService";
 
 export class MasterController extends BaseController {
 
@@ -16,7 +17,7 @@ export class MasterController extends BaseController {
 
     public getMakerListByCategoryId = async (req: Request, res: Response) => {
         let params = MasterRequestParamCoordinator.getInstance(req).getMakerListByCategoryIdParams();
-        // let s = paytmServiceIns.getSum({ amount: 3, orderId: "3", userId: 3 });
+        let s = paytmServiceIns.getSum({ amount: 5, orderId: "5", userId: 5 });
         await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getMakerListByCategoryId, callableFunctionParams: params }).send(req, res);
     }
 
@@ -31,6 +32,10 @@ export class MasterController extends BaseController {
 
     public getCities = async (req: Request, res: Response) => {
         await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getCities }).send(req, res);
+    }
+
+    public addServiceCenter = async (req: Request, res: Response) => {
+
     }
 }
 

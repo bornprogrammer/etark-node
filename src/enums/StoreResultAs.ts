@@ -1,7 +1,4 @@
 
-
-
-
 export enum StoreResultAs {
     ADD_PLAN_RESULTS = "add_plan_results",
     PLAN_DETAILS = "plan_details",

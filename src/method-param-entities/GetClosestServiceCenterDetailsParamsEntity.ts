@@ -1,0 +1,6 @@
+
+
+export interface GetServiceCenterListParamsEntity {
+    userAddressId: number,
+    complainId: number
+}

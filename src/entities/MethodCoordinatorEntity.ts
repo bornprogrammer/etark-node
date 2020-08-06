@@ -1,6 +1,7 @@
 import { StoreResultAs } from "@app/enums/StoreResultAs";
 
 
+
 export default interface MethodCoordinatorEntity {
 
     callableFunction: CallableFunction;

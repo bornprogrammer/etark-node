@@ -1,0 +1,17 @@
+alter table plan_components modify component_type enum('security_deposit','monitoring_charges','pickup_delivery','tax','plan_price') not null;
+
+alter table app_settings add column delivery_price_margin int not null;
+
+alter table app_settings drop column monitoring_charges;
+
+export plan_component data;
+
+add the app settings default value ;
+
+create table delivery(
+    id int auto_increment primary key,
+    user_plan_id int not null,
+    service_center_id int not null,
+    distance float(10,2) not null,
+    foreign key (user_plan_id) references user_plan(id)
+)
