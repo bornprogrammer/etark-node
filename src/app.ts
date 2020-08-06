@@ -2,6 +2,7 @@
 import express, { Request, Response } from 'express';
 
 import AppRoutes from './routes/AppRoutes';
+
 import { sequelizeConnection } from './SequelizeConnection';
 
 export default class App {
@@ -25,7 +26,6 @@ export default class App {
             res.send('status is healthy 1.1');
         });
         this.app.use('/api', AppRoutes.routes());
-
     }
 
     private dbSetup(): void {

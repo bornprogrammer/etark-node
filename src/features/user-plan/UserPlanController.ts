@@ -1,7 +1,6 @@
 import { BaseController } from "@app/controllers/BaseController";
 import { Request, Response } from "express";
 import { userPlanServiceIns } from "./UserPlanService";
-import { userPlanRepositoryIns } from "./UserPlanRepository";
 import { UserPlanRequestParamCoordinator } from "./UserPlanRequestParamCoordinator";
 
 export class UserPlanController extends BaseController {
