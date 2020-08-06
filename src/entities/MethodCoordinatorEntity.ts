@@ -1,4 +1,4 @@
-import { StoreResultAsEnums } from "@app/enums/StoreResultAsEnums";
+import { StoreResultAs } from "@app/enums/StoreResultAs";
 
 
 export default interface MethodCoordinatorEntity {
@@ -7,6 +7,6 @@ export default interface MethodCoordinatorEntity {
 
     callableFunctionParams?: any;
 
-    storeResultAs?: StoreResultAsEnums;
+    storeResultAs?: StoreResultAs;
 
 }  

@@ -3,7 +3,7 @@ import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { UserAddress } from "@app/models/UserAddress";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { QueryTypes } from "sequelize";
-import { StoreResultAsEnums } from "@app/enums/StoreResultAsEnums";
+import { UserPlanComponent } from "@app/models/UserPlanComponent";
 
 export class UserRepository extends BaseRepository {
     /**
@@ -27,14 +27,32 @@ export class UserRepository extends BaseRepository {
 
     public getServiceCenterDetails = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let usrAddressDetails = methodParamEntity.methodReturnedValContainer[StoreResultAsEnums.ADD_ADDRESS_RESULTS];
-        let result = await sequelizeConnection.connection.query(`select service_centers.lat as service_centers_lat,service_centers.lon as service_centers_long,user_address.lat as user_address_lat,user_address.lon as user_address_long,swiggy_genie_price.base_fare,swiggy_genie_price.base_km,swiggy_genie_price.per_km_above_base_km from user_address inner join service_centers on user_address.city_id = service_centers.city_id inner join maker_detail on service_centers.maker_id = maker_detail.maker_id inner join complaints on maker_detail.id = complaints.maker_detail_id inner join swiggy_genie_price on user_address.city_id = swiggy_genie_price.city_id where user_address.id = ${usrAddressDetails.id} and complaints.id = ${params.complain_id}`, { type: QueryTypes.SELECT });
+
+        let result = await sequelizeConnection.connection.query(`select service_centers.lat as service_centers_lat,service_centers.lon as service_centers_long,user_address.lat as user_address_lat,user_address.lon as user_address_long,swiggy_genie_price.base_fare,swiggy_genie_price.base_km,swiggy_genie_price.per_km_above_base_km from user_address inner join service_centers on user_address.city_id = service_centers.city_id inner join maker_detail on service_centers.maker_id = maker_detail.maker_id inner join complaints on maker_detail.id = complaints.maker_detail_id inner join swiggy_genie_price on user_address.city_id = swiggy_genie_price.city_id where user_address.id = ${params.user_address_id} and complaints.id = ${params.complain_id}`, { type: QueryTypes.SELECT });
         return result;
     }
 
-    public getUserPlanDetailsByComplaintId = async (methodParamEntity: MethodParamEntity) => {
+    public getUserPlanComponentDetailsByComplaintId = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let result = Use
+        let result = await sequelizeConnection.connection.query(`select user_plan_components.id as user_plan_component_id,plan_components.component_display_name,plan_components.component_type,plan_components.component_price
+        from user_plan inner join user_plan_components on user_plan.id = user_plan_components.user_plan_id inner join plan_components on user_plan_components.plan_components_id = plan_components.id
+        where user_plan.complain_id = ${params.complain_id} and user_plan.status='pending'`, {
+            type: QueryTypes.SELECT
+        });
+        return result;
+    }
+
+    public updatePickupNDeliveryComponent = async (methodParamEntity: MethodParamEntity) => {
+        let userPlanComponentObj = methodParamEntity.methodParam;
+        let pickupNDeliveryPrice = methodParamEntity.lastInvokedMethodParam;
+        let result = await UserPlanComponent.update({
+            component_price: pickupNDeliveryPrice
+        }, {
+            where: {
+                id: userPlanComponentObj.user_plan_component_id
+            }
+        });
+        return result;
     }
 }
 

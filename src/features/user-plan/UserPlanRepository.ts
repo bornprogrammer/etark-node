@@ -3,7 +3,7 @@ import BaseRepository from "@app/services/BaseRepository";
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { UserPaymentDetails } from "@app/models/UserPaymentDetails";
 import { UserPlan } from "@app/models/UserPlan";
-import { StoreResultAsEnums } from "@app/enums/StoreResultAsEnums";
+import { StoreResultAs } from "@app/enums/StoreResultAs";
 import { PlanComponents } from "@app/models/PlanComponents";
 import { UserPlanComponent } from "@app/models/UserPlanComponent";
 import { Plan } from "@app/models/Plan";
@@ -52,8 +52,8 @@ export class UserPlanRepository extends BaseRepository {
     }
 
     public addUserPlanComponents = async (methodParamEntity: MethodParamEntity) => {
-        let planDetails = methodParamEntity.methodReturnedValContainer[StoreResultAsEnums.PLAN_DETAILS];
-        let userPlanDetails = methodParamEntity.methodReturnedValContainer[StoreResultAsEnums.ADD_PLAN_RESULTS];
+        let planDetails = methodParamEntity.methodReturnedValContainer[StoreResultAs.PLAN_DETAILS];
+        let userPlanDetails = methodParamEntity.methodReturnedValContainer[StoreResultAs.ADD_PLAN_RESULTS];
         for (const planComponentObj of planDetails.PlanComponents) {
             await UserPlanComponent.create({
                 user_plan_id: userPlanDetails.id,
