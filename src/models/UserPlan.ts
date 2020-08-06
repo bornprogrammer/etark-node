@@ -17,11 +17,10 @@ UserPlan.init({
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     },
-    // is_pickup_delivery_choosed: {
-    //     type: DataTypes.ENUM('yes', 'no'),
-    //     allowNull: false,
-    //     defaultValue: "yes"
-    // },
+    plan_price: {
+        type: DataTypes.FLOAT,
+        defaultValue: 0
+    },
     status: {
         type: DataTypes.ENUM('pending', 'completed', 'failed'),
         defaultValue: "pending"

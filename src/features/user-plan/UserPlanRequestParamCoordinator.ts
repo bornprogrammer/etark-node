@@ -17,7 +17,7 @@ export class UserPlanRequestParamCoordinator extends RequestParamsCoordinator {
     }
 
     public getAddUsePlanParams = () => {
-        let params = this.setParamFromBody("complain_id").setParamFromBody("plan_id").setParamFromBody("is_pickup_delivery_choosed").coordinate();
+        let params = this.setParamFromBody("complain_id").setParamFromBody("plan_id").coordinate();
         return params;
     }
 

@@ -23,6 +23,18 @@ UserAddress.init({
     user_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
+    },
+    city_id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    },
+    lat: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    lon: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
 }, {
     tableName: "user_address",

@@ -2,13 +2,17 @@ import MethodCoordinatorEntity from "../../entities/MethodCoordinatorEntity";
 import MethodParamEntity from "../../entities/MethodParamEntity";
 import { Coordinator } from "../Coordinator";
 import ArrayHelper from "@app/helpers/ArrayHelper";
+import { UtilsHelper } from "@app/helpers/UtilsHelper";
 
 export default class MethodCoordinator implements Coordinator {
 
     private callableFunctionContainer: MethodCoordinatorEntity[];
 
+    private storeResultAsContainer: any;
+
     constructor() {
         this.callableFunctionContainer = [];
+        this.storeResultAsContainer = {};
     }
 
     public setMethod(methodCoordinatorEntity: MethodCoordinatorEntity): MethodCoordinator {
@@ -26,6 +30,8 @@ export default class MethodCoordinator implements Coordinator {
                     result = callableResult;
                     if (!callableResult) {
                         break;
+                    } else if (callableObj.storeResultAs) {
+                        this.storeResultAsContainer[callableObj.storeResultAs] = result;
                     }
                     // this.doPreservedOrMergeResults(callableObj, callableResult);
                 }
@@ -38,6 +44,6 @@ export default class MethodCoordinator implements Coordinator {
     }
 
     private buildMethodParamEntity(topMethodParam?: any, methodParam?: any, lastInvokedMethodParam?: any): MethodParamEntity {
-        return { topMethodParam, methodParam, lastInvokedMethodParam };
+        return { topMethodParam, methodParam, lastInvokedMethodParam, methodReturnedValContainer: this.storeResultAsContainer };
     }
 }

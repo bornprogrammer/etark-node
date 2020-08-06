@@ -13,6 +13,8 @@ export class MasterRoutes {
 
         router.get("/plans", masterControllerIns.getPlans);
 
+        router.get("/cities", masterControllerIns.getCities);
+
         return router;
 
     }

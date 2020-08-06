@@ -19,6 +19,14 @@ UserPlanComponent.init({
     plan_components_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
+    },
+    status: {
+        type: DataTypes.ENUM('active', 'deleted'),
+        defaultValue: 'active'
+    },
+    component_price: {
+        type: DataTypes.FLOAT,
+        allowNull: false
     }
 }, {
     sequelize: sequelizeConnection.connection,

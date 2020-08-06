@@ -3,6 +3,10 @@ import BaseRepository from "@app/services/BaseRepository";
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { UserPaymentDetails } from "@app/models/UserPaymentDetails";
 import { UserPlan } from "@app/models/UserPlan";
+import { StoreResultAsEnums } from "@app/enums/StoreResultAsEnums";
+import { PlanComponents } from "@app/models/PlanComponents";
+import { UserPlanComponent } from "@app/models/UserPlanComponent";
+import { Plan } from "@app/models/Plan";
 
 export class UserPlanRepository extends BaseRepository {
     /**
@@ -20,7 +24,6 @@ export class UserPlanRepository extends BaseRepository {
         });
         return result;
     }
-
     public addPlan = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
         let addUserPlanParams = {
@@ -31,15 +34,34 @@ export class UserPlanRepository extends BaseRepository {
         return result;
     }
 
-    public addUserPlanComponents = async (methodParamEntity: MethodParamEntity) => {
-        // let params = methodParamEntity.topMethodParam;
-        // let addUserPlanParams = {
-        //     complain_id: params.complain_id,
-        //     plan_id: params.plan_id,
-        // };
-        // let result = await UserPlanComponent.create();
-        let result = methodParamEntity.
+    public getPlanDetails = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let result = await Plan.findOne({
+            where: {
+                id: params.plan_id,
+            },
+            include: {
+                model: PlanComponents,
+                where: {
+                    status: 'active'
+                },
+                required: true
+            }
+        });
         return result;
+    }
+
+    public addUserPlanComponents = async (methodParamEntity: MethodParamEntity) => {
+        let planDetails = methodParamEntity.methodReturnedValContainer[StoreResultAsEnums.PLAN_DETAILS];
+        let userPlanDetails = methodParamEntity.methodReturnedValContainer[StoreResultAsEnums.ADD_PLAN_RESULTS];
+        for (const planComponentObj of planDetails.PlanComponents) {
+            await UserPlanComponent.create({
+                user_plan_id: userPlanDetails.id,
+                plan_components_id: planComponentObj.id,
+                component_price: planComponentObj.component_price
+            });
+        }
+        return userPlanDetails;
     }
 }
 

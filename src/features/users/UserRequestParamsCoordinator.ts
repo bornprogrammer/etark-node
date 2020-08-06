@@ -16,7 +16,7 @@ export class UserRequestParamsCoordinator extends RequestParamsCoordinator {
     }
 
     public getAddAddressParams = () => {
-        return this.setParamFromBody("address").setParamFromBody("zip_code").setParamFromParamsAs("id", "user_id").coordinate();
+        return this.setParamFromBody("address").setParamFromBody("zip_code").setParamFromParamsAs("id", "user_id").setParamFromBody("complain_id").setParamFromBody("city_id").setParamFromBody("lat").setParamFromBody("long").coordinate();
     }
 
 

@@ -5,6 +5,7 @@ import { Maker } from "@app/models/Maker";
 import { Merchant } from "@app/models/Merchant";
 import { Op } from "sequelize";
 import { Plan } from "@app/models/Plan";
+import { City } from "@app/models/City";
 
 export class MasterRepository extends BaseRepository {
     /**
@@ -47,6 +48,15 @@ export class MasterRepository extends BaseRepository {
 
     public getPlans = async (methodParamEntity: MethodParamEntity) => {
         let result = await Plan.findAll();
+        return result;
+    }
+
+    public getCities = async () => {
+        let result = await City.findAll({
+            where: {
+                status: 'active'
+            }
+        });
         return result;
     }
 }
