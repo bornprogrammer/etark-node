@@ -6,7 +6,6 @@ export class TokenNotFoundError extends HttpResponseError {
 
     constructor() {
         super(HttpResponseCode.UNAUTHORIZED, "token is invalid");
-
     }
 
 }

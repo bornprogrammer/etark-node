@@ -53,7 +53,7 @@ export class UserPlanService extends BaseService {
 
     public getPlanDetails = async (methodParamEntity: MethodParamEntity) => {
         let param = methodParamEntity.topMethodParam;
-        let planComponentDetails: GetPlanComponentDetailsParamsEntity = { planId: param.plan_id };
+        let planComponentDetails: GetPlanComponentDetailsParamsEntity = new GetPlanComponentDetailsParamsEntity(param.plan_id);
         let result = await planRepositoryIns.getPlanComponentDetails(planComponentDetails);
         return result;
     }

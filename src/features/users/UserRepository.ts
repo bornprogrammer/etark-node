@@ -6,6 +6,8 @@ import { QueryTypes } from "sequelize";
 import { UserPlanComponent } from "@app/models/UserPlanComponent";
 import { UpdateUserPlanComponentPriceParamEntity } from "@app/repo-method-param-entities/UpdateUserPlanComponentPriceParamEntity";
 import { GetServiceCenterListParamsEntity } from "@app/repo-method-param-entities/GetClosestServiceCenterDetailsParamsEntity";
+import { UtilsHelper } from "@app/helpers/UtilsHelper";
+import { ServiceCenterNotFound } from "@app/errors/ServiceCenterNotFound";
 
 export class UserRepository extends BaseRepository {
 
@@ -43,6 +45,9 @@ export class UserRepository extends BaseRepository {
         where user_plan.complain_id = ${params.complain_id} and user_plan.status='pending'`, {
             type: QueryTypes.SELECT
         });
+        if (!UtilsHelper.isMethodReturnedValueTruthy(result)) {
+            throw new ServiceCenterNotFound();
+        }
         return result;
     }
 

@@ -5,6 +5,7 @@ import { StoreResultAs } from "@app/enums/StoreResultAs";
 import { UtilsHelper } from "@app/helpers/UtilsHelper";
 import { PlanComponents } from "@app/enums/PlanComponents";
 import { AppConstants } from "@app/constants/AppConstants";
+import { ServiceCenterNotFound } from "@app/errors/ServiceCenterNotFound";
 
 class UserService extends BaseService {
     /**

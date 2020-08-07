@@ -28,7 +28,7 @@ export default class MethodCoordinator implements Coordinator {
                 for (const callableObj of this.callableFunctionContainer) {
                     const callableResult = await callableObj.callableFunction(this.buildMethodParamEntity(topParams, callableObj.callableFunctionParams, result));
                     result = callableResult;
-                    if (!callableResult) {
+                    if (!UtilsHelper.isMethodReturnedValueTruthy(callableResult)) {
                         break;
                     } else if (callableObj.storeResultAs) {
                         this.storeResultAsContainer[callableObj.storeResultAs] = result;
