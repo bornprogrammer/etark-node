@@ -1,7 +1,10 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 
-export class UserPaymentDetails extends Model { }
+export class UserPaymentDetails extends Model {
+    id: number;
+    gateway_response: string
+}
 
 UserPaymentDetails.init({
     id: {
@@ -11,6 +14,10 @@ UserPaymentDetails.init({
     },
     gateway_response: {
         type: DataTypes.TEXT,
+        allowNull: false
+    },
+    user_payment_id: {
+        type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     }
 }, {

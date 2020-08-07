@@ -2,7 +2,6 @@
 import paytmchecksum from 'paytmchecksum';
 import { PaytmChecksumEntity } from '@app/entities/PaytmChecksumEntity';
 import { httpPostServiceIns } from '@app/http-services/HttpPostService';
-import { and } from 'sequelize';
 
 class PaytmService {
 
@@ -39,8 +38,13 @@ class PaytmService {
         return paytmTxnToken;
     }
 
-    public isPaytmCheckSumValid = (paytmResponse: any, paytmChecksum: string): boolean => {
-        return this.paytmchecksum.verifyCheckSum(paytmResponse, this.merchantKey, paytmChecksum);
+    public isPaytmCheckSumValid = (paytmResponse: any): boolean => {
+        let paytmCheckSum = paytmResponse.CHECKSUMHASH;
+        console.log("paytmCheckSum", paytmCheckSum);
+        delete paytmResponse.CHECKSUMHASH;
+        let isPaytmCheckSumValid = this.paytmchecksum.verifySignature(paytmResponse, this.merchantKey, paytmCheckSum);
+        console.log("isPaytmCheckSumValid", isPaytmCheckSumValid);
+        return isPaytmCheckSumValid;
     }
 
     private callPaymtm = async (checkSum: string) => {
@@ -48,6 +52,7 @@ class PaytmService {
             let paytmParams = { head: { "signature": checkSum }, body: this.paytmParamsBody };
             let url = this.urlStag + "theia/api/v1/initiateTransaction?mid=weoglH66146360524361&orderId=" + this.paytmParamsBody.orderId;
             let response = await httpPostServiceIns(url).setPayload(paytmParams).call();
+            console.log(response);
             return response;
         } catch (error) {
             console.log(error);

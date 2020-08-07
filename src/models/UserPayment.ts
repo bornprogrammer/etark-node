@@ -1,14 +1,12 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
-import validator from "validator";
-
 
 export interface UserPaymentAttributes {
     id?: number;
     user_plan_id: number;
     order_no?: string;
     grand_total: number;
-    payment_status?: number;
+    payment_status?: string;
     sub_total: number;
     tax: number;
     paytm_checksum?: string
@@ -18,7 +16,7 @@ export class UserPayment extends Model {
     user_plan_id: number;
     order_no?: string;
     grand_total: number;
-    payment_status?: number;
+    payment_status?: string;
     sub_total: number;
     tax: number;
     paytm_checksum?: string

@@ -22,8 +22,8 @@ export class UserPlanController extends BaseController {
     }
 
     public paytmCallback = async (req: Request, res: Response) => {
-        // let params = { resp: req.body };
-        this.getCtrlMethodCoordinator().setMethod({ callableFunction: userPlanServiceIns.paytmCallback, callableFunctionParams: req.body }).send(req, res);
+        let params = { paytm_resp: req.body };
+        this.getCtrlMethodCoordinator().setMethod({ callableFunction: userPlanServiceIns.paytmCallback, callableFunctionParams: params }).send(req, res);
     }
 }
 

@@ -12,6 +12,9 @@ import { UserPayment, UserPaymentAttributes } from "@app/models/UserPayment";
 import { userPaymentRepositoryIns } from "@app/repositories/UserPaymentRepository";
 import { paytmServiceIns } from "@app/services/PaytmService";
 import { AppConstants } from "@app/constants/AppConstants";
+import { UpdateUserPaymentStatusParamsEntity } from "@app/repo-method-param-entities/UpdateUserPaymentStatusParamsEntity";
+import { UserPaymentDetailsRepository, userPaymentDetailsRepositoryIns } from "@app/repositories/UserPaymentDetailsRepository";
+import { UserPaymentDetails } from "@app/models/UserPaymentDetails";
 
 export class UserPlanService extends BaseService {
     /**
@@ -22,12 +25,26 @@ export class UserPlanService extends BaseService {
     }
 
     public paytmCallback = async (methodParamEntity: MethodParamEntity) => {
-        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isPaytmCheckSumValid, callableFunctionParams: methodParamEntity.topMethodParam }).coordinate();
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isPaytmCheckSumValid, callableFunctionParams: methodParamEntity.topMethodParam }).setMethod({ callableFunction: this.updatePayment }).coordinate();
         return result;
     }
 
     public isPaytmCheckSumValid = (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
+        let isPaytmCheckSumValid = paytmServiceIns.isPaytmCheckSumValid(params.paytm_resp);
+        return { isPaytmCheckSumValid };
+    }
+
+    public updatePayment = async (methodParamEntity: MethodParamEntity) => {
+        let topParams = methodParamEntity.topMethodParam.paytm_resp;
+        let isPaytmCheckSumValid = methodParamEntity.lastInvokedMethodParam;
+        let userPayment: UpdateUserPaymentStatusParamsEntity = { paymentStatus: isPaytmCheckSumValid.isPaytmCheckSumValid ? "completed" : "failed", checksum: topParams.CHECKSUMHASH, orderNo: topParams.ORDERID };
+        userPaymentRepositoryIns.updateUserPaymentStatus(userPayment);
+        let userPaymentDetails = new UserPaymentDetails();
+        userPaymentDetails.id = topParams.ORDERID.replace(AppConstants.ORDER_ID_PREFIX, "");
+        userPaymentDetails.gateway_response = JSON.stringify(topParams);
+        console.log(userPaymentDetails);
+        userPaymentDetailsRepositoryIns.create(userPaymentDetails);
     }
 
     public addUserPlan = async (methodParamEntity: MethodParamEntity) => {
