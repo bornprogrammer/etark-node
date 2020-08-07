@@ -21,9 +21,14 @@ export class UserPlanService extends BaseService {
         super();
     }
 
-    // public paytmCallback = async (methodParamEntity: MethodParamEntity) => {
-    //     let result = await this.getMethodCoordinator().setMethod({ callableFunction: userPlanRepositoryIns.paytmCallback, callableFunctionParams: methodParamEntity.topMethodParam }).coordinate();
-    // }
+    public paytmCallback = async (methodParamEntity: MethodParamEntity) => {
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isPaytmCheckSumValid, callableFunctionParams: methodParamEntity.topMethodParam }).coordinate();
+        return result;
+    }
+
+    public isPaytmCheckSumValid = (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+    }
 
     public addUserPlan = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
