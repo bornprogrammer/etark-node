@@ -4,8 +4,6 @@ import express, { Request, Response } from 'express';
 import AppRoutes from './routes/AppRoutes';
 
 import { sequelizeConnection } from './SequelizeConnection';
-
-// const cors = ;
 export default class App {
 
     private app: express.Application;
