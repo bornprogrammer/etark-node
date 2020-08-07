@@ -38,7 +38,7 @@ export class UserPlanService extends BaseService {
     public updatePayment = async (methodParamEntity: MethodParamEntity) => {
         let topParams = methodParamEntity.topMethodParam.paytm_resp;
         let isPaytmCheckSumValid = methodParamEntity.lastInvokedMethodParam;
-        let userPayment: UpdateUserPaymentStatusParamsEntity = { paymentStatus: isPaytmCheckSumValid.isPaytmCheckSumValid ? "completed" : "failed", checksum: topParams.CHECKSUMHASH, orderNo: topParams.ORDERID };
+        let userPayment: UpdateUserPaymentStatusParamsEntity = { paymentStatus: topParams.STATUS === "TXN_SUCCESS" ? "completed" : "failed", checksum: topParams.CHECKSUMHASH, orderNo: topParams.ORDERID };
         userPaymentRepositoryIns.updateUserPaymentStatus(userPayment);
         let userPaymentDetails = new UserPaymentDetails();
         userPaymentDetails.id = topParams.ORDERID.replace(AppConstants.ORDER_ID_PREFIX, "");
