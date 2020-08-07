@@ -5,7 +5,7 @@ import AppRoutes from './routes/AppRoutes';
 
 import { sequelizeConnection } from './SequelizeConnection';
 
-const cors = require('cors');
+// const cors = ;
 export default class App {
 
     private app: express.Application;
@@ -14,7 +14,7 @@ export default class App {
 
         this.app = express();
 
-        this.app.use(cors());
+        this.app.use(require('cors')());
 
         const port = process.env.PORT || 5000;
 
