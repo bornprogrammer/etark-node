@@ -2,6 +2,7 @@
 import paytmchecksum from 'paytmchecksum';
 import { PaytmChecksumEntity } from '@app/entities/PaytmChecksumEntity';
 import { httpPostServiceIns } from '@app/http-services/HttpPostService';
+import { and } from 'sequelize';
 
 class PaytmService {
 
@@ -9,6 +10,7 @@ class PaytmService {
     private paytmParamsBody: any
     private urlProd: string = "securegw.paytm.in/";
     private urlStag: string = "https://securegw-stage.paytm.in/";
+    private merchantKey: string = "t%6_v!wV#lymlZpr";
     /**
      *
      */
@@ -32,9 +34,13 @@ class PaytmService {
 
     public generatePaytmTxnToken = async (paytmChecksumEntity: PaytmChecksumEntity) => {
         this.setParams(paytmChecksumEntity);
-        let checkSum = await this.paytmchecksum.generateSignature(JSON.stringify(this.paytmParamsBody), "t%6_v!wV#lymlZpr");
+        let checkSum = await this.paytmchecksum.generateSignature(JSON.stringify(this.paytmParamsBody), this.merchantKey);
         let paytmTxnToken = await this.callPaymtm(checkSum);
         return paytmTxnToken;
+    }
+
+    public isPaytmCheckSumValid = (paytmResponse: any, paytmChecksum: string): boolean => {
+        return this.paytmchecksum.verifyCheckSum(paytmResponse, this.merchantKey, paytmChecksum);
     }
 
     private callPaymtm = async (checkSum: string) => {
