@@ -1,7 +1,26 @@
-import { Model, DataTypes } from "sequelize";
+import { Model, DataTypes, Optional } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
+import { UserPlanComponent } from "./UserPlanComponent";
 
-export class UserPlan extends Model { }
+
+export interface UserPlanAttributes {
+    id: number;
+    complain_id: number;
+    plan_id: number;
+    status?: string
+}
+
+export interface UserPlanCreationAttributes extends Optional<UserPlanAttributes, 'id' | 'status'> {
+}
+
+export class UserPlan extends Model<UserPlanAttributes, UserPlanCreationAttributes> implements UserPlanAttributes {
+    id: number;
+    complain_id: number;
+    plan_id: number;
+    status: string;
+    // export class UserPlan extends Model {
+    public readonly UserPlanComponents?: UserPlanComponent[];
+}
 
 UserPlan.init({
     id: {
@@ -17,10 +36,6 @@ UserPlan.init({
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     },
-    plan_price: {
-        type: DataTypes.FLOAT,
-        defaultValue: 0
-    },
     status: {
         type: DataTypes.ENUM('pending', 'completed', 'failed'),
         defaultValue: "pending"
@@ -31,3 +46,7 @@ UserPlan.init({
     underscored: true
 }
 )
+
+UserPlan.hasMany(UserPlanComponent);
+
+UserPlanComponent.belongsTo(UserPlan);

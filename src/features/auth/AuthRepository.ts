@@ -8,6 +8,10 @@ import { UserSuspended } from "@app/errors/UserSuspended";
 import UnAuthorized from "@app/errors/UnAuthorized";
 
 export class AuthRepository extends BaseRepository {
+
+    public create(params: any) {
+        throw new Error("Method not implemented.");
+    }
     /**
      *
      */

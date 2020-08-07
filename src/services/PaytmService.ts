@@ -30,10 +30,11 @@ class PaytmService {
         }
     }
 
-    public getSum = async (paytmChecksumEntity: PaytmChecksumEntity) => {
+    public generatePaytmTxnToken = async (paytmChecksumEntity: PaytmChecksumEntity) => {
         this.setParams(paytmChecksumEntity);
         let checkSum = await this.paytmchecksum.generateSignature(JSON.stringify(this.paytmParamsBody), "t%6_v!wV#lymlZpr");
-        this.callPaymtm(checkSum);
+        let paytmTxnToken = await this.callPaymtm(checkSum);
+        return paytmTxnToken;
     }
 
     private callPaymtm = async (checkSum: string) => {
@@ -41,12 +42,10 @@ class PaytmService {
             let paytmParams = { head: { "signature": checkSum }, body: this.paytmParamsBody };
             let url = this.urlStag + "theia/api/v1/initiateTransaction?mid=weoglH66146360524361&orderId=" + this.paytmParamsBody.orderId;
             let response = await httpPostServiceIns(url).setPayload(paytmParams).call();
-            console.log(response);
             return response;
         } catch (error) {
             console.log(error);
         }
-        return null;
     }
 
     private setParams = (paytmChecksumEntity: PaytmChecksumEntity) => {

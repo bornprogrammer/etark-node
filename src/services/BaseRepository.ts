@@ -1,4 +1,3 @@
-import { ABSTRACT } from "sequelize/types";
 
 
 export default abstract class BaseRepository {
@@ -6,4 +5,6 @@ export default abstract class BaseRepository {
     constructor() {
 
     }
+
+    public abstract create(params: any);
 }

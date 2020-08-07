@@ -21,5 +21,10 @@ export class UserPlanRequestParamCoordinator extends RequestParamsCoordinator {
         return params;
     }
 
+    public getMakePaymentParams = () => {
+        let params = this.setParamFromParams("user_plan_id").coordinate();
+        return params;
+    }
+
 
 }

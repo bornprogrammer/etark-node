@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
-import { PlanComponents } from "./PlanComponents";
+import { PlanComponent } from "./PlanComponents";
 
 
 export class Plan extends Model {
@@ -30,6 +30,6 @@ Plan.init({
     tableName: "plans",
     sequelize: sequelizeConnection.connection,
 })
-Plan.hasMany(PlanComponents);
+Plan.hasMany(PlanComponent);
 
-PlanComponents.belongsTo(Plan);
+PlanComponent.belongsTo(Plan);

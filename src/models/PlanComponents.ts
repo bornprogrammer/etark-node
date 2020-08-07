@@ -1,10 +1,15 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
+import { UserPlanComponent } from "./UserPlanComponent";
 
-export class PlanComponents extends Model {
+export class PlanComponent extends Model {
+    id: number;
+    component_price: number;
+    component_type: string
+    // public readonly userPlanComponents: UserPlanComponent[];
 }
 
-PlanComponents.init({
+PlanComponent.init({
     id: {
         type: DataTypes.INTEGER.UNSIGNED,
         autoIncrement: true,
@@ -38,3 +43,6 @@ PlanComponents.init({
     sequelize: sequelizeConnection.connection,
     timestamps: false
 })
+
+PlanComponent.hasMany(UserPlanComponent, { foreignKey: "plan_components_id" });
+UserPlanComponent.belongsTo(PlanComponent, { foreignKey: "plan_components_id", as: "planComponent" });

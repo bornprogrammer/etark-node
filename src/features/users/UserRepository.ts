@@ -4,15 +4,19 @@ import { UserAddress } from "@app/models/UserAddress";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { QueryTypes } from "sequelize";
 import { UserPlanComponent } from "@app/models/UserPlanComponent";
-import { UpdateUserPlanComponentPriceParamEntity } from "@app/method-param-entities/UpdateUserPlanComponentPriceParamEntity";
-import { GetServiceCenterListParamsEntity } from "@app/method-param-entities/GetClosestServiceCenterDetailsParamsEntity";
+import { UpdateUserPlanComponentPriceParamEntity } from "@app/repo-method-param-entities/UpdateUserPlanComponentPriceParamEntity";
+import { GetServiceCenterListParamsEntity } from "@app/repo-method-param-entities/GetClosestServiceCenterDetailsParamsEntity";
 
 export class UserRepository extends BaseRepository {
+
     /**
      *
      */
     constructor() {
         super();
+    }
+    public create(params: any) {
+        throw new Error("Method not implemented.");
     }
 
     public addAddress = async (methodParamEntity: MethodParamEntity) => {

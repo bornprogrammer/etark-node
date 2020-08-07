@@ -1,8 +1,27 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
+import validator from "validator";
 
+
+export interface UserPaymentAttributes {
+    id?: number;
+    user_plan_id: number;
+    order_no?: string;
+    grand_total: number;
+    payment_status?: number;
+    sub_total: number;
+    tax: number;
+    paytm_checksum?: string
+}
 export class UserPayment extends Model {
-
+    id?: number;
+    user_plan_id: number;
+    order_no?: string;
+    grand_total: number;
+    payment_status?: number;
+    sub_total: number;
+    tax: number;
+    paytm_checksum?: string
 }
 
 UserPayment.init({
@@ -15,13 +34,10 @@ UserPayment.init({
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     },
-    txn_token: {
-        type: DataTypes.STRING,
-    },
     order_no: {
         type: DataTypes.STRING,
     },
-    total_payment: {
+    grand_total: {
         type: DataTypes.FLOAT,
         allowNull: false
     },
@@ -29,6 +45,17 @@ UserPayment.init({
         type: DataTypes.ENUM('pending', 'completed', 'failed'),
         allowNull: false,
         defaultValue: "pending"
+    },
+    sub_total: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+    tax: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+    paytm_checksum: {
+        type: DataTypes.STRING,
     }
 }, {
     sequelize: sequelizeConnection.connection,
