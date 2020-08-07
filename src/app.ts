@@ -5,6 +5,8 @@ import AppRoutes from './routes/AppRoutes';
 
 import { sequelizeConnection } from './SequelizeConnection';
 
+import { cors } from 'cors';
+
 export default class App {
 
     private app: express.Application;
@@ -12,6 +14,10 @@ export default class App {
     constructor() {
 
         this.app = express();
+
+        this.app.use(cors({
+            origin: "http://etark-beta.s3-website.ap-south-1.amazonaws.com"
+        }));
 
         const port = process.env.PORT || 5000;
 
