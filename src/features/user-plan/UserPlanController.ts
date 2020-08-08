@@ -26,6 +26,7 @@ export class UserPlanController extends BaseController {
     public paytmCallback = async (req: Request, res: Response) => {
         let params = { paytm_resp: req.body };
         let paytmResp = await this.getCtrlMethodCoordinator().setMethod({ callableFunction: userPlanServiceIns.paytmCallback, callableFunctionParams: params }).returnResp(req, res);
+        console.log("paytmResp", paytmResp);
         let queryStr = ObjectHelper.buildStrFromKeyNValueOfObject({ status: paytmResp.STATUS, orderId: paytmResp.ORDERID }, "=", "&");
         let urlToRedirect = AppConstants.CLIENT_URL_AFTER_PAYTM_RESPONSE + "confirm?" + queryStr;
         console.log(urlToRedirect);

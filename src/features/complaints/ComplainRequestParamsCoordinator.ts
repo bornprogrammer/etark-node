@@ -1,6 +1,5 @@
 import RequestParamsCoordinator from "@app/coordinators/request-params-cordinators/RequestParamsCoordinator";
 import { Request } from "express";
-import { complaintControllerIns } from "./ComplaintController";
 
 export class ComplainRequestParamsCoordinator extends RequestParamsCoordinator {
     /**
@@ -16,6 +15,14 @@ export class ComplainRequestParamsCoordinator extends RequestParamsCoordinator {
 
     public getChancesOfWinningParams = () => {
         return this.setParamFromParamsAs("id", "complaint_id").coordinate();
+    }
+
+    public getAddCompensationParams = () => {
+        return this.setParamFromBody("compensation_type").coordinate();
+    }
+
+    public getUpdateCompensationParams = () => {
+        return this.setParamFromParamsAs("id", "complain_id").setParamFromBody("compensation_type").coordinate();
     }
 
     public getAddComplaintsParams = () => {
