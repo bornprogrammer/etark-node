@@ -52,8 +52,6 @@ export class ComplaintService extends BaseService {
         let callApi = await httpPostServiceIns(AppConstants.ML_MODEL_CHANCES_OF_WINNING_URL).setFormUrlEncodedPayload({ com: fieldVal.fieldVal }).setExpectedResponseAsJson().call();
         return chancesOfWinningMLCasesServiceIns.getHigherChances(callApi);
     }
-
 }
-
 
 export const complaintServiceIns = new ComplaintService();
