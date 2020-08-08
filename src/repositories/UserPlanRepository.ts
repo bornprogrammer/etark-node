@@ -24,7 +24,7 @@ export class UserPlanRepository extends BaseRepository {
                 {
                     model: UserPlanComponent,
                     where: {
-                        status: params.userPlanComponentStatus
+                        status: params.userPlanComponentStatus,
                     },
                     include: [
                         {

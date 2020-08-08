@@ -1,6 +1,7 @@
 import { Optional, DataTypes, Model, Association, HasManyGetAssociationsMixin } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { MakerDetails } from "./MakerDetails";
+import { Complaint } from "./Complaint";
 
 interface MakerAttribute {
     id: number;

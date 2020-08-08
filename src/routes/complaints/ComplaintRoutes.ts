@@ -13,6 +13,8 @@ export class ComplaintRoutes {
 
         router.post("/:id/device-images", complaintControllerIns.addDeviceImages);
 
+        router.get("/:id/winning-chances", complaintControllerIns.getChancesOfWinning);
+
         router.post("/upload-invoice", multerUploadFileMiddlewareIns.uploadSingle("invoice"), complaintControllerIns.uploadInvoice);
 
         router.post("/upload-device-image", multerUploadFileMiddlewareIns.uploadSingle("device-image"), complaintControllerIns.uploadInvoice);

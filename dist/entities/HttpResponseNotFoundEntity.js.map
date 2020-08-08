@@ -1,1 +1,0 @@
-{"version":3,"file":"HttpResponseNotFoundEntity.js","sourceRoot":"","sources":["../../src/entities/HttpResponseNotFoundEntity.ts"],"names":[],"mappings":";;;;;AACA,8EAAsD;AACtD,oEAAgE;AAEhE,MAAqB,0BAA2B,SAAQ,4BAAkB;IAEtE,YAAY,OAAe;QACvB,KAAK,CAAC,OAAO,EAAE,oCAAgB,CAAC,SAAS,CAAC,CAAC;IAC/C,CAAC;CACJ;AALD,6CAKC"}

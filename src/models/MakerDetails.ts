@@ -6,6 +6,7 @@ import {
     Optional,
 } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
+import { Complaint } from "./Complaint";
 
 interface MakerDetailsAttributes {
     id: number;
@@ -52,3 +53,8 @@ MakerDetails.init({
     sequelize: sequelizeConnection.connection,
     timestamps: false
 })
+
+MakerDetails.hasMany(Complaint);
+
+Complaint.belongsTo(MakerDetails, { as: "makerDetail" })
+

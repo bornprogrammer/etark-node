@@ -45,6 +45,7 @@ export class UserPlanService extends BaseService {
         userPaymentDetails.gateway_response = JSON.stringify(topParams);
         console.log(userPaymentDetails);
         userPaymentDetailsRepositoryIns.create(userPaymentDetails);
+        return topParams;
     }
 
     public addUserPlan = async (methodParamEntity: MethodParamEntity) => {

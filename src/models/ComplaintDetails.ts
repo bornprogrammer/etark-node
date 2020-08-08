@@ -1,6 +1,7 @@
 
 import { Model, Optional, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
+import { Field } from "./Field";
 
 interface ComplaintDetailsAttributes {
     id: number,
@@ -12,11 +13,12 @@ interface ComplaintDetailsAttributes {
 interface ComplaintDetailsCreationAttributes extends Optional<ComplaintDetailsAttributes, 'id'> { }
 
 // export class ComplaintDetails extends Model<ComplaintDetailsAttributes, ComplaintDetailsCreationAttributes> implements ComplaintDetailsAttributes {
-export class ComplaintDetails extends Model {
-    // id: number;
-    // complaint_id: number;
-    // field_id: number;
-    // field_val: string;
+export class ComplaintDetails extends Model implements ComplaintDetailsAttributes {
+    id: number;
+    complaint_id: number;
+    field_id: number;
+    field_val: string;
+    public readonly field?: Field;
 }
 ComplaintDetails.init({
     id: {

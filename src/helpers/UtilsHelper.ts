@@ -26,7 +26,12 @@ export class UtilsHelper {
         function deg2rad(deg) {
             return deg * (Math.PI / 180);
         }
-
         return d;
     }
+
+    public static generateRandomNumberBetweenRange(min: number, max: number): number {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+
 }

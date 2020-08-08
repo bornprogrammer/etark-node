@@ -10,4 +10,13 @@ export class ObjectHelper {
         return isObjectValid;
     }
 
+    public static buildStrFromKeyNValueOfObject(object: any, delimiter1: string, delimiter2: string) {
+        let strFromKeyNValueOfObject = "";
+        if (ObjectHelper.isObjectNotEmpty(object)) {
+            for (const key in object) {
+                strFromKeyNValueOfObject += key + delimiter1 + object[key] + delimiter2;
+            }
+        }
+        return strFromKeyNValueOfObject;
+    }
 }   

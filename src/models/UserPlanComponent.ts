@@ -10,8 +10,7 @@ export interface UserPlanComponentAttributes {
     component_price: number
 }
 
-export interface UserPlanComponentCreationAttributes extends Optional<UserPlanComponentAttributes, 'id'> { }
-
+export interface UserPlanComponentCreationAttributes extends Model<UserPlanComponentAttributes>, UserPlanComponentAttributes { }
 // export class UserPlanComponent extends Model<UserPlanComponentAttributes, UserPlanComponentCreationAttributes> implements UserPlanComponentAttributes {
 export class UserPlanComponent extends Model {
     id: number;

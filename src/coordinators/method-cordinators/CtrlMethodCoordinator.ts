@@ -25,7 +25,16 @@ export class CtrlMethodCoordinator extends MethodCoordinator {
             result = await this.coordinate();
             responseServiceIns.sendResponse(request, res, result);
         } catch (error) {
-            console.log('error thrown', error);
+            this.sendError(res, error);
+        }
+    }
+
+    public returnResp = async (request: Request, res: Response) => {
+        let result = null;
+        try {
+            result = await this.coordinate();
+            return result;
+        } catch (error) {
             this.sendError(res, error);
         }
     }
@@ -33,6 +42,10 @@ export class CtrlMethodCoordinator extends MethodCoordinator {
     public sendData = async (request: Request, res: Response, data: any) => {
         responseServiceIns.sendResponse(request, res, data);
     }
+
+    // public redirectAndSendRespInQueryString = async (request: Request, res: Response, data: any) => {
+    //     return res.redirect();
+    // }
 
     private sendError = (response: Response, error: any) => {
         if (error instanceof HttpResponseError) {

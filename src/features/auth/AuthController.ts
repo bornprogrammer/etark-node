@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { BaseController } from "@app/controllers/BaseController";
+import { BaseController } from "./../../controllers/BaseController";
 import { AuthService, authServiceIns } from "./AuthService";
 import { AuthRequestParamsCoordinator } from "./AuthRequestParamsCoordinator";
 
@@ -20,7 +20,6 @@ class AuthController extends BaseController {
     }
 
     public createUser = async (req: Request, res: Response) => {
-        console.log('sssssss');
         let params = AuthRequestParamsCoordinator.getInstance(req).getCreateUserParams();
         this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mService.createUser, callableFunctionParams: params }).send(req, res);
     }
