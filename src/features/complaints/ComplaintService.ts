@@ -5,7 +5,7 @@ import { complaintRepositoryIns as complaintRepositoryIns1 } from "@app/reposito
 import { GetComplaintDetailsParamsEntity } from "@app/repo-method-param-entities/GetComplaintDetailsParamsEntity";
 import { httpPostServiceIns } from "@app/http-services/HttpPostService";
 import { AppConstants } from "@app/constants/AppConstants";
-import { ChancesOfWinningMLCasesService, chancesOfWinningMLCasesServiceIns } from "@app/services/ChancesOfWinningMLCasesService";
+import { chancesOfWinningMLCasesServiceIns } from "@app/services/ChancesOfWinningMLCasesService";
 
 export class ComplaintService extends BaseService {
 
