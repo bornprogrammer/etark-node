@@ -14,6 +14,10 @@ export class ComplainRequestParamsCoordinator extends RequestParamsCoordinator {
         return new ComplainRequestParamsCoordinator(request);
     }
 
+    public getChancesOfWinningParams = () => {
+        return this.setParamFromParamsAs("id", "complaint_id").coordinate();
+    }
+
     public getAddComplaintsParams = () => {
         let params = this.setParamFromBody("user_id").setParamFromBody("maker_detail_id").setParamFromBody("imei_number").setParamFromBody("model_name").setParamFromBody("phone_price").setParamFromBody("purchase_mode").setParamFromBody("merchant_id").setParamFromBody("how_long_phone_owned").setParamFromBody("problem_description").setParamFromBody("is_device_fake").setParamFromBody("uploaed_invoice_copy").setParamFromBody("communicated_ecom_firm").setParamFromBody("problem_type").setParamFromBody("merchant_response").setParamFromBody("under_warranty").coordinate();
 

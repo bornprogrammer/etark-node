@@ -14,7 +14,7 @@ export class ComplaintRepository extends BaseRepository {
 
     public addComplaints = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let complaintParams = { user_id: params.user_id, maker_detail_id: params.maker_detail_id, status: 'active' };
+        let complaintParams = { user_id: params.user_id, maker_detail_id: params.maker_detail_id };
         let result = await Complaint.create(complaintParams);
         return result;
     }

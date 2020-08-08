@@ -2,7 +2,7 @@ import { BaseController } from "@app/controllers/BaseController";
 import { ComplainRequestParamsCoordinator } from "./ComplainRequestParamsCoordinator";
 import { Request, Response } from "express";
 import { complaintServiceIns } from "./ComplaintService";
-import { nodeMailerServiceIns } from "@app/services/NodeMailerService";
+import { ObjectHelper } from "@app/helpers/ObjectHelper";
 
 export class ComplaintController extends BaseController {
     /**
@@ -26,6 +26,12 @@ export class ComplaintController extends BaseController {
         // await this.getCtrlMethodCoordinator().setMethod({ callableFunction: complaintServiceIns.uploadInvoice, callableFunctionParams: req['file'] }).send(req, res);
         // nodeMailerServiceIns.sendHtml("service@etark.in", "iamabornprogrammer@gmail.com", "support email", "<h1>this is header file</h1>");
         await this.getCtrlMethodCoordinator().sendData(req, res, req['file']);
+    }
+
+    public getChancesOfWinning = async (req: Request, res: Response) => {
+        let params = ComplainRequestParamsCoordinator.getInstance(req).getChancesOfWinningParams();
+        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: complaintServiceIns.getChancesOfWinning, callableFunctionParams: params }).send(req, res);
+        // let queryStr = ObjectHelper.buildStrFromKeyNValueOfObject(result,)
     }
 }
 

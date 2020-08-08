@@ -1,1 +1,0 @@
-{"version":3,"file":"BadHttpRequestError.js","sourceRoot":"","sources":["../../src/errors/BadHttpRequestError.ts"],"names":[],"mappings":";;AACA,2DAAwD;AACxD,oEAAgE;AAEhE,MAAqB,mBAAoB,SAAQ,qCAAiB;IAE9D;;OAEG;IACH;QACI,KAAK,CAAC,oCAAgB,CAAC,WAAW,EAAE,sBAAsB,CAAC,CAAC;IAChE,CAAC;CAEJ;AATD,sCASC"}

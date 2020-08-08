@@ -2,6 +2,8 @@ import { BaseController } from "@app/controllers/BaseController";
 import { Request, Response } from "express";
 import { userPlanServiceIns } from "./UserPlanService";
 import { UserPlanRequestParamCoordinator } from "./UserPlanRequestParamCoordinator";
+import { ObjectHelper } from "@app/helpers/ObjectHelper";
+import { AppConstants } from "@app/constants/AppConstants";
 
 export class UserPlanController extends BaseController {
     /**
@@ -23,7 +25,10 @@ export class UserPlanController extends BaseController {
 
     public paytmCallback = async (req: Request, res: Response) => {
         let params = { paytm_resp: req.body };
-        this.getCtrlMethodCoordinator().setMethod({ callableFunction: userPlanServiceIns.paytmCallback, callableFunctionParams: params }).send(req, res);
+        let paytmResp = await this.getCtrlMethodCoordinator().setMethod({ callableFunction: userPlanServiceIns.paytmCallback, callableFunctionParams: params }).returnResp(req, res);
+        let queryStr = ObjectHelper.buildStrFromKeyNValueOfObject(paytmResp, "=", "&");
+        let urlToRedirect = AppConstants.CLIENT_URL_AFTER_PAYTM_RESPONSE + "?" + queryStr;
+        res.redirect(urlToRedirect);
     }
 }
 

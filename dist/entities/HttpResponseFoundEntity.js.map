@@ -1,1 +1,0 @@
-{"version":3,"file":"HttpResponseFoundEntity.js","sourceRoot":"","sources":["../../src/entities/HttpResponseFoundEntity.ts"],"names":[],"mappings":";;;;;AACA,8EAAsD;AACtD,oEAAgE;AAEhE,MAAqB,uBAAwB,SAAQ,4BAAkB;IACnE,oBAAoB;IAEpB,YAAY,IAAS,EAAE,OAAe;QAClC,KAAK,CAAC,OAAO,EAAE,oCAAgB,CAAC,OAAO,CAAC,CAAC;QACzC,IAAI,CAAC,MAAM,GAAG,IAAI,CAAC;IACvB,CAAC;CACJ;AAPD,0CAOC"}

@@ -1,6 +1,8 @@
 import BaseService from "@app/services/BaseService";
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { complaintRepositoryIns } from "./ComplaintRepository";
+import { complaintRepositoryIns as complaintRepositoryIns1 } from "@app/repositories/ComplaintRepository";
+import { GetComplaintDetailsParamsEntity } from "@app/repo-method-param-entities/GetComplaintDetailsParamsEntity";
 
 export class ComplaintService extends BaseService {
 
@@ -27,6 +29,22 @@ export class ComplaintService extends BaseService {
         let params = methodParamEntity.topMethodParam;
         let uploadedInvoiceParams = { file_name: params.filename };
         return uploadedInvoiceParams;
+    }
+
+    public getChancesOfWinning = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.getComplaintDetails, callableFunctionParams: params }).setMethod({ callableFunction: this.callWinningChancesMLApi }).coordinate();
+    }
+
+    public getComplaintDetails = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let getComplaintDetailsParams = new GetComplaintDetailsParamsEntity(params.complaint_id);
+        let result = await complaintRepositoryIns1.getComplaintDetails(getComplaintDetailsParams);
+        return result;
+    }
+
+    public callWinningChancesMLApi = async (methodParamEntity: MethodParamEntity) => {
+
     }
 
 }

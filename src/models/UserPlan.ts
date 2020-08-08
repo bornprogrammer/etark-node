@@ -1,4 +1,4 @@
-import { Model, DataTypes, Optional } from "sequelize";
+import { Model, DataTypes, Optional, Association } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { UserPlanComponent } from "./UserPlanComponent";
 
@@ -10,16 +10,19 @@ export interface UserPlanAttributes {
     status?: string
 }
 
-export interface UserPlanCreationAttributes extends Optional<UserPlanAttributes, 'id' | 'status'> {
+export interface UserPlanCreationAttributes extends Model<UserPlanAttributes>, UserPlanAttributes {
 }
 
-export class UserPlan extends Model<UserPlanAttributes, UserPlanCreationAttributes> implements UserPlanAttributes {
+// export class UserPlan extends Model<UserPlanAttributes, UserPlanCreationAttributes>{
+export class UserPlan extends Model {
     id: number;
     complain_id: number;
     plan_id: number;
     status: string;
-    // export class UserPlan extends Model {
     public readonly UserPlanComponents?: UserPlanComponent[];
+    public static associations: {
+        userPlanComponents: Association<UserPlan, UserPlanComponent>;
+    };
 }
 
 UserPlan.init({

@@ -1,9 +1,9 @@
-import { Optional, DataTypes } from "sequelize/types";
-import { Model } from "sequelize";
+
+import { Optional, DataTypes, Model } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
+import { ComplaintDetails } from "./ComplaintDetails";
 
-
-interface FieldAttributes {
+export interface FieldAttributes {
     id: number,
     field_name: string,
     field_lookup_id: number,
@@ -12,11 +12,11 @@ interface FieldAttributes {
     category_id: number,
 }
 
-interface FieldCreationAttributes extends Optional<FieldAttributes, 'id'> {
+export interface FieldCreationAttributes extends Optional<FieldAttributes, 'id'> {
 }
 
 // export class Field extends Model<FieldAttributes, FieldCreationAttributes> implements FieldAttributes {
-export class Field extends Model {
+export class Field extends Model implements FieldAttributes {
     id: number;
     field_name: string;
     field_lookup_id: number;
@@ -58,3 +58,7 @@ Field.init({
     updatedAt: false,
     underscored: true,
 });
+
+Field.hasOne(ComplaintDetails);
+
+ComplaintDetails.belongsTo(Field, { as: "field" });
