@@ -34,12 +34,12 @@ export class ComplaintController extends BaseController {
 
     public addCompensation = async (req: Request, res: Response) => {
         let params = ComplainRequestParamsCoordinator.getInstance(req).getAddCompensationParams();
-        this.getCtrlMethodCoordinator().setMethod({ callableFunction: complaintServiceIns.getChancesOfWinning, callableFunctionParams: params }).send(req, res);
+        this.getCtrlMethodCoordinator().setMethod({ callableFunction: complaintServiceIns.addCompensation, callableFunctionParams: params }).send(req, res);
     }
 
     public updateCompensation = async (req: Request, res: Response) => {
         let params = ComplainRequestParamsCoordinator.getInstance(req).getUpdateCompensationParams();
-        this.getCtrlMethodCoordinator().setMethod({ callableFunction: complaintServiceIns.getChancesOfWinning, callableFunctionParams: params }).send(req, res);
+        this.getCtrlMethodCoordinator().setMethod({ callableFunction: complaintServiceIns.updateCompensation, callableFunctionParams: params }).send(req, res);
     }
 }
 

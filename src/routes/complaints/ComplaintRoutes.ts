@@ -17,7 +17,7 @@ export class ComplaintRoutes {
 
         router.post("/:id/compentsation", complaintControllerIns.addCompensation);
 
-        router.put("/:id/compentsation", complaintControllerIns.updateCompensation);
+        router.put("/:id/compentsation/:complain_detail_id", complaintControllerIns.updateCompensation);
 
         router.post("/upload-invoice", multerUploadFileMiddlewareIns.uploadSingle("invoice"), complaintControllerIns.uploadInvoice);
 

@@ -18,11 +18,11 @@ export class ComplainRequestParamsCoordinator extends RequestParamsCoordinator {
     }
 
     public getAddCompensationParams = () => {
-        return this.setParamFromBody("compensation_type").coordinate();
+        return this.setParamFromParamsAs("id", "complain_id").setParamFromBody("compensation_type").coordinate();
     }
 
     public getUpdateCompensationParams = () => {
-        return this.setParamFromParamsAs("id", "complain_id").setParamFromBody("compensation_type").coordinate();
+        return this.setParamFromParamsAs("id", "complain_id").setParamFromParams("complain_detail_id").setParamFromBody("compensation_type").coordinate();
     }
 
     public getAddComplaintsParams = () => {

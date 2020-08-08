@@ -6,6 +6,8 @@ import { GetComplaintDetailsParamsEntity } from "@app/repo-method-param-entities
 import { httpPostServiceIns } from "@app/http-services/HttpPostService";
 import { AppConstants } from "@app/constants/AppConstants";
 import { chancesOfWinningMLCasesServiceIns } from "@app/services/ChancesOfWinningMLCasesService";
+import { ComplaintDetails } from "@app/models/ComplaintDetails";
+import { complaintDetailsRepositoryIns } from "@app/repositories/ComplaintDetailsRepository";
 
 export class ComplaintService extends BaseService {
 
@@ -51,6 +53,31 @@ export class ComplaintService extends BaseService {
         let fieldVal = methodParamEntity.lastInvokedMethodParam;
         let callApi = await httpPostServiceIns(AppConstants.ML_MODEL_CHANCES_OF_WINNING_URL).setFormUrlEncodedPayload({ com: fieldVal.fieldVal }).setExpectedResponseAsJson().call();
         return chancesOfWinningMLCasesServiceIns.getHigherChances(callApi);
+    }
+
+    public addCompensation = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let complaintDetailsObj = this.buildComplainDetailsInsForCompensation(params);
+        console.log(params);
+        let result = await complaintDetailsRepositoryIns.create([complaintDetailsObj]);
+        return result[0];
+    }
+
+    public updateCompensation = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        // let complaintDetailsObj = this.buildComplainDetailsInsForCompensation(params);
+        // complaintDetailsObj.id = params.complain_detail_id;
+        // console.log("sss");
+        let result = await complaintDetailsRepositoryIns.update(params);
+        return result;
+    }
+
+    private buildComplainDetailsInsForCompensation = (params: any): ComplaintDetails => {
+        let complaintDetails = new ComplaintDetails();
+        complaintDetails.field_val = params.compensation_type // free_servicing,product_replacement
+        complaintDetails.complaint_id = params.complain_id;
+        complaintDetails.field_id = 17;
+        return complaintDetails;
     }
 }
 
