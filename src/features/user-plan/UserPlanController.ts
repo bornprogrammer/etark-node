@@ -29,7 +29,7 @@ export class UserPlanController extends BaseController {
         console.log("paytmResp", paytmResp);
         console.log("paytm body", req.body);
         let queryStr = ObjectHelper.buildStrFromKeyNValueOfObject({ status: params.paytm_resp.STATUS, orderId: params.paytm_resp.ORDERID }, "=", "&");
-        let urlToRedirect = AppConstants.CLIENT_URL_AFTER_PAYTM_RESPONSE + "confirm?" + queryStr;
+        let urlToRedirect = AppConstants.CLIENT_URL_AFTER_PAYTM_RESPONSE + "#/confirm?" + queryStr;
         console.log(urlToRedirect);
         res.redirect(urlToRedirect);
     }

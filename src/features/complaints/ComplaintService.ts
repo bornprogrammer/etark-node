@@ -57,20 +57,30 @@ export class ComplaintService extends BaseService {
 
     public addCompensation = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
+        let result = this.getMethodCoordinator().setMethod({ callableFunction: this.createComplainDetail, callableFunctionParams: params }).setMethod({ callableFunction: this.callCompensationAmountMLApi }).coordinate();
+        return result;
+    }
+
+    public createComplainDetail = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
         let complaintDetailsObj = this.buildComplainDetailsInsForCompensation(params);
-        console.log(params);
-        let result = await complaintDetailsRepositoryIns.create([complaintDetailsObj]);
+        let result = complaintDetailsRepositoryIns.create([complaintDetailsObj]);
         return result[0];
     }
 
+    public callCompensationAmountMLApi = async (methodParamEntity: MethodParamEntity) => {
+        let fieldVal = methodParamEntity.lastInvokedMethodParam;
+        let callApi = await httpPostServiceIns(AppConstants.ML_MODEL_COMPENSATION_URL).setFormUrlEncodedPayload({ amount: fieldVal.fieldVal }).setExpectedResponseAsJson().call();
+        return chancesOfWinningMLCasesServiceIns.getHigherChances(callApi);
+    }
+
+
     public updateCompensation = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        // let complaintDetailsObj = this.buildComplainDetailsInsForCompensation(params);
-        // complaintDetailsObj.id = params.complain_detail_id;
-        // console.log("sss");
         let result = await complaintDetailsRepositoryIns.update(params);
         return result;
     }
+
 
     private buildComplainDetailsInsForCompensation = (params: any): ComplaintDetails => {
         let complaintDetails = new ComplaintDetails();
