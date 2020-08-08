@@ -25,6 +25,7 @@ export class CtrlMethodCoordinator extends MethodCoordinator {
             result = await this.coordinate();
             responseServiceIns.sendResponse(request, res, result);
         } catch (error) {
+            console.log("ctrl error came ", error);
             this.sendError(res, error);
         }
     }
@@ -35,7 +36,7 @@ export class CtrlMethodCoordinator extends MethodCoordinator {
             result = await this.coordinate();
             return result;
         } catch (error) {
-            // this.sendError(res, error);
+            console.log("ctrl error came ", error);
         }
         return null;
     }

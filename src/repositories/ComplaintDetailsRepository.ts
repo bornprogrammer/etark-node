@@ -14,7 +14,7 @@ export class ComplaintDetailsRepository extends BaseRepository {
 
     public update = async (complainDetailObj: any) => {
         let result = await ComplaintDetails.update({
-            field_val: complainDetailObj.compensation_type
+            field_val: complainDetailObj.field_val
         }, {
             where: {
                 id: complainDetailObj.complain_detail_id
@@ -22,6 +22,18 @@ export class ComplaintDetailsRepository extends BaseRepository {
         });
         return result;
     }
+
+    // public updateByFieldId = async (complainDetailObj: any) => {
+    //     let result = await ComplaintDetails.update({
+    //         field_val: complainDetailObj.field_val
+    //     }, {
+    //         where: {
+    //             id: complainDetailObj.complain_detail_id,
+    //             field_id: complainDetailObj.field_id
+    //         }
+    //     });
+    //     return result;
+    // }
 
 }
 

@@ -38,6 +38,7 @@ export default class MethodCoordinator implements Coordinator {
                 // this.preservedResultsContainer.push(result);
             }
         } catch (error) {
+            console.log("error came ", error);
             throw error;
         }
         return result;
