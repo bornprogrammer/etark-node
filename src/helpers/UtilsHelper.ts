@@ -1,3 +1,4 @@
+import { ObjectHelper } from "./ObjectHelper";
 
 
 export class UtilsHelper {
@@ -31,6 +32,17 @@ export class UtilsHelper {
 
     public static generateRandomNumberBetweenRange(min: number, max: number): number {
         return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    public static replaceAllStr(objectData: any, strVal: string, openDelimiter: string = "{{", closeDelimiter: string = "}}"): string {
+        let builtStr = strVal;
+        if (ObjectHelper.isObjectNotEmpty(objectData)) {
+            for (const key in objectData) {
+                let regExp = new RegExp(`${openDelimiter}${key}${closeDelimiter}`, "g");
+                builtStr = builtStr.replace(regExp, objectData[key]);
+            }
+        }
+        return builtStr;
     }
 
 
