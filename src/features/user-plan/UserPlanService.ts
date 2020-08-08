@@ -15,6 +15,9 @@ import { AppConstants } from "@app/constants/AppConstants";
 import { UpdateUserPaymentStatusParamsEntity } from "@app/repo-method-param-entities/UpdateUserPaymentStatusParamsEntity";
 import { UserPaymentDetailsRepository, userPaymentDetailsRepositoryIns } from "@app/repositories/UserPaymentDetailsRepository";
 import { UserPaymentDetails } from "@app/models/UserPaymentDetails";
+import { fileReaderServiceIns } from "@app/services/FileReaderService";
+import { nodeMailerServiceIns } from "@app/services/NodeMailerService";
+import { UtilsHelper } from "@app/helpers/UtilsHelper";
 
 export class UserPlanService extends BaseService {
     /**
@@ -25,9 +28,23 @@ export class UserPlanService extends BaseService {
     }
 
     public paytmCallback = async (methodParamEntity: MethodParamEntity) => {
-        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isPaytmCheckSumValid, callableFunctionParams: methodParamEntity.topMethodParam }).setMethod({ callableFunction: this.updatePayment }).coordinate();
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isPaytmCheckSumValid, callableFunctionParams: methodParamEntity.topMethodParam }).setMethod({ callableFunction: this.updatePayment }).setMethod({ callableFunction: this.sendEmail }).coordinate();
         return result;
     }
+
+    public sendEmail = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let orderId = params.paytm_resp.ORDERID.replace(AppConstants.ORDER_ID_PREFIX, "");
+        let result = await userPlanRepositoryIns.getDetailsForOrderEmailTemp(orderId);
+        fileReaderServiceIns.readEmailTemplate("order-detail.html", this.sendOrderEmail.bind(null, result));
+        return params;
+    }
+
+    public sendOrderEmail = (orderDetail, error, data) => {
+        let orderDetailObj = orderDetail[0];
+        nodeMailerServiceIns.sendHtml("service@etark.in", "iamabornprogrammer@gmail.com", "Order email", UtilsHelper.replaceAllStr(orderDetailObj, data));
+    }
+
 
     public isPaytmCheckSumValid = (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
@@ -43,7 +60,6 @@ export class UserPlanService extends BaseService {
         let userPaymentDetails = new UserPaymentDetails();
         userPaymentDetails.id = topParams.ORDERID.replace(AppConstants.ORDER_ID_PREFIX, "");
         userPaymentDetails.gateway_response = JSON.stringify(topParams);
-        console.log(userPaymentDetails);
         userPaymentDetailsRepositoryIns.create(userPaymentDetails);
         return topParams;
     }

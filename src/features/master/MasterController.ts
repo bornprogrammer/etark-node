@@ -3,6 +3,7 @@ import { MasterRequestParamCoordinator } from "./MasterRequestParamCoordinator";
 import { MasterService, masterServiceIns } from "./MasterService";
 import { Request, Response } from "express";
 import { paytmServiceIns } from "@app/services/PaytmService";
+import { fileReaderServiceIns } from "@app/services/FileReaderService";
 
 export class MasterController extends BaseController {
 
@@ -17,7 +18,6 @@ export class MasterController extends BaseController {
 
     public getMakerListByCategoryId = async (req: Request, res: Response) => {
         let params = MasterRequestParamCoordinator.getInstance(req).getMakerListByCategoryIdParams();
-        let s = paytmServiceIns.generatePaytmTxnToken({ amount: 5, orderId: "5", userId: 5 });
         await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getMakerListByCategoryId, callableFunctionParams: params }).send(req, res);
     }
 
