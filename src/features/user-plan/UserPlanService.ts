@@ -35,8 +35,10 @@ export class UserPlanService extends BaseService {
     public sendEmail = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
         let orderId = params.paytm_resp.ORDERID.replace(AppConstants.ORDER_ID_PREFIX, "");
-        let result = await userPlanRepositoryIns.getDetailsForOrderEmailTemp(orderId);
-        fileReaderServiceIns.readEmailTemplate("order-detail.html", this.sendOrderEmail.bind(null, result));
+        if (params.paytm_resp.STATUS === "TXN_SUCCESS") {
+            let result = await userPlanRepositoryIns.getDetailsForOrderEmailTemp(orderId);
+            fileReaderServiceIns.readEmailTemplate("order-detail.html", this.sendOrderEmail.bind(null, result));
+        }
         return params;
     }
 
@@ -56,11 +58,11 @@ export class UserPlanService extends BaseService {
         let topParams = methodParamEntity.topMethodParam.paytm_resp;
         let isPaytmCheckSumValid = methodParamEntity.lastInvokedMethodParam;
         let userPayment: UpdateUserPaymentStatusParamsEntity = { paymentStatus: topParams.STATUS === "TXN_SUCCESS" ? "completed" : "failed", checksum: topParams.CHECKSUMHASH, orderNo: topParams.ORDERID };
-        userPaymentRepositoryIns.updateUserPaymentStatus(userPayment);
+        await userPaymentRepositoryIns.updateUserPaymentStatus(userPayment);
         let userPaymentDetails = new UserPaymentDetails();
         userPaymentDetails.id = topParams.ORDERID.replace(AppConstants.ORDER_ID_PREFIX, "");
         userPaymentDetails.gateway_response = JSON.stringify(topParams);
-        userPaymentDetailsRepositoryIns.create(userPaymentDetails);
+        await userPaymentDetailsRepositoryIns.create(userPaymentDetails);
         return topParams;
     }
 
