@@ -34,8 +34,10 @@ export class HttpService {
 
     public call = async () => {
         try {
+            console.log("rpOptions", this.rpOptions);
             let resp = await requestPromise(this.rpOptions);
             resp = !this.rpOptions.json ? JSON.parse(resp) : resp;
+            console.log("rpOptions resp", resp);
             return resp;
         } catch (error) {
             console.log('http calling error', error);

@@ -21,36 +21,41 @@ export class ComplaintRepository extends BaseRepository {
     }
 
     public getComplaintDetails = async (params: GetComplaintDetailsParamsEntity) => {
-        let result = await Complaint.findOne({
-            where: {
-                id: params.complaintId,
-                status: params.complaintStatus
-            },
-            include: [
-                {
-                    model: MakerDetails,
-                    as: "makerDetail",
-                    required: true
+        // try {
+            let result = await Complaint.findOne({
+                where: {
+                    id: params.complaintId,
+                    status: params.complaintStatus
                 },
-                {
-                    model: ComplaintDetails,
-                    as: "complainDetails",
-                    include: [
-                        {
-                            model: Field,
-                            required: true,
-                            as: "field",
-                        }
-                    ],
-                    required: true
-                }
-            ]
-        })
-        return result;
-    }
+                include: [
+                    {
+                        model: MakerDetails,
+                        as: "makerDetail",
+                        required: true
+                    },
+                    {
+                        model: ComplaintDetails,
+                        as: "complainDetails",
+                        include: [
+                            {
+                                model: Field,
+                                required: true,
+                                as: "field",
+                            }
+                        ],
+                        required: true
+                    }
+                ]
+            })
+            // } catch (error) {
+            //     console.log('ssssssssssss');
+            // }
+            return result;
+        }
 
     public getComplaintDetailByFieldName = async (params: GetComplaintDetailsParamsEntity, fieldName: string) => {
         let result = await this.getComplaintDetails(params);
+        console.log("cd", result);
         let complainDetail: ComplaintDetails = null;
         if (ObjectHelper.isObjectNotEmpty(result)) {
             result.complainDetails.forEach((complainDetailObj: ComplaintDetails) => {
