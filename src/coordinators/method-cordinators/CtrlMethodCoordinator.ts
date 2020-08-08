@@ -35,8 +35,9 @@ export class CtrlMethodCoordinator extends MethodCoordinator {
             result = await this.coordinate();
             return result;
         } catch (error) {
-            this.sendError(res, error);
+            // this.sendError(res, error);
         }
+        return null;
     }
 
     public sendData = async (request: Request, res: Response, data: any) => {
