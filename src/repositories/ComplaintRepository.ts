@@ -5,6 +5,8 @@ import { GetComplaintDetailsParamsEntity } from "@app/repo-method-param-entities
 import { ComplaintDetails } from "@app/models/ComplaintDetails";
 import { Field } from "@app/models/Field";
 import { MakerDetails } from "@app/models/MakerDetails";
+import ArrayHelper from "@app/helpers/ArrayHelper";
+import { ObjectHelper } from "@app/helpers/ObjectHelper";
 
 export class ComplaintRepository extends BaseRepository {
     /**
@@ -37,7 +39,7 @@ export class ComplaintRepository extends BaseRepository {
                         {
                             model: Field,
                             required: true,
-                            as: "field"
+                            as: "field",
                         }
                     ],
                     required: true
@@ -45,6 +47,19 @@ export class ComplaintRepository extends BaseRepository {
             ]
         })
         return result;
+    }
+
+    public getComplaintDetailByFieldName = async (params: GetComplaintDetailsParamsEntity, fieldName: string) => {
+        let result = await this.getComplaintDetails(params);
+        let complainDetail: ComplaintDetails = null;
+        if (ObjectHelper.isObjectNotEmpty(result)) {
+            result.complainDetails.forEach((complainDetailObj: ComplaintDetails) => {
+                if (complainDetailObj.field.field_name === fieldName) {
+                    complainDetail = complainDetailObj;
+                }
+            })
+        }
+        return complainDetail;
     }
 
 

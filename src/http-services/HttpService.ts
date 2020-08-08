@@ -16,7 +16,6 @@ export class HttpService {
 
     public setHeadersAsObj(headers: object) {
         if (ObjectHelper.isObjectNotEmpty(headers)) {
-            // tslint:disable-next-line: forin
             for (const key in headers) {
                 this.rpOptions.headers[key] = headers[key];
             }
@@ -28,12 +27,18 @@ export class HttpService {
         this.rpOptions.qs = obj;
     }
 
+    public setExpectedResponseAsJson() {
+        this.rpOptions.json = true;
+        return this;
+    }
+
     public call = async () => {
         try {
             let resp = await requestPromise(this.rpOptions);
             resp = !this.rpOptions.json ? JSON.parse(resp) : resp;
             return resp;
         } catch (error) {
+            console.log('http calling error', error);
             throw error;
         }
     }

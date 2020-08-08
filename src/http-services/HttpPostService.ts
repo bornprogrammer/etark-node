@@ -2,7 +2,6 @@ import { HttpMethodEnum } from '@app/enums/HttpMethodEnum';
 import { HttpService } from './HttpService';
 
 class HttpPostService extends HttpService {
-    // private payload: string;
     constructor(url: string) {
         super(url, HttpMethodEnum.POST);
     }

@@ -2,7 +2,6 @@ import { BaseController } from "@app/controllers/BaseController";
 import { ComplainRequestParamsCoordinator } from "./ComplainRequestParamsCoordinator";
 import { Request, Response } from "express";
 import { complaintServiceIns } from "./ComplaintService";
-import { ObjectHelper } from "@app/helpers/ObjectHelper";
 
 export class ComplaintController extends BaseController {
     /**
@@ -30,8 +29,7 @@ export class ComplaintController extends BaseController {
 
     public getChancesOfWinning = async (req: Request, res: Response) => {
         let params = ComplainRequestParamsCoordinator.getInstance(req).getChancesOfWinningParams();
-        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: complaintServiceIns.getChancesOfWinning, callableFunctionParams: params }).send(req, res);
-        // let queryStr = ObjectHelper.buildStrFromKeyNValueOfObject(result,)
+        this.getCtrlMethodCoordinator().setMethod({ callableFunction: complaintServiceIns.getChancesOfWinning, callableFunctionParams: params }).send(req, res);
     }
 }
 
