@@ -75,9 +75,11 @@ class UserService extends BaseService {
             if (distanceFromLatLonInKm < distance) {
                 distance = distanceFromLatLonInKm;
                 serviceCenterObj = item;
+                console.log("serviceCenterObj", serviceCenterObj);
             }
         });
         distance = parseFloat(distance.toFixed(2));
+        console.log("distance", distance);
         let price = serviceCenterObj.base_fare + AppConstants.DELIVERY_PRICE_MARGIN;
         let remainingDist = distance - serviceCenterObj.base_km;
         if (remainingDist > 0) {
