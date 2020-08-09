@@ -66,4 +66,4 @@ class PaytmService {
     }
 }
 
-export const paytmServiceIns = new PaytmService(); 
+export const paytmServiceIns = new PaytmService();
