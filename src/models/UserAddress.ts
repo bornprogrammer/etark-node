@@ -30,11 +30,9 @@ UserAddress.init({
     },
     lat: {
         type: DataTypes.STRING,
-        allowNull: false
     },
     lon: {
         type: DataTypes.STRING,
-        allowNull: false
     }
 }, {
     tableName: "user_address",
