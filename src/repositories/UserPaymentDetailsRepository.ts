@@ -9,6 +9,7 @@ export class UserPaymentDetailsRepository extends BaseRepository {
             user_payment_id: params.id,
             gateway_response: params.gateway_response
         });
+        return result;
     }
 }
 

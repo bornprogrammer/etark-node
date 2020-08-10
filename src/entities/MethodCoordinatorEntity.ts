@@ -10,4 +10,6 @@ export default interface MethodCoordinatorEntity {
 
     storeResultAs?: StoreResultAs;
 
+    resultToBeReturnedAsFinalResult?: boolean;
+
 }  

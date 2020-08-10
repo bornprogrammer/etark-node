@@ -1,12 +1,14 @@
 import { Model, DataTypes, Optional, Association } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { UserPlanComponent } from "./UserPlanComponent";
+import { UserPaymentDetailsRepository } from "@app/repositories/UserPaymentDetailsRepository";
+import { UserPayment } from "./UserPayment";
 
 
 export interface UserPlanAttributes {
     id: number;
-    complain_id: number;
-    plan_id: number;
+    complain_id?: number;
+    plan_id?: number;
     status?: string
 }
 
@@ -20,9 +22,10 @@ export class UserPlan extends Model {
     plan_id: number;
     status: string;
     public readonly UserPlanComponents?: UserPlanComponent[];
-    public static associations: {
-        userPlanComponents: Association<UserPlan, UserPlanComponent>;
-    };
+    public readonly userPayment?: UserPayment;
+    // public static associations: {
+    //     userPlanComponents: Association<UserPlan, UserPlanComponent>;
+    // };
 }
 
 UserPlan.init({
@@ -53,3 +56,9 @@ UserPlan.init({
 UserPlan.hasMany(UserPlanComponent);
 
 UserPlanComponent.belongsTo(UserPlan);
+
+UserPlan.hasOne(UserPayment, {
+    as: "userPayment"
+});
+
+UserPayment.belongsTo(UserPlan);

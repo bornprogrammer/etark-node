@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import { UserRequestParamsCoordinator } from "./UserRequestParamsCoordinator";
 import { userServiceIns } from "./UserService";
 
-
 export class UserController extends BaseController {
 
     /**

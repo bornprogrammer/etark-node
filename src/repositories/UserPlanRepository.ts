@@ -1,12 +1,14 @@
 import BaseRepository from "@app/services/BaseRepository";
 import { GetUserPlanComponentDetailsParamsEntity } from "@app/repo-method-param-entities/GetUserPlanComponentDetailsParamsEntity";
-import { UserPlan } from "@app/models/UserPlan";
+import { UserPlan, UserPlanAttributes } from "@app/models/UserPlan";
 import { UserPlanComponent } from "@app/models/UserPlanComponent";
 import { AddUserPlanParamEntity } from "@app/repo-method-param-entities/AddUserPlanParamEntity";
 import { PlanComponent } from "@app/models/PlanComponents";
 import { PlanComponents } from "@app/enums/PlanComponents";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { QueryTypes } from "sequelize";
+import { GetUserPlanStatusByUserPaymentIdParamsEntity } from "@app/repo-method-param-entities/GetUserPlanStatusByUserPaymentIdParamsEntity";
+import { UserPayment } from "@app/models/UserPayment";
 
 export class UserPlanRepository extends BaseRepository {
     /**
@@ -65,12 +67,41 @@ export class UserPlanRepository extends BaseRepository {
         return result;
     }
 
+    public updateUserPlanStatus = async (params: UserPlanAttributes) => {
+        let result = await UserPlan.update({
+            status: params.status
+        }, {
+            where: {
+                id: params.id,
+                status: "pending",
+            }
+        });
+        return result;
+    }
+
     public getDetailsForOrderEmailTemp = async (orderId: string) => {
         let result = await sequelizeConnection.connection.query(`select users.name,users.email,plans.plan_name
         from user_payment inner join user_plan on user_payment.user_plan_id = user_plan.id  inner join plans on user_plan.plan_id = plans.id
         inner join complaints on user_plan.complain_id = complaints.id inner join users on complaints.user_id = users.id
-        where user_payment.id=${orderId}`, {
+        where user_payment.id=${orderId} and user_plan.status='success'`, {
             type: QueryTypes.SELECT
+        })
+        return result;
+    }
+
+    public getUserPlanStatusByUserPaymentId = async (params: GetUserPlanStatusByUserPaymentIdParamsEntity) => {
+        let result = await UserPlan.findOne({
+            include: [
+                {
+                    model: UserPayment,
+                    required: true,
+                    where: {
+                        id: params.userPaymentId,
+                        status: params.userPaymentStatus
+                    },
+                    as: "userPayment"
+                }
+            ]
         })
         return result;
     }

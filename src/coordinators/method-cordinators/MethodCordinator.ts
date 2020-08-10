@@ -10,6 +10,8 @@ export default class MethodCoordinator implements Coordinator {
 
     private storeResultAsContainer: any;
 
+    private finalResult: any;
+
     constructor() {
         this.callableFunctionContainer = [];
         this.storeResultAsContainer = {};
@@ -32,16 +34,17 @@ export default class MethodCoordinator implements Coordinator {
                         break;
                     } else if (callableObj.storeResultAs) {
                         this.storeResultAsContainer[callableObj.storeResultAs] = result;
+                    } else if (callableObj.resultToBeReturnedAsFinalResult) {
+                        this.finalResult = result;
                     }
                     // this.doPreservedOrMergeResults(callableObj, callableResult);
                 }
-                // this.preservedResultsContainer.push(result);
             }
         } catch (error) {
             console.log("error came ", error);
             throw error;
         }
-        return result;
+        return this.finalResult || result;
     }
 
     private buildMethodParamEntity(topMethodParam?: any, methodParam?: any, lastInvokedMethodParam?: any): MethodParamEntity {

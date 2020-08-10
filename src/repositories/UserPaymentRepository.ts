@@ -27,8 +27,8 @@ class UserPaymentRepository extends BaseRepository {
             payment_status: params.paymentStatus
         }, {
             where: {
-                // paytm_checksum: params.checksum,
-                order_no: params.orderNo,
+                id: params.orderId,
+                payment_status: 'pending'
             }
         });
         return result;

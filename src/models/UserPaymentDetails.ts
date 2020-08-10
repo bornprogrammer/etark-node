@@ -3,7 +3,8 @@ import { sequelizeConnection } from "@app/SequelizeConnection";
 
 export class UserPaymentDetails extends Model {
     id: number;
-    gateway_response: string
+    gateway_response: string;
+    user_payment_id: number;
 }
 
 UserPaymentDetails.init({

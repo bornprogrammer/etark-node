@@ -1,6 +1,6 @@
 
 export interface UpdateUserPaymentStatusParamsEntity {
-    orderNo: string;
-    checksum: string;
+    orderId: string;
+    // checksum: string;
     paymentStatus: string;
 }
