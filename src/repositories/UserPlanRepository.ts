@@ -97,7 +97,7 @@ export class UserPlanRepository extends BaseRepository {
                     required: true,
                     where: {
                         id: params.userPaymentId,
-                        status: params.userPaymentStatus
+                        payment_status: params.userPaymentStatus
                     },
                     as: "userPayment"
                 }

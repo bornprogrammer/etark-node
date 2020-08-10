@@ -1,7 +1,6 @@
-import { Model, DataTypes, Optional, Association } from "sequelize";
+import { Model, DataTypes, Association } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { UserPlanComponent } from "./UserPlanComponent";
-import { UserPaymentDetailsRepository } from "@app/repositories/UserPaymentDetailsRepository";
 import { UserPayment } from "./UserPayment";
 
 
@@ -57,7 +56,7 @@ UserPlan.hasMany(UserPlanComponent);
 
 UserPlanComponent.belongsTo(UserPlan);
 
-UserPlan.hasOne(UserPayment, {
+UserPlan.hasMany(UserPayment, {
     as: "userPayment"
 });
 

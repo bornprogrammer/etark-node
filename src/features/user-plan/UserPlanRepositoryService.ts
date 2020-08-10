@@ -81,8 +81,7 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
 
     public markUserPlanStatusSuccess = async (methodParamEntity: MethodParamEntity) => {
         let params: UserPlan = methodParamEntity.lastInvokedMethodParam;
-        console.log("user plan det", params);
-        let result = await userPlanRepositoryIns.updateUserPlanStatus({ id: params.id });
+        let result = await userPlanRepositoryIns.updateUserPlanStatus({ id: params.id, status: "success" });
         return result;
     }
 
@@ -114,17 +113,6 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
         let result = await userPlanRepositoryIns.getDetailsForOrderEmailTemp(orderId);
         return result;
     }
-
-    public sendOrderEmail = (orderDetail, error, data) => {
-        let orderDetailObj = orderDetail[0];
-        nodeMailerServiceIns.sendHtml("service@etark.in", "iamabornprogrammer@gmail.com", "Order email", UtilsHelper.replaceAllStr(orderDetailObj, data));
-    }
-
-    // public isPaytmCheckSumValid = (methodParamEntity: MethodParamEntity) => {
-    //     let params = methodParamEntity.topMethodParam;
-    //     // let isPaytmCheckSumValid = paytmServiceIns.isPaytmCheckSumValid(params.paytm_resp);
-    //     return { isPaytmCheckSumValid: true };
-    // }
 
     public addUserPlan = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;

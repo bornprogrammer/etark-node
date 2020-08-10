@@ -25,12 +25,14 @@ export class NodeMailerService {
 
     public sendHtml = async (from: string, to: string, subject: string, htmlTemplate: string) => {
         try {
-            await this.transporter.sendMail({
+            console.log("recipient", to);
+            let response = await this.transporter.sendMail({
                 from: from, // sender address
                 to: to, // list of receivers
                 subject: subject, // Subject line
                 html: htmlTemplate, // html body
             });
+            console.log("email sent", response);
         } catch (error) {
             console.log(error);
         }
