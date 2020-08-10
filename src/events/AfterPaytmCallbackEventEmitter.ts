@@ -39,5 +39,4 @@ export class AfterPaytmCallbackEventEmitter extends BaseEventEmitter {
         return paytmResp.STATUS === "TXN_SUCCESS";
     }
 }
-
 export const afterPaytmCallbackEventEmitterIns = new AfterPaytmCallbackEventEmitter();
