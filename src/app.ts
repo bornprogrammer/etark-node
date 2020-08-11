@@ -1,6 +1,8 @@
 
 import express, { Request, Response } from 'express';
 
+import path from 'path';
+
 import AppRoutes from './routes/AppRoutes';
 
 // import dotenv from 'dotenv';
@@ -33,6 +35,8 @@ export default class App {
             res.send('status is healthy 1.1');
         });
         this.app.use('/api', AppRoutes.routes());
+        this.app.get("/", express.static(path.join(__dirname, "./public")));
+
     }
 
     private dbSetup(): void {
