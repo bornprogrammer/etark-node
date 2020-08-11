@@ -9,6 +9,7 @@ import { chancesOfWinningMLCasesServiceIns } from "@app/services/ChancesOfWinnin
 import { ComplaintDetails } from "@app/models/ComplaintDetails";
 import { complaintDetailsRepositoryIns } from "@app/repositories/ComplaintDetailsRepository";
 import { StoreResultAs } from "@app/enums/StoreResultAs";
+import ArrayHelper from "@app/helpers/ArrayHelper";
 
 export class ComplaintService extends BaseService {
 
@@ -127,6 +128,18 @@ export class ComplaintService extends BaseService {
         complaintDetails.complaint_id = params.complain_id;
         complaintDetails.field_id = 19;
         return complaintDetails;
+    }
+
+    public getIMEIFieldValue = (complaintDetails: ComplaintDetails[]) => {
+        let imeiNumber = null;
+        if (ArrayHelper.isArrayValid(complaintDetails)) {
+            complaintDetails.forEach(complaintDetail => {
+                if (complaintDetail.field.field_name === "imei_number") {
+                    imeiNumber = complaintDetail.field_val;
+                }
+            });
+        }
+        return imeiNumber;
     }
 }
 

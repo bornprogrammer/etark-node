@@ -17,6 +17,15 @@ export class UserController extends BaseController {
         await this.getCtrlMethodCoordinator().setMethod({ callableFunctionParams: params, callableFunction: userServiceIns.addAddress }).send(req, res);
     }
 
+    public getSuccessPageDetail = async (req: Request, res: Response) => {
+        let params = UserRequestParamsCoordinator.getInstance(req).getSuccessPageDetailParams();
+        await this.getCtrlMethodCoordinator().setMethod({ callableFunctionParams: params, callableFunction: userServiceIns.getSuccessPageDetail }).send(req, res);
+    }
+
+    public downloadInvoice = async (req: Request, res: Response) => {
+
+    }
+
 }
 
 export const userControllerIns = new UserController();

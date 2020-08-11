@@ -1,10 +1,12 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { PlanComponent } from "./PlanComponents";
+import { UserPlan } from "./UserPlan";
 
 
 export class Plan extends Model {
-
+    plan_type: string;
+    plan_name: string
 }
 
 Plan.init({
@@ -29,7 +31,12 @@ Plan.init({
     timestamps: false,
     tableName: "plans",
     sequelize: sequelizeConnection.connection,
+    underscored: true
 })
 Plan.hasMany(PlanComponent);
 
 PlanComponent.belongsTo(Plan);
+
+Plan.hasMany(UserPlan, { foreignKey: "plan_id" });
+
+UserPlan.belongsTo(Plan, { as: "plan", foreignKey: "plan_id" });

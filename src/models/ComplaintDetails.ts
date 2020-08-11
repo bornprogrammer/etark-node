@@ -43,4 +43,3 @@ ComplaintDetails.init({
     tableName: "complaint_details",
     timestamps: false
 })
-

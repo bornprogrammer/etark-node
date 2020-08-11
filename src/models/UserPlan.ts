@@ -2,6 +2,7 @@ import { Model, DataTypes, Association } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { UserPlanComponent } from "./UserPlanComponent";
 import { UserPayment } from "./UserPayment";
+import { Plan } from "./Plan";
 
 
 export interface UserPlanAttributes {
@@ -21,10 +22,8 @@ export class UserPlan extends Model {
     plan_id: number;
     status: string;
     public readonly UserPlanComponents?: UserPlanComponent[];
-    public readonly userPayment?: UserPayment;
-    // public static associations: {
-    //     userPlanComponents: Association<UserPlan, UserPlanComponent>;
-    // };
+    public readonly userPayments?: [UserPayment];
+    public readonly plan?: Plan;
 }
 
 UserPlan.init({
@@ -35,7 +34,7 @@ UserPlan.init({
     },
     complain_id: {
         type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false
+        allowNull: false,
     },
     plan_id: {
         type: DataTypes.INTEGER.UNSIGNED,
@@ -57,7 +56,7 @@ UserPlan.hasMany(UserPlanComponent);
 UserPlanComponent.belongsTo(UserPlan);
 
 UserPlan.hasMany(UserPayment, {
-    as: "userPayment"
+    as: "userPayments"
 });
 
 UserPayment.belongsTo(UserPlan);

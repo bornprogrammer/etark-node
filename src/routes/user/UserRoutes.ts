@@ -9,6 +9,8 @@ export class UserRoutes {
 
         router.post("/:id/addresses", userControllerIns.addAddress);
 
+        router.get("/:id/payment/:order_id", userControllerIns.getSuccessPageDetail);
+
         return router;
     }
 

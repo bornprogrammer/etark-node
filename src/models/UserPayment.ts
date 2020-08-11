@@ -19,7 +19,8 @@ export class UserPayment extends Model {
     payment_status?: string;
     sub_total: number;
     tax: number;
-    paytm_checksum?: string
+    paytm_checksum?: string;
+
 }
 
 UserPayment.init({

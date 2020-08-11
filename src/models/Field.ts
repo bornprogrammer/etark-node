@@ -59,6 +59,6 @@ Field.init({
     underscored: true,
 });
 
-Field.hasOne(ComplaintDetails);
+Field.hasMany(ComplaintDetails, { foreignKey: "field_id" });
 
-ComplaintDetails.belongsTo(Field, { as: "field" });
+ComplaintDetails.belongsTo(Field, { as: "field", foreignKey: "field_id" });

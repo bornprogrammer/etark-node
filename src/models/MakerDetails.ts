@@ -54,7 +54,7 @@ MakerDetails.init({
     timestamps: false
 })
 
-MakerDetails.hasMany(Complaint);
+MakerDetails.hasMany(Complaint, { foreignKey: "maker_detail_id" });
 
-Complaint.belongsTo(MakerDetails, { as: "makerDetail" })
+Complaint.belongsTo(MakerDetails, { as: "makerDetail" });
 
