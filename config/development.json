@@ -1,0 +1,9 @@
+{
+    "name": "E-Tark Development",
+    "db": {
+        "dbname": "etark",
+        "username": "root",
+        "password": "Divyani_1990",
+        "host": "localhost"
+    }
+}

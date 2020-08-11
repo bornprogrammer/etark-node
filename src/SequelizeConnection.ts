@@ -1,17 +1,16 @@
 import { Sequelize } from "sequelize";
+import config from "config";
 
 export class SequelizeConnection {
     public connection: Sequelize;
     constructor() {
         this.connection = new Sequelize(
-            "etark",
-            "root",
-            // "Divyani_1990",
-            "YCombi2020",
+            config.get("db.dbname"),
+            config.get("db.username"),
+            config.get("db.password"),
             {
-                // host: "localhost",
-                host: "etark.c7yr7myjbwov.ap-south-1.rds.amazonaws.com",
-                dialect: "mysql",
+                host: config.get("db.host"),
+                dialect: config.get("dialect"),
             },
         );
     }
