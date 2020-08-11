@@ -7,8 +7,7 @@ import { PlanComponents } from "@app/enums/PlanComponents";
 import { AppConstants } from "@app/constants/AppConstants";
 import { complaintRepositoryIns } from "@app/repositories/ComplaintRepository";
 import { userPlanServiceIns } from "../user-plan/UserPlanService";
-import { ComplaintDetails } from "@app/models/ComplaintDetails";
-import ArrayHelper from "@app/helpers/ArrayHelper";
+
 import { complaintServiceIns } from "../complaints/ComplaintService";
 
 class UserService extends BaseService {
