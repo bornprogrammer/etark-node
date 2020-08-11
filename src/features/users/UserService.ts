@@ -7,7 +7,6 @@ import { PlanComponents } from "@app/enums/PlanComponents";
 import { AppConstants } from "@app/constants/AppConstants";
 import { complaintRepositoryIns } from "@app/repositories/ComplaintRepository";
 import { userPlanServiceIns } from "../user-plan/UserPlanService";
-
 import { complaintServiceIns } from "../complaints/ComplaintService";
 
 class UserService extends BaseService {

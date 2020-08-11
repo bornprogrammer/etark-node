@@ -99,7 +99,7 @@ export class UserPlanRepository extends BaseRepository {
                         id: params.userPaymentId,
                         payment_status: params.userPaymentStatus
                     },
-                    as: "userPayment"
+                    as: "userPayments"
                 }
             ]
         })

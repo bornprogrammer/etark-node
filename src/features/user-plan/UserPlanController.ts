@@ -29,7 +29,7 @@ export class UserPlanController extends BaseController {
         const status = result ? params.paytm_resp.STATUS : "TXN_FAILURE";
         const queryStr = ObjectHelper.buildStrFromKeyNValueOfObject({ status, orderId: params.paytm_resp.ORDERID }, "=", "&");
         const urlToRedirect = AppConstants.CLIENT_URL_AFTER_PAYTM_RESPONSE + "#/confirm?" + queryStr;
-        console.log("queryStr", queryStr);
+        console.log("queryStr", urlToRedirect);
         res.redirect(urlToRedirect);
     }
 }
