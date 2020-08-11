@@ -1,6 +1,5 @@
 
 import nodemailer from 'nodemailer';
-
 export class NodeMailerService {
 
     private transporter: any

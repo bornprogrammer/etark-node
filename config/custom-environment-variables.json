@@ -1,8 +1,15 @@
 {
     "db": {
-        "dbname": "dbname",
-        "username": "username",
-        "password": "password",
-        "host": "host"
+        "dbname": "db_name",
+        "username": "db_username",
+        "password": "db_password",
+        "host": "db_host"
+    },
+    "mail": {
+        "port": "mail_port",
+        "host": "mail_host",
+        "secure": "true",
+        "user": "mail_user",
+        "pass": "mail_password"
     }
 }
