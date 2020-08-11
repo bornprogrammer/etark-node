@@ -1,13 +1,8 @@
-
 import express, { Request, Response } from 'express';
 
 import path from 'path';
 
 import AppRoutes from './routes/AppRoutes';
-
-// import dotenv from 'dotenv';
-
-// dotenv.config();
 
 import { sequelizeConnection } from './SequelizeConnection';
 export default class App {
@@ -34,9 +29,8 @@ export default class App {
         this.app.get('/ts/health-check', async (req: Request, res: Response) => {
             res.send('status is healthy 1.1');
         });
+        this.app.use(express.static(path.join(__dirname, "./public")));
         this.app.use('/api', AppRoutes.routes());
-        this.app.get("/", express.static(path.join(__dirname, "./public")));
-
     }
 
     private dbSetup(): void {
