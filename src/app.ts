@@ -3,7 +3,9 @@ import express, { Request, Response } from 'express';
 
 import AppRoutes from './routes/AppRoutes';
 
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
+
+// dotenv.config();
 
 import { sequelizeConnection } from './SequelizeConnection';
 export default class App {
@@ -12,7 +14,7 @@ export default class App {
 
     constructor() {
 
-        dotenv.config();
+        console.log(process.env.NODE_ENV);
 
         this.app = express();
 

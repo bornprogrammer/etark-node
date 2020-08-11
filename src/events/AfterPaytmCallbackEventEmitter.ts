@@ -22,7 +22,6 @@ export class AfterPaytmCallbackEventEmitter extends BaseEventEmitter {
     public sendEmail = async (data: any) => {
         let paytmResp: PaytmCallbackResponseEntity = data;
         if (this.isPaymentSucces(paytmResp)) {
-            // let result = this.get
             let result = await userPlanRepositoryServiceIns.getDetailsForOrderEmailTemp(userPlanServiceIns.removeOrderPrefixFromOrderNo(paytmResp.ORDERID));
             if (result) {
                 fileReaderServiceIns.readEmailTemplate("order-detail.html", this.sendOrderEmail.bind(null, result));

@@ -1,9 +1,3 @@
 {
-    "name": "E-Tark Production",
-    "db": {
-        "dbname": "etark",
-        "username": "root",
-        "password": "YCombi2020",
-        "host": "etark.c7yr7myjbwov.ap-south-1.rds.amazonaws.com"
-    }
+    "name": "E-Tark Production"
 }

@@ -1,9 +1,8 @@
 {
-    "mail": {
-        "host": "smtp.zoho.in",
-        "port": 465,
-        "secure": true,
-        "user": "service@etark.in",
-        "pass": "etarklegal2020"
+    "db": {
+        "dbname": "dbname",
+        "username": "username",
+        "password": "password",
+        "host": "host"
     }
 }
