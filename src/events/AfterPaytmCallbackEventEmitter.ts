@@ -6,6 +6,7 @@ import { userPlanRepositoryServiceIns } from "@app/features/user-plan/UserPlanRe
 import { fileReaderServiceIns } from "@app/services/FileReaderService";
 import { nodeMailerServiceIns } from "@app/services/NodeMailerService";
 import { UtilsHelper } from "@app/helpers/UtilsHelper";
+import config from "config";
 
 export class AfterPaytmCallbackEventEmitter extends BaseEventEmitter {
     /**
@@ -31,11 +32,23 @@ export class AfterPaytmCallbackEventEmitter extends BaseEventEmitter {
 
     public sendOrderEmail = (orderDetail, error, data) => {
         let orderDetailObj = orderDetail[0];
-        nodeMailerServiceIns.sendHtml("service@etark.in", orderDetailObj.email, "Order email", UtilsHelper.replaceAllStr(orderDetailObj, data));
+        orderDetailObj.is_download_report_to_be_shown = this.isDownloadReportToBeShown(orderDetailObj) ? "inline-block" : "none";
+        // orderDetailObj.email = "iamabornprogrammer@gmail.com";
+        nodeMailerServiceIns.sendHtml(config.get("mail.from"), orderDetailObj.email, "Order email", UtilsHelper.replaceAllStr(orderDetailObj, data));
     }
 
     public isPaymentSucces = (paytmResp: any): boolean => {
         return paytmResp.STATUS === "TXN_SUCCESS";
     }
+
+    public isDownloadReportToBeShown = (orderDetailObj: any): boolean => {
+        let isDownloadReportToBeShown = true;
+        let planType = orderDetailObj.plan_type;
+        if (planType === "pickup_delivery") {
+            isDownloadReportToBeShown = false;
+        }
+        return isDownloadReportToBeShown;
+    }
 }
+
 export const afterPaytmCallbackEventEmitterIns = new AfterPaytmCallbackEventEmitter();

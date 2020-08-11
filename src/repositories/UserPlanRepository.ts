@@ -80,7 +80,7 @@ export class UserPlanRepository extends BaseRepository {
     }
 
     public getDetailsForOrderEmailTemp = async (orderId: string) => {
-        let result = await sequelizeConnection.connection.query(`select user_payment.order_no,users.name,users.email,plans.plan_name
+        let result = await sequelizeConnection.connection.query(`select plans.plan_type,user_payment.order_no,users.name,users.email,plans.plan_name
         from user_payment inner join user_plan on user_payment.user_plan_id = user_plan.id  inner join plans on user_plan.plan_id = plans.id
         inner join complaints on user_plan.complain_id = complaints.id inner join users on complaints.user_id = users.id
         where user_payment.id=${orderId} and user_plan.status='success'`, {

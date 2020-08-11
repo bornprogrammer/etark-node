@@ -10,6 +10,7 @@
         "host": "mail_host",
         "secure": "true",
         "user": "mail_user",
-        "pass": "mail_password"
+        "pass": "mail_password",
+        "from": "mail_user"
     }
 }
