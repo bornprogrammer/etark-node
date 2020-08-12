@@ -10,6 +10,7 @@ import { UserPlan } from "@app/models/UserPlan";
 import { UserPaymentDetailsRepository } from "./UserPaymentDetailsRepository";
 import { UserPayment } from "@app/models/UserPayment";
 import { Plan } from "@app/models/Plan";
+import { ComplaintDetailByFieldNameParamsEntity } from "@app/repo-method-param-entities/ComplaintDetailByFieldNameParamsEntity";
 
 export class ComplaintRepository extends BaseRepository {
     /**
@@ -54,13 +55,12 @@ export class ComplaintRepository extends BaseRepository {
         return result;
     }
 
-    public getComplaintDetailByFieldName = async (params: GetComplaintDetailsParamsEntity, fieldName: string) => {
+    public getComplaintDetailByFieldName = async (params: ComplaintDetailByFieldNameParamsEntity) => {
         let result = await this.getComplaintDetails(params);
-
         let complainDetail: ComplaintDetails = null;
         if (ObjectHelper.isObjectNotEmpty(result)) {
             result.complainDetails.forEach((complainDetailObj: ComplaintDetails) => {
-                if (complainDetailObj.field.field_name === fieldName) {
+                if (complainDetailObj.field.field_name === params.fieldName) {
                     complainDetail = complainDetailObj;
                 }
             })

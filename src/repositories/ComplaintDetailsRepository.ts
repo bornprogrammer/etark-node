@@ -23,18 +23,17 @@ export class ComplaintDetailsRepository extends BaseRepository {
         return result;
     }
 
-    // public updateByFieldId = async (complainDetailObj: any) => {
+    // public updateByFieldId = async (complainDetailObj: UpdateComplainDetailByFieldIdParamsEntity) => {
     //     let result = await ComplaintDetails.update({
-    //         field_val: complainDetailObj.field_val
+    //         field_val: complainDetailObj.fieldVal
     //     }, {
     //         where: {
-    //             id: complainDetailObj.complain_detail_id,
+    //             complaint_id: complainDetailObj.complainId,
     //             field_id: complainDetailObj.field_id
     //         }
     //     });
     //     return result;
     // }
-
 }
 
 export const complaintDetailsRepositoryIns = new ComplaintDetailsRepository();

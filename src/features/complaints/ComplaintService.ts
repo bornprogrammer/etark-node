@@ -2,7 +2,6 @@ import BaseService from "@app/services/BaseService";
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { complaintRepositoryIns } from "./ComplaintRepository";
 import { complaintRepositoryIns as complaintRepositoryIns1 } from "@app/repositories/ComplaintRepository";
-import { GetComplaintDetailsParamsEntity } from "@app/repo-method-param-entities/GetComplaintDetailsParamsEntity";
 import { httpPostServiceIns } from "@app/http-services/HttpPostService";
 import { AppConstants } from "@app/constants/AppConstants";
 import { chancesOfWinningMLCasesServiceIns } from "@app/services/ChancesOfWinningMLCasesService";
@@ -10,9 +9,10 @@ import { ComplaintDetails } from "@app/models/ComplaintDetails";
 import { complaintDetailsRepositoryIns } from "@app/repositories/ComplaintDetailsRepository";
 import { StoreResultAs } from "@app/enums/StoreResultAs";
 import ArrayHelper from "@app/helpers/ArrayHelper";
+import { ComplaintDetailByFieldNameParamsEntity } from "@app/repo-method-param-entities/ComplaintDetailByFieldNameParamsEntity";
+import { SmartphoneComplainFieldsEnum } from "@app/enums/SmartphoneComplainFieldsEnum";
 
 export class ComplaintService extends BaseService {
-
     /**
      *
      */
@@ -40,26 +40,54 @@ export class ComplaintService extends BaseService {
 
     public getChancesOfWinning = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.getComplaintDetails, callableFunctionParams: params }).setMethod({ callableFunction: this.callWinningChancesMLApi }).coordinate();
+        params.field_name = SmartphoneComplainFieldsEnum.PROBLEM_DESCRIPTION;
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.getComplaintDetails, callableFunctionParams: params }).setMethod({ callableFunction: this.callWinningChancesMLApi, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.updateWinningOfChances }).coordinate();
         return result;
     }
 
     public getComplaintDetails = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let getComplaintDetailsParams = new GetComplaintDetailsParamsEntity(params.complaint_id);
-        let result = await complaintRepositoryIns1.getComplaintDetailByFieldName(getComplaintDetailsParams, "problem_description");
-        return { fieldVal: result.field_val };
+        let getComplaintDetailsParams = new ComplaintDetailByFieldNameParamsEntity(params.complaint_id, params.field_name);
+        let result = await complaintRepositoryIns1.getComplaintDetailByFieldName(getComplaintDetailsParams);
+        // return { fieldVal: result.field_val, fieldId: result.field_id, complain_detail_id: result.id };
+        return result;
     }
 
     public callWinningChancesMLApi = async (methodParamEntity: MethodParamEntity) => {
-        let fieldVal = methodParamEntity.lastInvokedMethodParam;
-        let callApi = await httpPostServiceIns(AppConstants.ML_MODEL_CHANCES_OF_WINNING_URL).setFormUrlEncodedPayload({ com: fieldVal.fieldVal }).setExpectedResponseAsJson().call();
-        return chancesOfWinningMLCasesServiceIns.getHigherChances(callApi);
+        let complainDetails: ComplaintDetails = methodParamEntity.lastInvokedMethodParam;
+        let winningChances = null;
+        if (complainDetails) {
+            winningChances = await httpPostServiceIns(AppConstants.ML_MODEL_CHANCES_OF_WINNING_URL).setFormUrlEncodedPayload({ com: complainDetails.field_val }).setExpectedResponseAsJson().call();
+        }
+        return chancesOfWinningMLCasesServiceIns.getHigherChances(winningChances);
+    }
+
+    public updateWinningOfChances = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        params.winningChances = methodParamEntity.lastInvokedMethodParam.winning_chances_val;
+        params.field_name = SmartphoneComplainFieldsEnum.WINNING_CHANCES_ML_RESPONSE;
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.getComplaintDetails, callableFunctionParams: params, notBreakWhenReturnedValueNotTruthy: true }).setMethod({ callableFunction: this.upsertWinningOfChances }).coordinate();
+        return result;
+    }
+
+    public upsertWinningOfChances = async (methodParamEntity: MethodParamEntity) => {
+        let complaintDetails: ComplaintDetails = methodParamEntity.lastInvokedMethodParam;
+        let params = methodParamEntity.topMethodParam;
+        if (!complaintDetails) {
+            complaintDetails = new ComplaintDetails();
+            complaintDetails.field_val = params.winningChances;
+            complaintDetails.field_id = 18;
+            complaintDetails.complaint_id = params.complaint_id;
+            await complaintDetailsRepositoryIns.create([complaintDetails]);
+        } else {
+            await complaintDetailsRepositoryIns.update({ field_val: params.winningChances, complain_detail_id: complaintDetails.id });
+        }
+        return true;
     }
 
     public addCompensation = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let result = this.getMethodCoordinator().setMethod({ callableFunction: this.createComplainDetail, callableFunctionParams: params, storeResultAs: StoreResultAs.ADD_COMPENSATION }).setMethod({ callableFunction: this.getComplaintDetailByFieldNameAmount, callableFunctionParams: "phone_price" }).setMethod({ callableFunction: this.callCompensationAmountMLApi }).setMethod({ callableFunction: this.createCompensationMLResponse }).coordinate();
+        let result = this.getMethodCoordinator().setMethod({ callableFunction: this.createComplainDetail, callableFunctionParams: params, storeResultAs: StoreResultAs.ADD_COMPENSATION }).setMethod({ callableFunction: this.getComplaintDetailByFieldNameAmount, callableFunctionParams: SmartphoneComplainFieldsEnum.PHONE_PRICE }).setMethod({ callableFunction: this.callCompensationAmountMLApi }).setMethod({ callableFunction: this.createCompensationMLResponse }).coordinate();
         return result;
     }
 
@@ -72,8 +100,8 @@ export class ComplaintService extends BaseService {
 
     public getComplaintDetailByFieldNameAmount = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let getComplaintDetailsParams = new GetComplaintDetailsParamsEntity(params.complain_id);
-        let result = await complaintRepositoryIns1.getComplaintDetailByFieldName(getComplaintDetailsParams, methodParamEntity.methodParam);
+        let getComplaintDetailsParams = new ComplaintDetailByFieldNameParamsEntity(params.complain_id, methodParamEntity.methodParam);
+        let result = await complaintRepositoryIns1.getComplaintDetailByFieldName(getComplaintDetailsParams);
         return { fieldVal: result.field_val, fieldId: result.field_id, complain_detail_id: result.id };
     }
 
@@ -100,7 +128,7 @@ export class ComplaintService extends BaseService {
 
     public updateCompensation = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let result = this.getMethodCoordinator().setMethod({ callableFunction: this.updateCompensationVal, callableFunctionParams: params }).setMethod({ callableFunction: this.getComplaintDetailByFieldNameAmount, callableFunctionParams: "phone_price" }).setMethod({ callableFunction: this.callCompensationAmountMLApi, storeResultAs: StoreResultAs.COMPENSATION_ML_API_RESP }).setMethod({ callableFunction: this.getComplaintDetailByFieldNameAmount, callableFunctionParams: "compensation_ml_response" }).setMethod({ callableFunction: this.updateCompensationMLResponse }).coordinate();
+        let result = this.getMethodCoordinator().setMethod({ callableFunction: this.updateCompensationVal, callableFunctionParams: params }).setMethod({ callableFunction: this.getComplaintDetailByFieldNameAmount, callableFunctionParams: SmartphoneComplainFieldsEnum.PHONE_PRICE }).setMethod({ callableFunction: this.callCompensationAmountMLApi, storeResultAs: StoreResultAs.COMPENSATION_ML_API_RESP }).setMethod({ callableFunction: this.getComplaintDetailByFieldNameAmount, callableFunctionParams: SmartphoneComplainFieldsEnum.COMPENSATION_ML_RESPONSE }).setMethod({ callableFunction: this.updateCompensationMLResponse }).coordinate();
         return result;
     }
 
@@ -109,7 +137,6 @@ export class ComplaintService extends BaseService {
         let complainDetailObj = methodParamEntity.lastInvokedMethodParam;
         params.field_val = methodParamEntity.methodReturnedValContainer[StoreResultAs.COMPENSATION_ML_API_RESP];
         params.complain_detail_id = complainDetailObj.complain_detail_id;
-        console.log('ml model updated');
         let result = await complaintDetailsRepositoryIns.update(params);
         return result;
     }
@@ -134,7 +161,7 @@ export class ComplaintService extends BaseService {
         let imeiNumber = null;
         if (ArrayHelper.isArrayValid(complaintDetails)) {
             complaintDetails.forEach(complaintDetail => {
-                if (complaintDetail.field.field_name === "imei_number") {
+                if (complaintDetail.field.field_name === SmartphoneComplainFieldsEnum.IMEI_NUMBER) {
                     imeiNumber = complaintDetail.field_val;
                 }
             });

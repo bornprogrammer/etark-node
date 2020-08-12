@@ -1,7 +1,6 @@
 import { StoreResultAs } from "@app/enums/StoreResultAs";
 
 
-
 export default interface MethodCoordinatorEntity {
 
     callableFunction: CallableFunction;
@@ -11,5 +10,7 @@ export default interface MethodCoordinatorEntity {
     storeResultAs?: StoreResultAs;
 
     resultToBeReturnedAsFinalResult?: boolean;
+
+    notBreakWhenReturnedValueNotTruthy?: boolean;
 
 }  
