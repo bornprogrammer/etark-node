@@ -3,6 +3,7 @@ import ArrayHelper from "@app/helpers/ArrayHelper";
 import config from "config";
 import { httpGetServiceIns } from "@app/http-services/HttpGetService";
 import { GoogleDistanceMapApiHttpResponse } from "@app/entities/GoogleDistanceMapApiHttpResponse";
+import { MinDistanceForServiceCenterReturnedEntity } from "@app/entities/MinDistanceForServiceCenterReturnedEntity";
 
 export class GoogleDistanceMapApiService {
 
@@ -17,17 +18,19 @@ export class GoogleDistanceMapApiService {
         return result;
     }
 
-    public getMinDistance = async (googleDistanceMapApiEntityOrigin: GoogleDistanceMapApiEntity[], googleDistanceMapApiEntityDes: GoogleDistanceMapApiEntity[]) => {
+    public getMinDistanceForServiceCenter = async (googleDistanceMapApiEntityOrigin: GoogleDistanceMapApiEntity[], googleDistanceMapApiEntityDes: GoogleDistanceMapApiEntity[]): Promise<MinDistanceForServiceCenterReturnedEntity> => {
         let result: GoogleDistanceMapApiHttpResponse = await this.getDistance(googleDistanceMapApiEntityOrigin, googleDistanceMapApiEntityDes);
         let minDistance = 1000000;
+        let minDestIndex = 0;
         if (result) {
-            result.rows[0].elements.forEach(item => {
+            result.rows[0].elements.forEach((item, index) => {
                 if (item.distance.value < minDistance) {
                     minDistance = item.distance.value;
+                    minDestIndex = index;
                 }
             });
         }
-        return minDistance;
+        return { distance: minDistance, distanceKM: minDistance / 1000, minDestIndex: minDestIndex };
     }
 
     private buildQueryStr = (googleDistanceMapApiEntityOrigin: GoogleDistanceMapApiEntity[], googleDistanceMapApiEntityDes: GoogleDistanceMapApiEntity[]) => {

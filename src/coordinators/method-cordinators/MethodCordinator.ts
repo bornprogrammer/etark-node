@@ -32,9 +32,11 @@ export default class MethodCoordinator implements Coordinator {
                     result = callableResult;
                     if (!UtilsHelper.isMethodReturnedValueTruthy(callableResult) && callableObj.notBreakWhenReturnedValueNotTruthy !== true) {
                         break;
-                    } else if (callableObj.storeResultAs) {
+                    }
+                    if (callableObj.storeResultAs) {
                         this.storeResultAsContainer[callableObj.storeResultAs] = result;
-                    } else if (callableObj.resultToBeReturnedAsFinalResult) {
+                    }
+                    if (callableObj.resultToBeReturnedAsFinalResult) {
                         this.finalResult = result;
                     }
                     // this.doPreservedOrMergeResults(callableObj, callableResult);

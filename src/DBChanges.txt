@@ -1,6 +1,10 @@
 alter table maker_detail add column inspection_charges int null;
 
-alter table plan_components modify component_type enum('security_deposit','monitoring_charges','pickup_delivery','tax','plan_price','inspection_charge');
+delete from plan_components where component_type='tax'
+
+delete from user_plan_components where plan_components_id in(14,15,16,17,18)
+
+alter table plan_components modify component_type enum('security_deposit','monitoring_charges','pickup_delivery','plan_price','inspection_charge');
 
 alter table plan_components add column is_taxable tinyint(1) not null default 1;
 
@@ -18,3 +22,5 @@ create table pickup_delivery_status(
     updated_at datetime not null default now(),
     foreign key (pickup_delivery_id) references pickup_deliveries(id)
 )
+
+add inspection_charge in plan_components

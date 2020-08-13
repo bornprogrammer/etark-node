@@ -1,6 +1,7 @@
 import BaseRepository from "@app/repositories/BaseRepository";
 import { AddUserPlanComponentsParamsEntity } from "@app/repo-method-param-entities/AddUserPlanComponentsParamsEntity";
 import { UserPlanComponent } from "@app/models/UserPlanComponent";
+import { UpdateUserPlanComponentPriceParamEntity } from "@app/repo-method-param-entities/UpdateUserPlanComponentPriceParamEntity";
 
 export class UserPlanComponentRepository extends BaseRepository {
 
@@ -13,6 +14,17 @@ export class UserPlanComponentRepository extends BaseRepository {
             });
         }
         return true;
+    }
+
+    public update = async (params: UpdateUserPlanComponentPriceParamEntity) => {
+        let update = UserPlanComponent.update({
+            component_price: params.componentPrice
+        }, {
+            where: {
+                id: params.userPlanComponentId
+            }
+        })
+        return update;
     }
 
 

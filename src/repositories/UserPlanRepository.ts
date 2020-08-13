@@ -50,9 +50,9 @@ export class UserPlanRepository extends BaseRepository {
         let userPlanComponentPriceDetails = { grand_total: 0, sub_total: 0, tax: 0 };
         result.UserPlanComponents.forEach((userPlanComponentObject: UserPlanComponent) => {
             userPlanComponentPriceDetails.grand_total += userPlanComponentObject.component_price;
-            if (userPlanComponentObject.planComponent.component_type === PlanComponents.TAX) {
-                userPlanComponentPriceDetails.tax = userPlanComponentObject.component_price;
-            }
+            // if (userPlanComponentObject.planComponent.component_type === PlanComponents.TAX) {
+            //     userPlanComponentPriceDetails.tax = userPlanComponentObject.component_price;
+            // }
         });
         userPlanComponentPriceDetails.sub_total = userPlanComponentPriceDetails.grand_total - userPlanComponentPriceDetails.tax;
         return userPlanComponentPriceDetails;

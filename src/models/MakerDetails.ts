@@ -14,6 +14,7 @@ interface MakerDetailsAttributes {
     category_id: number;
     display_name: string;
     status: string;
+    inspection_charges: string;
 }
 interface MakerDetailsCreationAttributes extends Optional<MakerDetailsAttributes, 'id'> { }
 // export class MakerDetails extends Model<MakerDetailsAttributes, MakerDetailsCreationAttributes> implements MakerDetailsAttributes {
@@ -23,6 +24,7 @@ export class MakerDetails extends Model {
     category_id: number;
     display_name: string;
     status: string;
+    inspection_charges: string;
 }
 
 MakerDetails.init({
@@ -46,6 +48,9 @@ MakerDetails.init({
     status: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    inspection_charges: {
+        type: DataTypes.NUMBER,
     }
 }, {
     tableName: "maker_detail",

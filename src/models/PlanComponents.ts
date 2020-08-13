@@ -20,7 +20,7 @@ PlanComponent.init({
         allowNull: false
     },
     component_type: {
-        type: DataTypes.ENUM('security_deposit', 'monitoring_charges'),
+        type: DataTypes.ENUM('security_deposit', 'monitoring_charges', 'pickup_delivery', 'plan_price', 'inspection_charge'),
         allowNull: false,
         defaultValue: "security_deposit"
     },

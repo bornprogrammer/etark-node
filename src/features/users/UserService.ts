@@ -10,6 +10,8 @@ import { userPlanServiceIns } from "../user-plan/UserPlanService";
 import { complaintServiceIns } from "../complaints/ComplaintService";
 import { GoogleDistanceMapApiEntity } from "@app/entities/GoogleDistanceMapApiEntity";
 import { ServiceCenterNotFound } from "@app/errors/ServiceCenterNotFound";
+import { googleDistanceMapApiServiceIns } from "@app/services/GoogleDistanceMapApiService";
+import { userPlanComponentRepositoryIns } from "@app/repositories/UserPlanComponentRepository";
 
 class UserService extends BaseService {
     /**
@@ -29,23 +31,44 @@ class UserService extends BaseService {
         let addAddressResult = methodParamEntity.methodReturnedValContainer[StoreResultAs.ADD_ADDRESS_RESULTS];
         topParams.userAddressId = addAddressResult.id;
         let totalComponentPrice = 0;
-        let userPlanTaxComponentDetails = null;
+        let taxableAmount = 0;
         for (const userPlanComponent of userPlanComponentDetails) {
             if (userPlanComponent.component_type === PlanComponents.PICKUP_DELIVERY) {
                 topParams.userPlanComponentId = userPlanComponent.user_plan_component_id;
-                let updatedPrice = await this.updateComponentPriceForPickupNDelivery(topParams);
-                userPlanComponent.component_price = updatedPrice;
+                userPlanComponent.component_price = await this.updateComponentPriceForPickupNDelivery(topParams);
+            } else if (userPlanComponent.component_type === PlanComponents.INSPECTION_CHARGE) {
+                console.log("component_type", userPlanComponent.component_type);
+                userPlanComponent.component_price = await this.updateInspectionFee(topParams, userPlanComponent);
             }
-            if (userPlanComponent.component_type === PlanComponents.TAX) {
-                userPlanTaxComponentDetails = userPlanComponent;
+            if (userPlanComponent.is_taxable == "1") {
+                taxableAmount += userPlanComponent.component_price;
             }
             totalComponentPrice += userPlanComponent.component_price;
         }
-        return this.updateTax(totalComponentPrice, userPlanComponentDetails, userPlanTaxComponentDetails);
+        return this.updateTax(totalComponentPrice, userPlanComponentDetails, taxableAmount);
+    }
+
+    public updateInspectionFee = async (params: any, userPlanComponent: any) => {
+        let updateInspectionFeeParams = { complain_id: params.complain_id, user_plan_component_id: userPlanComponent.user_plan_component_id };
+        let inspectionFees = await this.getMethodCoordinator().setMethod({ callableFunction: this.getInspectionFeeComponent, callableFunctionParams: updateInspectionFeeParams, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.updateInspectionFeeComponent }).coordinate();
+        return inspectionFees;
+    }
+
+    public getInspectionFeeComponent = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let result = await complaintRepositoryIns.getInspectionFeeComponent({ complainId: params.complain_id });
+        return result.makerDetail.inspection_charges;
+    }
+
+    public updateInspectionFeeComponent = async (methodParamEntity: MethodParamEntity) => {
+        let inspectionFee = methodParamEntity.lastInvokedMethodParam;
+        let params = methodParamEntity.topMethodParam;
+        let result = await userPlanComponentRepositoryIns.update({ componentPrice: inspectionFee, userPlanComponentId: params.user_plan_component_id });
+        return result;
     }
 
     public updateComponentPriceForPickupNDelivery = async (params: any) => {
-        let updatedResult = await this.getMethodCoordinator().setMethod({ callableFunction: this.getServiceCenterList, callableFunctionParams: params }).setMethod({ callableFunction: this.getClosestServiceCenterNPickupNDeliveryPrice, storeResultAs: StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE }).setMethod({ callableFunction: this.updatePickupNDeliveryComponent }).coordinate();
+        let updatedResult = await this.getMethodCoordinator().setMethod({ callableFunction: this.getServiceCenterList, callableFunctionParams: params }).setMethod({ callableFunction: this.getClosestServiceCenterNPickupNDeliveryPrice, storeResultAs: StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.updatePickupNDeliveryComponent, notBreakWhenReturnedValueNotTruthy: true }).setMethod({ callableFunction: this.updatePickupNDelivery }).coordinate();
         return updatedResult;
     }
 
@@ -61,41 +84,36 @@ class UserService extends BaseService {
     public updatePickupNDeliveryComponent = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
         let closestServiceCenterNPickupNDeliveryPrice = methodParamEntity.methodReturnedValContainer[StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE];
-        let result = userRepositoryIns.updateUserPlanComponentPrice({ componentPrice: closestServiceCenterNPickupNDeliveryPrice, userPlanComponentId: params.userPlanComponentId });
-        return closestServiceCenterNPickupNDeliveryPrice;
+        let result = await userRepositoryIns.updateUserPlanComponentPrice({ componentPrice: closestServiceCenterNPickupNDeliveryPrice, userPlanComponentId: params.userPlanComponentId });
     }
 
-    public updateTax = async (allComponentPrice: number, userPlanComponentDetails: any, userPlanTaxComponentDetails: any) => {
+    public updatePickupNDelivery = async (methodParamEntity: MethodParamEntity) => {
+
+    }
+
+    public updateTax = async (allComponentPrice: number, userPlanComponentDetails: any, taxableAmount: number) => {
         let object = { sub_total: allComponentPrice, tax: 0, total: 0, component_details: userPlanComponentDetails };
-        object.tax = Math.round((18 / 100) * allComponentPrice);
-        userRepositoryIns.updateUserPlanComponentPrice({ componentPrice: object.tax, userPlanComponentId: userPlanTaxComponentDetails.user_plan_component_id });
+        object.tax = Math.round((18 / 100) * taxableAmount);
         object.total = object.sub_total + object.tax;
         return object;
     }
 
-    public getClosestServiceCenterNPickupNDeliveryPrice = (methodParamEntity: MethodParamEntity) => {
+    public getClosestServiceCenterNPickupNDeliveryPrice = async (methodParamEntity: MethodParamEntity) => {
         let result = methodParamEntity.lastInvokedMethodParam;
-        let distance = 300000;
-        let serviceCenterObj = null;
         let originLetNLong: GoogleDistanceMapApiEntity[] = [{ lat: result[0].user_address_lat, long: result[0].user_address_long }];
+        let destLetNLong: GoogleDistanceMapApiEntity[] = [];
         result.forEach(item => {
-            // let distanceFromLatLonInKm = UtilsHelper.getDistanceFromLatLonInKm(item.service_centers_lat, item.service_centers_long, item.user_address_lat, item.user_address_long);
-            // if (distanceFromLatLonInKm < distance) {
-            //     distance = distanceFromLatLonInKm;
-            //     serviceCenterObj = item;
-            // }
+            destLetNLong.push({ lat: item.service_centers_lat, long: item.service_centers_long });
         });
-        distance = parseFloat(distance.toFixed(2));
+        let minDistanceResp = await googleDistanceMapApiServiceIns.getMinDistanceForServiceCenter(originLetNLong, destLetNLong);
+        let minDistance = parseFloat(minDistanceResp.distanceKM.toFixed(2));
+        let serviceCenterObj = result[minDistanceResp.minDestIndex];
         let price = serviceCenterObj.base_fare + AppConstants.DELIVERY_PRICE_MARGIN;
-        let remainingDist = distance - serviceCenterObj.base_km;
-        if (remainingDist > 0) {
+        if (minDistance > serviceCenterObj.base_km) {
+            let remainingDist = minDistance - serviceCenterObj.base_km;
             price += remainingDist * serviceCenterObj.per_km_above_base_km;
         }
         return Math.round(price);
-    }
-
-    private getDeliveryPriceForClosestServiceCenter = async () => {
-
     }
 
     public getSuccessPageDetail = async (methodParamEntity: MethodParamEntity) => {

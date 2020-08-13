@@ -178,7 +178,7 @@ export class ComplaintService extends BaseService {
         return sellerCompensationEmailEntity;
     }
 
-    public extractInfo = (complaint: Complaint) => {
+    private extractInfo = (complaint: Complaint) => {
         let details: SellerCompensationEmailEntity = null;
         if (ObjectHelper.isObjectNotEmpty(complaint)) {
             details = { company_name: "", user_name: "", product_detail: "", compensation_value: "", imei_number: "", model_name: "", winning_chances: "" };

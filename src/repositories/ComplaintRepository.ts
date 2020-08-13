@@ -13,6 +13,7 @@ import { Plan } from "@app/models/Plan";
 import { ComplaintDetailByFieldNameParamsEntity } from "@app/repo-method-param-entities/ComplaintDetailByFieldNameParamsEntity";
 import { User } from "@app/models/User";
 import { Maker } from "@app/models/Maker";
+import { GetInspectionFeeComponentParamsEntity } from "@app/repo-method-param-entities/GetInspectionFeeComponentParamsEntity";
 
 export class ComplaintRepository extends BaseRepository {
     /**
@@ -149,6 +150,25 @@ export class ComplaintRepository extends BaseRepository {
                 }
             ]
         });
+        return result;
+    }
+
+    public getInspectionFeeComponent = async (params: GetInspectionFeeComponentParamsEntity): Promise<Complaint> => {
+        let result = await Complaint.findOne({
+            include: [
+                {
+                    model: MakerDetails,
+                    required: true,
+                    as: "makerDetail",
+                    attributes: [
+                        'inspection_charges'
+                    ],
+                }
+            ],
+            where: {
+                id: params.complainId,
+            }
+        })
         return result;
     }
 }
