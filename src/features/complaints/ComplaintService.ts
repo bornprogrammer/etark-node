@@ -11,6 +11,9 @@ import { StoreResultAs } from "@app/enums/StoreResultAs";
 import ArrayHelper from "@app/helpers/ArrayHelper";
 import { ComplaintDetailByFieldNameParamsEntity } from "@app/repo-method-param-entities/ComplaintDetailByFieldNameParamsEntity";
 import { SmartphoneComplainFieldsEnum } from "@app/enums/SmartphoneComplainFieldsEnum";
+import { Complaint } from "@app/models/Complaint";
+import { SellerCompensationEmailEntity } from "@app/entities/SellerCompensationEmailEntity";
+import { ObjectHelper } from "@app/helpers/ObjectHelper";
 
 export class ComplaintService extends BaseService {
     /**
@@ -167,6 +170,36 @@ export class ComplaintService extends BaseService {
             });
         }
         return imeiNumber;
+    }
+
+    public getComplainDetailsForServiceCenterEmail = async (orderId: number) => {
+        let result = await complaintRepositoryIns1.getComplainDetailsForServiceCenterEmail(orderId);
+        let sellerCompensationEmailEntity = this.extractInfo(result);
+        return sellerCompensationEmailEntity;
+    }
+
+    public extractInfo = (complaint: Complaint) => {
+        let details: SellerCompensationEmailEntity = null;
+        if (ObjectHelper.isObjectNotEmpty(complaint)) {
+            details = { company_name: "", user_name: "", product_detail: "", compensation_value: "", imei_number: "", model_name: "", winning_chances: "" };
+            details.user_name = complaint.user.name;
+            details.company_name = complaint.makerDetail.display_name;
+            complaint.complainDetails.forEach(complainDetail => {
+                if (complainDetail.field.field_name === SmartphoneComplainFieldsEnum.IMEI_NUMBER) {
+                    details.imei_number = complainDetail.field_val;
+                } else if (complainDetail.field.field_name === SmartphoneComplainFieldsEnum.COMPENSATION_ML_RESPONSE) {
+                    details.compensation_value = complainDetail.field_val;
+                }
+                else if (complainDetail.field.field_name === SmartphoneComplainFieldsEnum.WINNING_CHANCES_ML_RESPONSE) {
+                    details.winning_chances = complainDetail.field_val;
+                }
+                else if (complainDetail.field.field_name === SmartphoneComplainFieldsEnum.MODEL_NAME) {
+                    details.model_name = complainDetail.field_val;
+                    details.product_detail = complainDetail.field_val;
+                }
+            });
+        }
+        return details;
     }
 }
 

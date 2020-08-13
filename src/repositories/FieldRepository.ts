@@ -1,4 +1,4 @@
-import BaseRepository from "@app/services/BaseRepository";
+import BaseRepository from "@app/repositories/BaseRepository";
 
 
 

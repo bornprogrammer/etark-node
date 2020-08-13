@@ -1,4 +1,4 @@
-import BaseRepository from "@app/services/BaseRepository";
+import BaseRepository from "@app/repositories/BaseRepository";
 import { ComplaintDetails } from "@app/models/ComplaintDetails";
 
 export class ComplaintDetailsRepository extends BaseRepository {

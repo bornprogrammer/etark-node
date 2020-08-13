@@ -4,6 +4,7 @@ import { MasterService, masterServiceIns } from "./MasterService";
 import { Request, Response } from "express";
 import { paytmServiceIns } from "@app/services/PaytmService";
 import { fileReaderServiceIns } from "@app/services/FileReaderService";
+import { complaintRepositoryIns } from "@app/repositories/ComplaintRepository";
 
 export class MasterController extends BaseController {
 
@@ -36,6 +37,10 @@ export class MasterController extends BaseController {
 
     public addServiceCenter = async (req: Request, res: Response) => {
 
+    }
+
+    public testApi = async (req: Request, res: Response) => {
+        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.testApi }).send(req, res);
     }
 }
 

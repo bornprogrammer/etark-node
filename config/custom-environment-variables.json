@@ -12,5 +12,8 @@
         "user": "mail_user",
         "pass": "mail_password",
         "from": "mail_user"
+    },
+    "google_map": {
+        "google_map_key": "google_map_key"
     }
 }

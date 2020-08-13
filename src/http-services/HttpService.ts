@@ -25,6 +25,7 @@ export class HttpService {
 
     public setQueryStr(obj: object) {
         this.rpOptions.qs = obj;
+        return this;
     }
 
     public setExpectedResponseAsJson() {

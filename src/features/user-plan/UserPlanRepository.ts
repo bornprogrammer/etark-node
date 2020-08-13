@@ -1,5 +1,5 @@
 
-import BaseRepository from "@app/services/BaseRepository";
+import BaseRepository from "@app/repositories/BaseRepository";
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { UserPaymentDetails } from "@app/models/UserPaymentDetails";
 import { UserPlan } from "@app/models/UserPlan";

@@ -1,4 +1,4 @@
-import BaseRepository from "@app/services/BaseRepository";
+import BaseRepository from "@app/repositories/BaseRepository";
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { User } from "@app/models/User";
 import { Op } from "sequelize";

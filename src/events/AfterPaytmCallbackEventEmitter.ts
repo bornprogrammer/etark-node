@@ -7,6 +7,9 @@ import { fileReaderServiceIns } from "@app/services/FileReaderService";
 import { nodeMailerServiceIns } from "@app/services/NodeMailerService";
 import { UtilsHelper } from "@app/helpers/UtilsHelper";
 import config from "config";
+import MethodParamEntity from "@app/entities/MethodParamEntity";
+import { complaintServiceIns } from "@app/features/complaints/ComplaintService";
+import { SellerCompensationEmailEntity } from "@app/entities/SellerCompensationEmailEntity";
 
 export class AfterPaytmCallbackEventEmitter extends BaseEventEmitter {
     /**
@@ -22,22 +25,39 @@ export class AfterPaytmCallbackEventEmitter extends BaseEventEmitter {
 
     public sendEmail = async (data: any) => {
         let paytmResp: PaytmCallbackResponseEntity = data;
-        if (this.isPaymentSucces(paytmResp)) {
-            let result = await userPlanRepositoryServiceIns.getDetailsForOrderEmailTemp(userPlanServiceIns.removeOrderPrefixFromOrderNo(paytmResp.ORDERID));
-            if (result) {
-                fileReaderServiceIns.readEmailTemplate("order-detail.html", this.sendOrderEmail.bind(null, result));
-            }
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isPaymentSucces, callableFunctionParams: paytmResp }).setMethod({ callableFunction: this.sendOrdeEmailToCustomer, notBreakWhenReturnedValueNotTruthy: true }).setMethod({ callableFunction: this.sendComplaintDetailEmailToServiceCenter }).coordinate();
+    }
+
+    public sendOrdeEmailToCustomer = async (methodParamEntity: MethodParamEntity) => {
+        let paytmResp = methodParamEntity.topMethodParam;
+        let result = await userPlanRepositoryServiceIns.getDetailsForOrderEmailTemp(userPlanServiceIns.removeOrderPrefixFromOrderNo(paytmResp.ORDERID));
+        if (result) {
+            fileReaderServiceIns.readEmailTemplate("order-detail.html", this.sendOrderEmail.bind(null, result));
         }
+    }
+
+    public sendComplaintDetailEmailToServiceCenter = async (methodParamEntity: MethodParamEntity) => {
+        let paytmResp = methodParamEntity.topMethodParam;
+        let orderId = userPlanServiceIns.removeOrderPrefixFromOrderNo(paytmResp.ORDERID);
+        let serviceCenterCompensationEmailDetails = await complaintServiceIns.getComplainDetailsForServiceCenterEmail(parseInt(orderId));
+        if (serviceCenterCompensationEmailDetails) {
+            fileReaderServiceIns.readEmailTemplate("Email-template-etark.html", this.sendCompensationEmailToServiceCenter.bind(null, serviceCenterCompensationEmailDetails));
+        }
+    }
+
+    public sendCompensationEmailToServiceCenter = (sellerCompensationEmailEntity: SellerCompensationEmailEntity, error, data) => {
+        nodeMailerServiceIns.sendHtml(config.get("mail.from"), "iamabornprogrammer@gmail.com", "Request for compensationOrder email", UtilsHelper.replaceAllStr(sellerCompensationEmailEntity, data));
     }
 
     public sendOrderEmail = (orderDetail, error, data) => {
         let orderDetailObj = orderDetail[0];
         orderDetailObj.is_download_report_to_be_shown = this.isDownloadReportToBeShown(orderDetailObj) ? "inline-block" : "none";
-        // orderDetailObj.email = "iamabornprogrammer@gmail.com";
+        orderDetailObj.email = "iamabornprogrammer@gmail.com";
         nodeMailerServiceIns.sendHtml(config.get("mail.from"), orderDetailObj.email, "Order email", UtilsHelper.replaceAllStr(orderDetailObj, data));
     }
 
-    public isPaymentSucces = (paytmResp: any): boolean => {
+    public isPaymentSucces = (methodParamEntity: MethodParamEntity): boolean => {
+        let paytmResp: any = methodParamEntity.topMethodParam;
         return paytmResp.STATUS === "TXN_SUCCESS";
     }
 

@@ -1,4 +1,4 @@
-import BaseRepository from "@app/services/BaseRepository";
+import BaseRepository from "@app/repositories/BaseRepository";
 import { GetUserPlanComponentDetailsParamsEntity } from "@app/repo-method-param-entities/GetUserPlanComponentDetailsParamsEntity";
 import { UserPlan, UserPlanAttributes } from "@app/models/UserPlan";
 import { UserPlanComponent } from "@app/models/UserPlanComponent";

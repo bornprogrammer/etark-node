@@ -14,11 +14,9 @@ interface MakerCreationAttribute extends Optional<MakerAttribute, 'id'> { }
 export class Maker extends Model {
     id: number;
     maker_name: string;
-
     public static associations: {
         projects: Association<Maker, MakerDetails>;
     };
-
     public getMakerDetails!: HasManyGetAssociationsMixin<MakerDetails>
 }
 
@@ -38,6 +36,6 @@ Maker.init({
     sequelize: sequelizeConnection.connection
 })
 
-Maker.hasMany(MakerDetails);
+Maker.hasMany(MakerDetails, { as: "makerDetails", foreignKey: "maker_id" });
 
-MakerDetails.belongsTo(Maker);
+MakerDetails.belongsTo(Maker, { as: "maker", foreignKey: "maker_id" });

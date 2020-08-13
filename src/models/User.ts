@@ -2,6 +2,7 @@
 import { Model, Optional, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { UserStatusEnum } from "@app/enums/UserStatusEnum";
+import { Complaint } from "./Complaint";
 
 interface UserAttributes {
     id: number;
@@ -64,3 +65,7 @@ User.init({
         underscored: true,
     }
 );
+
+User.hasMany(Complaint, { as: "complaints", foreignKey: "user_id" });
+
+Complaint.belongsTo(User, { as: "user", foreignKey: "user_id" });

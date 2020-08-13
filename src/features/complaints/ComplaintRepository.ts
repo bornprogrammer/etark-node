@@ -1,16 +1,20 @@
-import BaseRepository from "@app/repositories/BaseRepository";
+
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { Complaint } from "@app/models/Complaint";
 import { ComplaintDetails } from "@app/models/ComplaintDetails";
+import BaseRepository from "@app/repositories/BaseRepository";
 
 export class ComplaintRepository extends BaseRepository {
-
     /**
      *
      */
     constructor() {
         super();
     }
+    public create(params: any) {
+        throw new Error("Method not implemented.");
+    }
+
 
     public addComplaints = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;

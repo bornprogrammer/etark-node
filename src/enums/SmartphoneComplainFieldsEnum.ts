@@ -5,4 +5,5 @@ export enum SmartphoneComplainFieldsEnum {
     COMPENSATION_ML_RESPONSE = "compensation_ml_response",
     PHONE_PRICE = "phone_price",
     IMEI_NUMBER = "imei_number",
+    MODEL_NAME = "model_name",
 }

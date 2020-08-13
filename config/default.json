@@ -1,4 +1,5 @@
 {
     "name": "E-Tark",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "google_map_api_url": "https://maps.googleapis.com/maps/api/distancematrix/json"
 }

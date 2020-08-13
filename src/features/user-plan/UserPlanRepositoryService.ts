@@ -15,15 +15,12 @@ import { AppConstants } from "@app/constants/AppConstants";
 import { UpdateUserPaymentStatusParamsEntity } from "@app/repo-method-param-entities/UpdateUserPaymentStatusParamsEntity";
 import { userPaymentDetailsRepositoryIns } from "@app/repositories/UserPaymentDetailsRepository";
 import { UserPaymentDetails } from "@app/models/UserPaymentDetails";
-import { nodeMailerServiceIns } from "@app/services/NodeMailerService";
-import { UtilsHelper } from "@app/helpers/UtilsHelper";
 import { BaseRepositoryService } from "@app/services/BaseRepositoryService";
 import { userPlanServiceIns } from "./UserPlanService";
 import { UpdateUserPaymentStatusError } from "@app/errors/UpdateUserPaymentStatusError";
 import { afterPaytmCallbackEventEmitterIns } from "@app/events/AfterPaytmCallbackEventEmitter";
 import { EventEmitterIdentifierEnum } from "@app/enums/EventEmitterIdentifierEnum";
 import { PaytmCallbackResponseEntity } from "@app/entities/PaytmCallbackResponseEntity";
-import { or } from "sequelize";
 import { GetUserPlanStatusByUserPaymentIdParamsEntity } from "@app/repo-method-param-entities/GetUserPlanStatusByUserPaymentIdParamsEntity";
 import { UserPlan } from "@app/models/UserPlan";
 

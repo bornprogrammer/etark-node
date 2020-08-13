@@ -8,6 +8,8 @@ import { AppConstants } from "@app/constants/AppConstants";
 import { complaintRepositoryIns } from "@app/repositories/ComplaintRepository";
 import { userPlanServiceIns } from "../user-plan/UserPlanService";
 import { complaintServiceIns } from "../complaints/ComplaintService";
+import { GoogleDistanceMapApiEntity } from "@app/entities/GoogleDistanceMapApiEntity";
+import { ServiceCenterNotFound } from "@app/errors/ServiceCenterNotFound";
 
 class UserService extends BaseService {
     /**
@@ -50,6 +52,9 @@ class UserService extends BaseService {
     public getServiceCenterList = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
         let serviceCenterList = await userRepositoryIns.getServiceCenterList({ complainId: params.complain_id, userAddressId: params.userAddressId });
+        if (!UtilsHelper.isMethodReturnedValueTruthy(serviceCenterList)) {
+            throw new ServiceCenterNotFound();
+        }
         return serviceCenterList;
     }
 
@@ -72,22 +77,25 @@ class UserService extends BaseService {
         let result = methodParamEntity.lastInvokedMethodParam;
         let distance = 300000;
         let serviceCenterObj = null;
+        let originLetNLong: GoogleDistanceMapApiEntity[] = [{ lat: result[0].user_address_lat, long: result[0].user_address_long }];
         result.forEach(item => {
-            let distanceFromLatLonInKm = UtilsHelper.getDistanceFromLatLonInKm(item.service_centers_lat, item.service_centers_long, item.user_address_lat, item.user_address_long);
-            if (distanceFromLatLonInKm < distance) {
-                distance = distanceFromLatLonInKm;
-                serviceCenterObj = item;
-                console.log("serviceCenterObj", serviceCenterObj);
-            }
+            // let distanceFromLatLonInKm = UtilsHelper.getDistanceFromLatLonInKm(item.service_centers_lat, item.service_centers_long, item.user_address_lat, item.user_address_long);
+            // if (distanceFromLatLonInKm < distance) {
+            //     distance = distanceFromLatLonInKm;
+            //     serviceCenterObj = item;
+            // }
         });
         distance = parseFloat(distance.toFixed(2));
-        console.log("distance", distance);
         let price = serviceCenterObj.base_fare + AppConstants.DELIVERY_PRICE_MARGIN;
         let remainingDist = distance - serviceCenterObj.base_km;
         if (remainingDist > 0) {
             price += remainingDist * serviceCenterObj.per_km_above_base_km;
         }
         return Math.round(price);
+    }
+
+    private getDeliveryPriceForClosestServiceCenter = async () => {
+
     }
 
     public getSuccessPageDetail = async (methodParamEntity: MethodParamEntity) => {

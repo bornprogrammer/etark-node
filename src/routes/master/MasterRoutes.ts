@@ -15,6 +15,8 @@ export class MasterRoutes {
 
         router.get("/cities", masterControllerIns.getCities);
 
+        router.get("/test-api", masterControllerIns.testApi);
+
         return router;
 
     }
