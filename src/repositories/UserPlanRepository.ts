@@ -9,6 +9,8 @@ import { sequelizeConnection } from "@app/SequelizeConnection";
 import { QueryTypes } from "sequelize";
 import { GetUserPlanStatusByUserPaymentIdParamsEntity } from "@app/repo-method-param-entities/GetUserPlanStatusByUserPaymentIdParamsEntity";
 import { UserPayment } from "@app/models/UserPayment";
+import { userPlanComponentRepositoryIns } from "./UserPlanComponentRepository";
+import { AppConstants } from "@app/constants/AppConstants";
 
 export class UserPlanRepository extends BaseRepository {
     /**
@@ -47,14 +49,18 @@ export class UserPlanRepository extends BaseRepository {
 
     public getUserPlanComponentPriceDetails = async (params: GetUserPlanComponentDetailsParamsEntity) => {
         let result = await this.getUserPlanComponentDetails(params);
-        let userPlanComponentPriceDetails = { grand_total: 0, sub_total: 0, tax: 0 };
+        let userPlanComponentPriceDetails = { grand_total: 0, sub_total: 0, tax: 0, gateway_charges: 0 };
+        let taxableAmount = 0;
         result.UserPlanComponents.forEach((userPlanComponentObject: UserPlanComponent) => {
-            userPlanComponentPriceDetails.grand_total += userPlanComponentObject.component_price;
-            // if (userPlanComponentObject.planComponent.component_type === PlanComponents.TAX) {
-            //     userPlanComponentPriceDetails.tax = userPlanComponentObject.component_price;
-            // }
+            userPlanComponentPriceDetails.sub_total += userPlanComponentObject.component_price;
+            if (userPlanComponentObject.planComponent.is_taxable === 1) {
+                taxableAmount += userPlanComponentObject.component_price;
+            }
         });
-        userPlanComponentPriceDetails.sub_total = userPlanComponentPriceDetails.grand_total - userPlanComponentPriceDetails.tax;
+        userPlanComponentPriceDetails.tax = Math.round((AppConstants.CGST / 100) * taxableAmount);
+        userPlanComponentPriceDetails.grand_total = userPlanComponentPriceDetails.tax + userPlanComponentPriceDetails.sub_total;
+        userPlanComponentPriceDetails.gateway_charges = Math.round((AppConstants.PAYTM_GATEWAY_CHARGES / 100) * userPlanComponentPriceDetails.grand_total);
+        userPlanComponentPriceDetails.grand_total += userPlanComponentPriceDetails.gateway_charges;
         return userPlanComponentPriceDetails;
     }
 

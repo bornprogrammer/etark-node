@@ -1,7 +1,7 @@
 import { BaseController } from "@app/controllers/BaseController";
 import { Request, Response } from "express";
 import { UserRequestParamsCoordinator } from "./UserRequestParamsCoordinator";
-import { userServiceIns } from "./UserService";
+import { userRepositoryServiceIns } from "./UserRepositoryService";
 
 export class UserController extends BaseController {
 
@@ -14,12 +14,12 @@ export class UserController extends BaseController {
 
     public addAddress = async (req: Request, res: Response) => {
         let params = UserRequestParamsCoordinator.getInstance(req).getAddAddressParams();
-        await this.getCtrlMethodCoordinator().setMethod({ callableFunctionParams: params, callableFunction: userServiceIns.addAddress }).send(req, res);
+        await this.getCtrlMethodCoordinator().setMethod({ callableFunctionParams: params, callableFunction: userRepositoryServiceIns.addAddress }).send(req, res);
     }
 
     public getSuccessPageDetail = async (req: Request, res: Response) => {
         let params = UserRequestParamsCoordinator.getInstance(req).getSuccessPageDetailParams();
-        await this.getCtrlMethodCoordinator().setMethod({ callableFunctionParams: params, callableFunction: userServiceIns.getSuccessPageDetail }).send(req, res);
+        await this.getCtrlMethodCoordinator().setMethod({ callableFunctionParams: params, callableFunction: userRepositoryServiceIns.getSuccessPageDetail }).send(req, res);
     }
 
     public downloadInvoice = async (req: Request, res: Response) => {

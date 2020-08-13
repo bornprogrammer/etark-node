@@ -5,7 +5,8 @@ import { UserPlanComponent } from "./UserPlanComponent";
 export class PlanComponent extends Model {
     id: number;
     component_price: number;
-    component_type: string
+    component_type: string;
+    is_taxable: number;
     // public readonly userPlanComponents: UserPlanComponent[];
 }
 
@@ -30,6 +31,10 @@ PlanComponent.init({
     },
     component_price: {
         type: DataTypes.FLOAT,
+        allowNull: false
+    },
+    is_taxable: {
+        type: DataTypes.TINYINT,
         allowNull: false
     },
     status: {
