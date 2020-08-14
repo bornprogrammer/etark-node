@@ -16,7 +16,10 @@ export class UserRequestParamsCoordinator extends RequestParamsCoordinator {
     }
 
     public getAddAddressParams = () => {
-        return this.setParamFromBody("address").setParamFromBody("zip_code").setParamFromParamsAs("id", "user_id").setParamFromBody("complain_id").setParamFromBody("city_id").setParamFromBody("lat").setParamFromBody("long").coordinate();
+        let params = this.setParamFromBody("address").setParamFromBody("zip_code").setParamFromParamsAs("id", "user_id").setParamFromBody("complain_id").setParamFromBody("city_id").setParamFromBody("lat").setParamFromBody("long").coordinate();
+        params['city_id'] = params['city_id'] ? params['city_id'] : null;
+        console.log('cit', params);
+        return params;
     }
 
     public getSuccessPageDetailParams = () => {
