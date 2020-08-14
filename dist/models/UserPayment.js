@@ -38,6 +38,10 @@ UserPayment.init({
     },
     paytm_checksum: {
         type: sequelize_1.DataTypes.STRING,
+    },
+    gateway_charge: {
+        type: sequelize_1.DataTypes.NUMBER.UNSIGNED,
+        allowNull: false
     }
 }, {
     sequelize: SequelizeConnection_1.sequelizeConnection.connection,

@@ -55,7 +55,7 @@ class UserPlanRepository extends BaseRepository_1.default {
         });
         this.getUserPlanComponentPriceDetails = (params) => __awaiter(this, void 0, void 0, function* () {
             let result = yield this.getUserPlanComponentDetails(params);
-            let userPlanComponentPriceDetails = { grand_total: 0, sub_total: 0, tax: 0, gateway_charges: 0 };
+            let userPlanComponentPriceDetails = { grand_total: 0, sub_total: 0, tax: 0, gateway_charge: 0 };
             let taxableAmount = 0;
             result.UserPlanComponents.forEach((userPlanComponentObject) => {
                 userPlanComponentPriceDetails.sub_total += userPlanComponentObject.component_price;
@@ -65,8 +65,8 @@ class UserPlanRepository extends BaseRepository_1.default {
             });
             userPlanComponentPriceDetails.tax = Math.round((AppConstants_1.AppConstants.CGST / 100) * taxableAmount);
             userPlanComponentPriceDetails.grand_total = userPlanComponentPriceDetails.tax + userPlanComponentPriceDetails.sub_total;
-            userPlanComponentPriceDetails.gateway_charges = Math.round((AppConstants_1.AppConstants.PAYTM_GATEWAY_CHARGES / 100) * userPlanComponentPriceDetails.grand_total);
-            userPlanComponentPriceDetails.grand_total += userPlanComponentPriceDetails.gateway_charges;
+            userPlanComponentPriceDetails.gateway_charge = Math.round((AppConstants_1.AppConstants.PAYTM_GATEWAY_CHARGES / 100) * userPlanComponentPriceDetails.grand_total);
+            userPlanComponentPriceDetails.grand_total += userPlanComponentPriceDetails.gateway_charge;
             return userPlanComponentPriceDetails;
         });
         this.create = (params) => __awaiter(this, void 0, void 0, function* () {
@@ -95,6 +95,7 @@ class UserPlanRepository extends BaseRepository_1.default {
         where user_payment.id=${orderId} and user_plan.status='success'`, {
                 type: sequelize_1.QueryTypes.SELECT
             });
+            console.log("result", result);
             return result;
         });
         this.getUserPlanStatusByUserPaymentId = (params) => __awaiter(this, void 0, void 0, function* () {

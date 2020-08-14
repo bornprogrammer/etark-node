@@ -139,7 +139,7 @@ class UserPlanRepositoryService extends BaseRepositoryService_1.BaseRepositorySe
         this.createUserPayment = (methodParamEntity) => __awaiter(this, void 0, void 0, function* () {
             let userPlanComponentPriceDetails = methodParamEntity.lastInvokedMethodParam;
             let params = methodParamEntity.topMethodParam;
-            let userPayment = { grand_total: userPlanComponentPriceDetails.grand_total, sub_total: userPlanComponentPriceDetails.sub_total, tax: userPlanComponentPriceDetails.tax, user_plan_id: params.user_plan_id };
+            let userPayment = { grand_total: userPlanComponentPriceDetails.grand_total, sub_total: userPlanComponentPriceDetails.sub_total, tax: userPlanComponentPriceDetails.tax, user_plan_id: params.user_plan_id, gateway_charge: userPlanComponentPriceDetails.gateway_charge };
             let result = yield UserPaymentRepository_1.userPaymentRepositoryIns.create(userPayment);
             return result;
         });

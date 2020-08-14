@@ -70,7 +70,7 @@ class UserRepositoryService extends BaseRepositoryService_1.BaseRepositoryServic
             return result;
         });
         this.updateComponentPriceForPickupNDelivery = (params) => __awaiter(this, void 0, void 0, function* () {
-            let updatedResult = yield this.getMethodCoordinator().setMethod({ callableFunction: this.getServiceCenterList, callableFunctionParams: params }).setMethod({ callableFunction: this.getClosestServiceCenterNPickupNDeliveryPrice, storeResultAs: StoreResultAs_1.StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.updatePickupNDeliveryComponent, notBreakWhenReturnedValueNotTruthy: true }).setMethod({ callableFunction: this.updatePickupNDelivery }).coordinate();
+            let updatedResult = yield this.getMethodCoordinator().setMethod({ callableFunction: this.getServiceCenterList, callableFunctionParams: params }).setMethod({ callableFunction: this.getClosestServiceCenterNPickupNDeliveryPrice, storeResultAs: StoreResultAs_1.StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.updatePickupNDeliveryComponent, notBreakWhenReturnedValueNotTruthy: true }).setMethod({ callableFunction: this.addPickupNDelivery }).coordinate();
             return updatedResult;
         });
         this.getServiceCenterList = (methodParamEntity) => __awaiter(this, void 0, void 0, function* () {
@@ -86,7 +86,7 @@ class UserRepositoryService extends BaseRepositoryService_1.BaseRepositoryServic
             let closestServiceCenterNPickupNDeliveryPrice = methodParamEntity.methodReturnedValContainer[StoreResultAs_1.StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE];
             let result = yield UserRepository_1.userRepositoryIns.updateUserPlanComponentPrice({ componentPrice: closestServiceCenterNPickupNDeliveryPrice, userPlanComponentId: params.userPlanComponentId });
         });
-        this.updatePickupNDelivery = (methodParamEntity) => __awaiter(this, void 0, void 0, function* () {
+        this.addPickupNDelivery = (methodParamEntity) => __awaiter(this, void 0, void 0, function* () {
         });
         this.updateTax = (allComponentPrice, userPlanComponentDetails, taxableAmount) => __awaiter(this, void 0, void 0, function* () {
             let object = { sub_total: allComponentPrice, gateway_charges: 0, tax: 0, total: 0, component_details: userPlanComponentDetails };

@@ -28,6 +28,7 @@ export class MasterRepository extends BaseRepository {
                 where: {
                     category_id: params.id
                 },
+                as: "makerDetails",
                 required: true
             },
         })

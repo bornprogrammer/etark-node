@@ -31,11 +31,11 @@ class MasterService extends BaseService_1.default {
             let result = yield this.getMethodCoordinator().setMethod({ callableFunction: this.mMasterRepository.getMerchantList, callableFunctionParams: params }).coordinate();
             return result;
         });
-        this.getPlans = (methodParamEntity) => __awaiter(this, void 0, void 0, function* () {
+        this.getPlans = () => __awaiter(this, void 0, void 0, function* () {
             let result = yield this.getMethodCoordinator().setMethod({ callableFunction: this.mMasterRepository.getPlans }).coordinate();
             return result;
         });
-        this.getCities = (methodParamEntity) => __awaiter(this, void 0, void 0, function* () {
+        this.getCities = () => __awaiter(this, void 0, void 0, function* () {
             let result = yield this.getMethodCoordinator().setMethod({ callableFunction: this.mMasterRepository.getCities }).coordinate();
             return result;
         });
