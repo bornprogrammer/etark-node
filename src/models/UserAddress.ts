@@ -26,7 +26,6 @@ UserAddress.init({
     },
     city_id: {
         type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false
     },
     lat: {
         type: DataTypes.STRING,
