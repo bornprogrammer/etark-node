@@ -6,8 +6,6 @@ import { QueryTypes } from "sequelize";
 import { UserPlanComponent } from "@app/models/UserPlanComponent";
 import { UpdateUserPlanComponentPriceParamEntity } from "@app/repo-method-param-entities/UpdateUserPlanComponentPriceParamEntity";
 import { GetServiceCenterListParamsEntity } from "@app/repo-method-param-entities/GetClosestServiceCenterDetailsParamsEntity";
-import { UtilsHelper } from "@app/helpers/UtilsHelper";
-import { ServiceCenterNotFound } from "@app/errors/ServiceCenterNotFound";
 
 export class UserRepository extends BaseRepository {
 
@@ -34,10 +32,7 @@ export class UserRepository extends BaseRepository {
     }
 
     public getServiceCenterList = async (params: GetServiceCenterListParamsEntity) => {
-        let result = await sequelizeConnection.connection.query(`select service_centers.id as service_center_id,service_centers.lat as service_centers_lat,service_centers.lon as service_centers_long,user_address.lat as user_address_lat,user_address.lon as user_address_long,swiggy_genie_price.base_fare,swiggy_genie_price.base_km,swiggy_genie_price.per_km_above_base_km from user_address inner join service_centers on user_address.city_id = service_centers.city_id inner join maker_detail on service_centers.maker_id = maker_detail.maker_id inner join complaints on maker_detail.id = complaints.maker_detail_id inner join swiggy_genie_price on user_address.city_id = swiggy_genie_price.city_id where service_centers.status='active' and user_address.id = ${params.userAddressId} and complaints.id = ${params.complainId}`, { type: QueryTypes.SELECT });
-        // if (!UtilsHelper.isMethodReturnedValueTruthy(result)) {
-        //     throw new ServiceCenterNotFound();
-        // }
+        let result = await sequelizeConnection.connection.query(`select service_centers.id as service_center_id,service_centers.lat as service_centers_lat,service_centers.lon as service_centers_long,user_address.lat as user_address_lat,user_address.lon as user_address_long,swiggy_genie_price.base_fare,swiggy_genie_price.base_km,swiggy_genie_price.per_km_above_base_km from user_address inner join service_centers on user_address.city_id = service_centers.city_id inner join service_center_detail on service_centers.id=service_center_detail.service_center_id inner join maker_detail on service_center_detail.maker_id = maker_detail.maker_id inner join complaints on maker_detail.id = complaints.maker_detail_id inner join swiggy_genie_price on user_address.city_id = swiggy_genie_price.city_id where service_centers.status='active' and service_center_detail.status='active' and user_address.id = ${params.userAddressId} and complaints.id = ${params.complainId}`, { type: QueryTypes.SELECT });
         return result;
     }
 

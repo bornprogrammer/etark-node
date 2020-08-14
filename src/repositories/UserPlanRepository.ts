@@ -4,12 +4,10 @@ import { UserPlan, UserPlanAttributes } from "@app/models/UserPlan";
 import { UserPlanComponent } from "@app/models/UserPlanComponent";
 import { AddUserPlanParamEntity } from "@app/repo-method-param-entities/AddUserPlanParamEntity";
 import { PlanComponent } from "@app/models/PlanComponents";
-import { PlanComponents } from "@app/enums/PlanComponents";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { QueryTypes } from "sequelize";
 import { GetUserPlanStatusByUserPaymentIdParamsEntity } from "@app/repo-method-param-entities/GetUserPlanStatusByUserPaymentIdParamsEntity";
 import { UserPayment } from "@app/models/UserPayment";
-import { userPlanComponentRepositoryIns } from "./UserPlanComponentRepository";
 import { AppConstants } from "@app/constants/AppConstants";
 
 export class UserPlanRepository extends BaseRepository {
@@ -49,7 +47,7 @@ export class UserPlanRepository extends BaseRepository {
 
     public getUserPlanComponentPriceDetails = async (params: GetUserPlanComponentDetailsParamsEntity) => {
         let result = await this.getUserPlanComponentDetails(params);
-        let userPlanComponentPriceDetails = { grand_total: 0, sub_total: 0, tax: 0, gateway_charges: 0 };
+        let userPlanComponentPriceDetails = { grand_total: 0, sub_total: 0, tax: 0, gateway_charge: 0 };
         let taxableAmount = 0;
         result.UserPlanComponents.forEach((userPlanComponentObject: UserPlanComponent) => {
             userPlanComponentPriceDetails.sub_total += userPlanComponentObject.component_price;
@@ -59,8 +57,8 @@ export class UserPlanRepository extends BaseRepository {
         });
         userPlanComponentPriceDetails.tax = Math.round((AppConstants.CGST / 100) * taxableAmount);
         userPlanComponentPriceDetails.grand_total = userPlanComponentPriceDetails.tax + userPlanComponentPriceDetails.sub_total;
-        userPlanComponentPriceDetails.gateway_charges = Math.round((AppConstants.PAYTM_GATEWAY_CHARGES / 100) * userPlanComponentPriceDetails.grand_total);
-        userPlanComponentPriceDetails.grand_total += userPlanComponentPriceDetails.gateway_charges;
+        userPlanComponentPriceDetails.gateway_charge = Math.round((AppConstants.PAYTM_GATEWAY_CHARGES / 100) * userPlanComponentPriceDetails.grand_total);
+        userPlanComponentPriceDetails.grand_total += userPlanComponentPriceDetails.gateway_charge;
         return userPlanComponentPriceDetails;
     }
 
@@ -92,6 +90,7 @@ export class UserPlanRepository extends BaseRepository {
         where user_payment.id=${orderId} and user_plan.status='success'`, {
             type: QueryTypes.SELECT
         })
+        console.log("result", result);
         return result;
     }
 

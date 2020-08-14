@@ -155,7 +155,7 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
     public createUserPayment = async (methodParamEntity: MethodParamEntity) => {
         let userPlanComponentPriceDetails = methodParamEntity.lastInvokedMethodParam;
         let params = methodParamEntity.topMethodParam;
-        let userPayment: UserPaymentAttributes = { grand_total: userPlanComponentPriceDetails.grand_total, sub_total: userPlanComponentPriceDetails.sub_total, tax: userPlanComponentPriceDetails.tax, user_plan_id: params.user_plan_id };
+        let userPayment: UserPaymentAttributes = { grand_total: userPlanComponentPriceDetails.grand_total, sub_total: userPlanComponentPriceDetails.sub_total, tax: userPlanComponentPriceDetails.tax, user_plan_id: params.user_plan_id, gateway_charge: userPlanComponentPriceDetails.gateway_charge };
         let result = await userPaymentRepositoryIns.create(userPayment);
         return result;
     }

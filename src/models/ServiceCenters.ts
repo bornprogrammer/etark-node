@@ -11,10 +11,6 @@ ServiceCenters.init({
         primaryKey: true,
         autoIncrement: true
     },
-    maker_id: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false
-    },
     city_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false

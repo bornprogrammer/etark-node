@@ -1,15 +1,7 @@
 import BaseService from "@app/services/BaseService";
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { MasterRepository, masterRepositoryIns } from "./MasterRepository";
-import { complaintRepositoryIns } from "@app/repositories/ComplaintRepository";
-import { Complaint } from "@app/models/Complaint";
-import { ObjectHelper } from "@app/helpers/ObjectHelper";
-import { SellerCompensationEmailEntity } from "@app/entities/SellerCompensationEmailEntity";
-import { ComplaintDetails } from "@app/models/ComplaintDetails";
-import { SmartphoneComplainFieldsEnum } from "@app/enums/SmartphoneComplainFieldsEnum";
-import { GoogleDistanceMapApiService, googleDistanceMapApiServiceIns } from "@app/services/GoogleDistanceMapApiService";
 import { GoogleDistanceMapApiEntity } from "@app/entities/GoogleDistanceMapApiEntity";
-
 
 export class MasterService extends BaseService {
 
@@ -34,12 +26,12 @@ export class MasterService extends BaseService {
         return result;
     }
 
-    public getPlans = async (methodParamEntity: MethodParamEntity) => {
+    public getPlans = async () => {
         let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.mMasterRepository.getPlans }).coordinate();
         return result;
     }
 
-    public getCities = async (methodParamEntity: MethodParamEntity) => {
+    public getCities = async () => {
         let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.mMasterRepository.getCities }).coordinate();
         return result;
     }
@@ -49,7 +41,6 @@ export class MasterService extends BaseService {
         let dests: GoogleDistanceMapApiEntity[] = [{ lat: "28.453729", long: "77.039494" }, { lat: "28.510637", long: "77.048866" }, { lat: "28.471032", long: "77.049519" }];
         // let result = await googleDistanceMapApiServiceIns.getMinDistance(origins, dests);
         return true;
-
     }
 }
 

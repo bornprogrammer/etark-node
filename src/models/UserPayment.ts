@@ -10,6 +10,7 @@ export interface UserPaymentAttributes {
     sub_total: number;
     tax: number;
     paytm_checksum?: string
+    gateway_charge?: number
 }
 export class UserPayment extends Model {
     id?: number;
@@ -20,7 +21,7 @@ export class UserPayment extends Model {
     sub_total: number;
     tax: number;
     paytm_checksum?: string;
-
+    gateway_charge?: number;
 }
 
 UserPayment.init({
@@ -55,6 +56,10 @@ UserPayment.init({
     },
     paytm_checksum: {
         type: DataTypes.STRING,
+    },
+    gateway_charge: {
+        type: DataTypes.NUMBER.UNSIGNED,
+        allowNull: false
     }
 }, {
     sequelize: sequelizeConnection.connection,

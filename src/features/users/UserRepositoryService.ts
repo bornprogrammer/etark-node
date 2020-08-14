@@ -67,7 +67,7 @@ class UserRepositoryService extends BaseRepositoryService {
     }
 
     public updateComponentPriceForPickupNDelivery = async (params: any) => {
-        let updatedResult = await this.getMethodCoordinator().setMethod({ callableFunction: this.getServiceCenterList, callableFunctionParams: params }).setMethod({ callableFunction: this.getClosestServiceCenterNPickupNDeliveryPrice, storeResultAs: StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.updatePickupNDeliveryComponent, notBreakWhenReturnedValueNotTruthy: true }).setMethod({ callableFunction: this.updatePickupNDelivery }).coordinate();
+        let updatedResult = await this.getMethodCoordinator().setMethod({ callableFunction: this.getServiceCenterList, callableFunctionParams: params }).setMethod({ callableFunction: this.getClosestServiceCenterNPickupNDeliveryPrice, storeResultAs: StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.updatePickupNDeliveryComponent, notBreakWhenReturnedValueNotTruthy: true }).setMethod({ callableFunction: this.addPickupNDelivery }).coordinate();
         return updatedResult;
     }
 
@@ -86,7 +86,7 @@ class UserRepositoryService extends BaseRepositoryService {
         let result = await userRepositoryIns.updateUserPlanComponentPrice({ componentPrice: closestServiceCenterNPickupNDeliveryPrice, userPlanComponentId: params.userPlanComponentId });
     }
 
-    public updatePickupNDelivery = async (methodParamEntity: MethodParamEntity) => {
+    public addPickupNDelivery = async (methodParamEntity: MethodParamEntity) => {
 
     }
 

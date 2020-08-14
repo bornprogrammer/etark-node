@@ -10,7 +10,6 @@
     "preserveConstEnums": true,
     // "resolveJsonModule": true,
     "sourceMap": true,
-    // "strict": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {

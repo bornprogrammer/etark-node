@@ -2,7 +2,6 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 
-
 export interface PickupDeliveryAttirbutes {
     id: number;
     user_plan_id: number;

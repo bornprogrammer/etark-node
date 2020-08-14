@@ -1,7 +1,6 @@
 import BaseService from "@app/services/BaseService";
 import { AppConstants } from "@app/constants/AppConstants";
 
-
 export class UserPlanService extends BaseService {
     /**
      *
