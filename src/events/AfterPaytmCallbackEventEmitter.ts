@@ -53,14 +53,14 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
     }
 
     public sendCompensationEmailToServiceCenter = async (sellerCompensationEmailEntity: SellerCompensationEmailEntity, error, data) => {
-        nodeMailerServiceIns.sendHtml(config.get("mail.from"), "iamabornprogrammer@gmail.com", "Request for compensationOrder email", UtilsHelper.replaceAllStr(sellerCompensationEmailEntity, data));
+        nodeMailerServiceIns.sendHtml(config.get("mail.from"), "bapi.rahul@gmail.com", "Request for compensationOrder email", UtilsHelper.replaceAllStr(sellerCompensationEmailEntity, data));
     }
 
     public sendOrderEmail = async (orderDetail, error, data) => {
         console.log("orderDetail", orderDetail);
         let orderDetailObj = orderDetail[0];
         orderDetailObj.is_download_report_to_be_shown = await this.isDownloadReportToBeShown(orderDetailObj) ? "inline-block" : "none";
-        orderDetailObj.email = "iamabornprogrammer@gmail.com";
+        // orderDetailObj.email = "iamabornprogrammer@gmail.com";
         nodeMailerServiceIns.sendHtml(config.get("mail.from"), orderDetailObj.email, "Order email", UtilsHelper.replaceAllStr(orderDetailObj, data));
     }
 
