@@ -1,5 +1,7 @@
 import BaseRepository from "@app/repositories/BaseRepository";
 import { ComplaintDetails } from "@app/models/ComplaintDetails";
+import { UpdateComplainDetailByFieldIdParamsEntity } from "@app/repo-method-param-entities/UpdateComplainDetailByFieldIdParamsEntity";
+import ArrayHelper from "@app/helpers/ArrayHelper";
 
 export class ComplaintDetailsRepository extends BaseRepository {
 
@@ -23,17 +25,22 @@ export class ComplaintDetailsRepository extends BaseRepository {
         return result;
     }
 
-    // public updateByFieldId = async (complainDetailObj: UpdateComplainDetailByFieldIdParamsEntity) => {
-    //     let result = await ComplaintDetails.update({
-    //         field_val: complainDetailObj.fieldVal
-    //     }, {
-    //         where: {
-    //             complaint_id: complainDetailObj.complainId,
-    //             field_id: complainDetailObj.field_id
-    //         }
-    //     });
-    //     return result;
-    // }
+    public updateByComplainIdNFieldId = async (complainDetail: UpdateComplainDetailByFieldIdParamsEntity) => {
+        let result = null;
+        // if (ArrayHelper.isArrayValid(complainDetails)) {
+        // for (const complainDetail of complainDetails) {
+        result = await ComplaintDetails.update({
+            field_val: complainDetail.fieldVal
+        }, {
+            where: {
+                complaint_id: complainDetail.complainId,
+                field_id: complainDetail.fieldId
+            }
+        });
+        // }
+        // }
+        return result;
+    }
 }
 
 export const complaintDetailsRepositoryIns = new ComplaintDetailsRepository();

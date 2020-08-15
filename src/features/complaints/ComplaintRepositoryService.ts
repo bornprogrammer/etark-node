@@ -15,7 +15,7 @@ import { Complaint } from "@app/models/Complaint";
 import { SellerCompensationEmailEntity } from "@app/entities/SellerCompensationEmailEntity";
 import { ObjectHelper } from "@app/helpers/ObjectHelper";
 
-export class ComplaintService extends BaseService {
+export class ComplaintRepositoryService extends BaseService {
     /**
      *
      */
@@ -201,6 +201,29 @@ export class ComplaintService extends BaseService {
         }
         return details;
     }
+
+    public updateComplaints = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.updateComplaintIfExists, callableFunctionParams: params }).setMethod({ callableFunction: this.updateComplainDetails }).coordinate();
+        return result;
+    }
+
+    public updateComplaintIfExists = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let result = await complaintRepositoryIns.update({ id: params.complain_id, maker_detail_id: params.maker_detail_id, user_id: params.user_id })
+        return result;
+    }
+
+    public updateComplainDetails = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let result = null;
+        if (ArrayHelper.isArrayValid(params.complaints_details)) {
+            for (const complainDetail of params.complaints_details) {
+                result = await complaintDetailsRepositoryIns.updateByComplainIdNFieldId({ complainId: params.complain_id, fieldVal: complainDetail.field_val, fieldId: complainDetail.field_id });
+            }
+        }
+        return result;
+    }
 }
 
-export const complaintServiceIns = new ComplaintService();
+export const complaintServiceIns = new ComplaintRepositoryService();

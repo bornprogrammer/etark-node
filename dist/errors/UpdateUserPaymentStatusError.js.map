@@ -1,1 +1,0 @@
-{"version":3,"file":"UpdateUserPaymentStatusError.js","sourceRoot":"","sources":["../../src/errors/UpdateUserPaymentStatusError.ts"],"names":[],"mappings":";;;AAAA,2DAAwD;AACxD,oEAAgE;AAEhE,MAAa,4BAA6B,SAAQ,qCAAiB;IAE/D;;OAEG;IACH;QACI,KAAK,CAAC,oCAAgB,CAAC,gBAAgB,EAAE,qEAAqE,CAAC,CAAC;IACpH,CAAC;CACJ;AARD,oEAQC"}

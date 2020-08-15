@@ -1,6 +1,6 @@
 
-// export interface UpdateComplainDetailByFieldIdParamsEntity {
-//     complainId: number;
-//     fieldId: number;
-//     fieldVal: string | number;
-// }
+export interface UpdateComplainDetailByFieldIdParamsEntity {
+    complainId: number;
+    fieldId: number;
+    fieldVal: string | number;
+}

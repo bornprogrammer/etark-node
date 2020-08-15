@@ -1,1 +1,0 @@
-{"version":3,"file":"GetComplaintDetailsParamsEntity.js","sourceRoot":"","sources":["../../src/repo-method-param-entities/GetComplaintDetailsParamsEntity.ts"],"names":[],"mappings":";;;AACA,MAAa,+BAA+B;IAGxC,YAAY,WAAmB;QAD/B,oBAAe,GAAa,CAAC,SAAS,EAAE,UAAU,CAAC,CAAC;QAEhD,IAAI,CAAC,WAAW,GAAG,WAAW,CAAC;IACnC,CAAC;CACJ;AAND,0EAMC"}

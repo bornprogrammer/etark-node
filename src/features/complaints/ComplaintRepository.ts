@@ -1,6 +1,6 @@
 
 import MethodParamEntity from "@app/entities/MethodParamEntity";
-import { Complaint } from "@app/models/Complaint";
+import { Complaint, ComplaintAttributes } from "@app/models/Complaint";
 import { ComplaintDetails } from "@app/models/ComplaintDetails";
 import BaseRepository from "@app/repositories/BaseRepository";
 
@@ -13,6 +13,18 @@ export class ComplaintRepository extends BaseRepository {
     }
     public create(params: any) {
         throw new Error("Method not implemented.");
+    }
+
+    public update = async (params: ComplaintAttributes) => {
+        let result = await Complaint.update({
+            maker_detail_id: params.maker_detail_id
+        }, {
+            where: {
+                id: params.id,
+                user_id: params.user_id
+            }
+        })
+        return result;
     }
 
 

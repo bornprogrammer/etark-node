@@ -9,9 +9,9 @@ import { UserPayment } from "./UserPayment";
 import { Plan } from "./Plan";
 import { User } from "./User";
 
-interface ComplaintAttributes {
+export interface ComplaintAttributes {
     id: number,
-    user_id: number,
+    user_id?: number,
     maker_detail_id: number,
     status?: string
 }

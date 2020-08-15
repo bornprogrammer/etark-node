@@ -6,7 +6,7 @@ import { PlanComponents } from "@app/enums/PlanComponents";
 import { AppConstants } from "@app/constants/AppConstants";
 import { complaintRepositoryIns } from "@app/repositories/ComplaintRepository";
 import { userPlanServiceIns } from "../user-plan/UserPlanService";
-import { complaintServiceIns } from "../complaints/ComplaintService";
+import { complaintServiceIns } from "../complaints/ComplaintRepositoryService";
 import { GoogleDistanceMapApiEntity } from "@app/entities/GoogleDistanceMapApiEntity";
 import { ServiceCenterNotFound } from "@app/errors/ServiceCenterNotFound";
 import { googleDistanceMapApiServiceIns } from "@app/services/GoogleDistanceMapApiService";
@@ -109,12 +109,14 @@ class UserRepositoryService extends BaseRepositoryService {
         let minDistanceResp = await googleDistanceMapApiServiceIns.getMinDistanceForServiceCenter(originLetNLong, destLetNLong);
         let minDistance = parseFloat(minDistanceResp.distanceKM.toFixed(2));
         let serviceCenterObj = result[minDistanceResp.minDestIndex];
-        let price = serviceCenterObj.base_fare + AppConstants.DELIVERY_PRICE_MARGIN;
+        let price = serviceCenterObj.base_fare;
         if (minDistance > serviceCenterObj.base_km) {
             let remainingDist = minDistance - serviceCenterObj.base_km;
             price += remainingDist * serviceCenterObj.per_km_above_base_km;
         }
-        return Math.round(price);
+        price = Math.round(price);
+        price *= 2 + AppConstants.DELIVERY_PRICE_MARGIN;
+        return price;
     }
 
     public getSuccessPageDetail = async (methodParamEntity: MethodParamEntity) => {

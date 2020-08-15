@@ -1,1 +1,0 @@
-{"version":3,"file":"BaseEventEmitter.js","sourceRoot":"","sources":["../../src/events/BaseEventEmitter.ts"],"names":[],"mappings":";;;;;;AAAA,mCAAsC;AAEtC,6GAAsF;AAEtF,MAAsB,gBAAiB,SAAQ,qBAAY;IAEvD,YAAY,SAAqC;QAC7C,KAAK,EAAE,CAAC;QACR,IAAI,CAAC,EAAE,CAAC,SAAS,EAAE,IAAI,CAAC,MAAM,CAAC,CAAC;IACpC,CAAC;IAEM,oBAAoB;QACvB,OAAO,IAAI,0BAAiB,EAAE,CAAC;IACnC,CAAC;CAIJ;AAbD,4CAaC"}

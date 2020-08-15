@@ -1,1 +1,0 @@
-{"version":3,"file":"HttpResponseError.js","sourceRoot":"","sources":["../../src/errors/HttpResponseError.ts"],"names":[],"mappings":";;;AAGA,MAAa,iBAAkB,SAAQ,KAAK;IAIxC;;OAEG;IACH,YAAY,iBAAmC,EAAE,OAAe;QAC5D,KAAK,CAAC,OAAO,CAAC,CAAC;QACf,IAAI,CAAC,iBAAiB,GAAG,iBAAiB,CAAC;IAC/C,CAAC;CAEJ;AAZD,8CAYC"}

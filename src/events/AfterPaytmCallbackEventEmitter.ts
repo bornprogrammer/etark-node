@@ -8,7 +8,7 @@ import { nodeMailerServiceIns } from "@app/services/NodeMailerService";
 import { UtilsHelper } from "@app/helpers/UtilsHelper";
 import config from "config";
 import MethodParamEntity from "@app/entities/MethodParamEntity";
-import { complaintServiceIns } from "@app/features/complaints/ComplaintService";
+import { complaintServiceIns } from "@app/features/complaints/ComplaintRepositoryService";
 import { SellerCompensationEmailEntity } from "@app/entities/SellerCompensationEmailEntity";
 import { BaseQueue } from "./BaseQueue";
 import { PlanTypeEnums } from "@app/enums/PlanTypeEnums";
