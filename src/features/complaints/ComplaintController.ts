@@ -26,6 +26,11 @@ export class ComplaintController extends BaseController {
         await this.getCtrlMethodCoordinator().setMethod({ callableFunction: complaintServiceIns.addDeviceImages, callableFunctionParams: params }).send(req, res);
     }
 
+    public updateDeviceImages = async (req: Request, res: Response) => {
+        let params = ComplainRequestParamsCoordinator.getInstance(req).getUpdateDeviceImagesParams();
+        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: complaintServiceIns.updateDeviceImages, callableFunctionParams: params }).send(req, res);
+    }
+
     public uploadInvoice = async (req: Request, res: Response) => {
         // await this.getCtrlMethodCoordinator().setMethod({ callableFunction: complaintServiceIns.uploadInvoice, callableFunctionParams: req['file'] }).send(req, res);
         // nodeMailerServiceIns.sendHtml("service@etark.in", "iamabornprogrammer@gmail.com", "support email", "<h1>this is header file</h1>");

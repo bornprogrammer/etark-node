@@ -14,6 +14,7 @@ import { SmartphoneComplainFieldsEnum } from "@app/enums/SmartphoneComplainField
 import { Complaint } from "@app/models/Complaint";
 import { SellerCompensationEmailEntity } from "@app/entities/SellerCompensationEmailEntity";
 import { ObjectHelper } from "@app/helpers/ObjectHelper";
+import { SmartphoneComplainFieldIdEnum } from "@app/enums/SmartphoneComplainFieldIdEnum";
 
 export class ComplaintRepositoryService extends BaseService {
     /**
@@ -79,7 +80,7 @@ export class ComplaintRepositoryService extends BaseService {
         if (!complaintDetails) {
             complaintDetails = new ComplaintDetails();
             complaintDetails.field_val = params.winningChances;
-            complaintDetails.field_id = 18;
+            complaintDetails.field_id = SmartphoneComplainFieldIdEnum.WINNING_CHANCES_ML_RESPONSE;
             complaintDetails.complaint_id = params.complaint_id;
             await complaintDetailsRepositoryIns.create([complaintDetails]);
         } else {
@@ -148,7 +149,7 @@ export class ComplaintRepositoryService extends BaseService {
         let complaintDetails = new ComplaintDetails();
         complaintDetails.field_val = params.compensation_type // free_servicing,product_replacement
         complaintDetails.complaint_id = params.complain_id;
-        complaintDetails.field_id = 17;
+        complaintDetails.field_id = SmartphoneComplainFieldIdEnum.COMPENSATION_TYPE;
         return complaintDetails;
     }
 
@@ -156,7 +157,7 @@ export class ComplaintRepositoryService extends BaseService {
         let complaintDetails = new ComplaintDetails();
         complaintDetails.field_val = params.ml_resp;
         complaintDetails.complaint_id = params.complain_id;
-        complaintDetails.field_id = 19;
+        complaintDetails.field_id = SmartphoneComplainFieldIdEnum.COMPENSATION_ML_RESPONSE;
         return complaintDetails;
     }
 
@@ -222,6 +223,20 @@ export class ComplaintRepositoryService extends BaseService {
                 result = await complaintDetailsRepositoryIns.updateByComplainIdNFieldId({ complainId: params.complain_id, fieldVal: complainDetail.field_val, fieldId: complainDetail.field_id });
             }
         }
+        return result;
+    }
+
+    public updateDeviceImages = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.updateDeviceImagesIfAny, callableFunctionParams: params }).coordinate();
+        return result;
+    }
+
+    public updateDeviceImagesIfAny = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let complainDetails = params.complaints_details;
+        let result = await complaintDetailsRepositoryIns.updateByComplainIdNFieldId({ complainId: params.complaint_id, fieldVal: complainDetails[0].field_val, fieldId: complainDetails[0].field_id });
+        result = await complaintDetailsRepositoryIns.updateByComplainIdNFieldId({ complainId: params.complaint_id, fieldVal: complainDetails[1].field_val, fieldId: complainDetails[1].field_id });
         return result;
     }
 }

@@ -15,6 +15,8 @@ export class ComplaintRoutes {
 
         router.post("/:id/device-images", complaintControllerIns.addDeviceImages);
 
+        router.put("/:id/device-images", complaintControllerIns.updateDeviceImages);
+
         router.get("/:id/winning-chances", complaintControllerIns.getChancesOfWinning);
 
         router.post("/:id/compentsation", complaintControllerIns.addCompensation);

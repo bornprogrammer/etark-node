@@ -53,6 +53,10 @@ export class ComplainRequestParamsCoordinator extends RequestParamsCoordinator {
         return addDeviceImageParams;
     }
 
+    public getUpdateDeviceImagesParams = () => {
+        return this.getAddDeviceImagesParams();
+    }
+
     private mapComplaintKeyNameToID = (complaintsParams: any) => {
         let complaintFields = [];
 
