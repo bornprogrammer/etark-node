@@ -55,9 +55,9 @@ export class UserPlanRepository extends BaseRepository {
                 taxableAmount += userPlanComponentObject.component_price;
             }
         });
-        userPlanComponentPriceDetails.tax = Math.round((AppConstants.CGST / 100) * taxableAmount);
+        userPlanComponentPriceDetails.tax = Math.ceil((AppConstants.CGST / 100) * taxableAmount);
         userPlanComponentPriceDetails.grand_total = userPlanComponentPriceDetails.tax + userPlanComponentPriceDetails.sub_total;
-        userPlanComponentPriceDetails.gateway_charge = Math.round((AppConstants.PAYTM_GATEWAY_CHARGES / 100) * userPlanComponentPriceDetails.grand_total);
+        userPlanComponentPriceDetails.gateway_charge = Math.ceil((AppConstants.PAYTM_GATEWAY_CHARGES / 100) * userPlanComponentPriceDetails.grand_total);
         userPlanComponentPriceDetails.grand_total += userPlanComponentPriceDetails.gateway_charge;
         return userPlanComponentPriceDetails;
     }
@@ -68,6 +68,17 @@ export class UserPlanRepository extends BaseRepository {
             plan_id: params.planId,
         };
         let result = await UserPlan.create(addUserPlanParams);
+        return result;
+    }
+
+    public update = async (params: UserPlanAttributes): Promise<any> => {
+        let result = await UserPlan.update({
+            plan_id: params.plan_id
+        }, {
+            where: {
+                id: params.id
+            }
+        });
         return result;
     }
 

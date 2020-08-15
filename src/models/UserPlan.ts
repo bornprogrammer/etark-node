@@ -9,7 +9,7 @@ export interface UserPlanAttributes {
     id: number;
     complain_id?: number;
     plan_id?: number;
-    status?: string
+    status?: string;
 }
 
 export interface UserPlanCreationAttributes extends Model<UserPlanAttributes>, UserPlanAttributes {

@@ -177,6 +177,26 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
         userPaymentRepositoryIns.update(userPaymentObject);
         return params;
     }
+
+    public updateUserPlan = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        // let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.getPlanDetails, callableFunctionParams: params, storeResultAs: StoreResultAs.PLAN_DETAILS }).setMethod({ callableFunction: this.addUserPlanDetails, storeResultAs: StoreResultAs.ADD_PLAN_RESULTS }).setMethod({ callableFunction: this.addUserPlanComponents }).coordinate();
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.updateUserPlanIfAny, callableFunctionParams: params, storeResultAs: StoreResultAs.ADD_PLAN_RESULTS }).setMethod({ callableFunction: this.deleteUserPlanComponents }).setMethod({ callableFunction: this.getPlanDetails, storeResultAs: StoreResultAs.PLAN_DETAILS }).setMethod({ callableFunction: this.addUserPlanComponents }).coordinate();
+        return result;
+    }
+
+    public updateUserPlanIfAny = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let result = await userPlanRepositoryIns.update({ id: params.user_plan_id, plan_id: params.plan_id });
+        return { id: params.user_plan_id };
+    }
+
+    public deleteUserPlanComponents = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let result = await userPlanComponentRepositoryIns.deleteUserPlanComponent(params.user_plan_id);
+        return result;
+    }
+
 }
 
 export const userPlanRepositoryServiceIns = new UserPlanRepositoryService();

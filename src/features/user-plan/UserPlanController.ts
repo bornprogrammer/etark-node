@@ -18,6 +18,11 @@ export class UserPlanController extends BaseController {
         await this.getCtrlMethodCoordinator().setMethod({ callableFunction: userPlanRepositoryServiceIns.addUserPlan, callableFunctionParams: params }).send(req, res);
     }
 
+    public updateUserPlan = async (req: Request, res: Response) => {
+        let params = UserPlanRequestParamCoordinator.getInstance(req).getUpdateUsePlanParams();
+        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: userPlanRepositoryServiceIns.updateUserPlan, callableFunctionParams: params }).send(req, res);
+    }
+
     public makePayment = async (req: Request, res: Response) => {
         let params = UserPlanRequestParamCoordinator.getInstance(req).getMakePaymentParams();
         await this.getCtrlMethodCoordinator().setMethod({ callableFunction: userPlanRepositoryServiceIns.makePayment, callableFunctionParams: params }).send(req, res);

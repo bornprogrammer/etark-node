@@ -17,7 +17,7 @@ export class UserPlanComponentRepository extends BaseRepository {
     }
 
     public update = async (params: UpdateUserPlanComponentPriceParamEntity) => {
-        let update = UserPlanComponent.update({
+        let update = await UserPlanComponent.update({
             component_price: params.componentPrice
         }, {
             where: {
@@ -25,6 +25,17 @@ export class UserPlanComponentRepository extends BaseRepository {
             }
         })
         return update;
+    }
+
+    public deleteUserPlanComponent = async (userPlanId: number) => {
+        let result = await UserPlanComponent.update({
+            status: 'deleted'
+        }, {
+            where: {
+                user_plan_id: userPlanId
+            }
+        })
+        return result;
     }
 
 

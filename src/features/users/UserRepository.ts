@@ -40,24 +40,11 @@ export class UserRepository extends BaseRepository {
         let params = methodParamEntity.topMethodParam;
         let result = await sequelizeConnection.connection.query(`select plan_components.is_taxable,user_plan_components.id as user_plan_component_id,plan_components.component_display_name,plan_components.component_type,plan_components.component_price
         from user_plan inner join user_plan_components on user_plan.id = user_plan_components.user_plan_id inner join plan_components on user_plan_components.plan_components_id = plan_components.id
-        where user_plan.complain_id = ${params.complain_id} and user_plan.status='pending'`, {
+        where user_plan.complain_id = ${params.complain_id} and user_plan.status='pending' and user_plan_components.status='active'`, {
             type: QueryTypes.SELECT
         });
         return result;
     }
-
-    // public updatePickupNDeliveryComponent = async (methodParamEntity: MethodParamEntity) => {
-    //     let userPlanComponentObj = methodParamEntity.methodParam;
-    //     let pickupNDeliveryPrice = methodParamEntity.lastInvokedMethodParam;
-    //     let result = await UserPlanComponent.update({
-    //         component_price: pickupNDeliveryPrice
-    //     }, {
-    //         where: {
-    //             id: userPlanComponentObj.user_plan_component_id
-    //         }
-    //     });
-    //     return result;
-    // }
 
     public updateUserPlanComponentPrice = async (params: UpdateUserPlanComponentPriceParamEntity) => {
         let result = await UserPlanComponent.update({

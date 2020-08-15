@@ -92,9 +92,9 @@ class UserRepositoryService extends BaseRepositoryService {
 
     public updateTax = async (allComponentPrice: number, userPlanComponentDetails: any, taxableAmount: number) => {
         let object = { sub_total: allComponentPrice, gateway_charges: 0, tax: 0, total: 0, component_details: userPlanComponentDetails };
-        object.tax = Math.round((AppConstants.CGST / 100) * taxableAmount);
+        object.tax = Math.ceil((AppConstants.CGST / 100) * taxableAmount);
         object.total = object.sub_total + object.tax;
-        object.gateway_charges = Math.round((AppConstants.PAYTM_GATEWAY_CHARGES / 100) * object.total);
+        object.gateway_charges = Math.ceil((AppConstants.PAYTM_GATEWAY_CHARGES / 100) * object.total);
         object.total += object.gateway_charges;
         return object;
     }
@@ -114,8 +114,8 @@ class UserRepositoryService extends BaseRepositoryService {
             let remainingDist = minDistance - serviceCenterObj.base_km;
             price += remainingDist * serviceCenterObj.per_km_above_base_km;
         }
-        price = Math.round(price);
-        price *= 2 + AppConstants.DELIVERY_PRICE_MARGIN;
+        price = Math.ceil(price);
+        price = (price * 2) + AppConstants.DELIVERY_PRICE_MARGIN;
         return price;
     }
 
