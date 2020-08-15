@@ -1,4 +1,6 @@
 import { ObjectHelper } from "./ObjectHelper";
+import { AppConstants } from "@app/constants/AppConstants";
+import config from "config";
 
 
 export class UtilsHelper {
@@ -43,6 +45,11 @@ export class UtilsHelper {
             }
         }
         return builtStr;
+    }
+
+    public static getBaseURL(): string {
+        let url = AppConstants.SERVER_BASE_URL + ":" + config.get('port');
+        return url + "/";
     }
 
 

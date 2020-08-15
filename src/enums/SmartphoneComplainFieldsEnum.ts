@@ -9,4 +9,5 @@ export enum SmartphoneComplainFieldsEnum {
     DEVICE_FRONT_IMAGE = "device_front_image",
     DEVICE_BACK_IMAGE = "device_back_image",
     COMPENSATION_TYPE = "compensation_type",
+    HOW_LONG_PHONE_OWNED = "how_long_phone_owned",
 }

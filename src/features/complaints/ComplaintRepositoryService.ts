@@ -182,7 +182,7 @@ export class ComplaintRepositoryService extends BaseService {
     private extractInfo = (complaint: Complaint) => {
         let details: SellerCompensationEmailEntity = null;
         if (ObjectHelper.isObjectNotEmpty(complaint)) {
-            details = { company_name: "", user_name: "", product_detail: "", compensation_value: "", imei_number: "", model_name: "", winning_chances: "" };
+            details = { company_name: "", user_name: "", product_detail: "", compensation_value: "", imei_number: "", model_name: "", winning_chances: "", how_long_phone_owned: "", compensation_type: "" };
             details.user_name = complaint.user.name;
             details.company_name = complaint.makerDetail.display_name;
             complaint.complainDetails.forEach(complainDetail => {
@@ -197,6 +197,12 @@ export class ComplaintRepositoryService extends BaseService {
                 else if (complainDetail.field.field_name === SmartphoneComplainFieldsEnum.MODEL_NAME) {
                     details.model_name = complainDetail.field_val;
                     details.product_detail = complainDetail.field_val;
+                }
+                else if (complainDetail.field.field_name === SmartphoneComplainFieldsEnum.HOW_LONG_PHONE_OWNED) {
+                    details.how_long_phone_owned = complainDetail.field_val;
+                }
+                else if (complainDetail.field.field_name === SmartphoneComplainFieldsEnum.COMPENSATION_TYPE) {
+                    details.compensation_type = complainDetail.field_val === "free_servicing" ? "Free Servicing" : "Product Replacement";
                 }
             });
         }
