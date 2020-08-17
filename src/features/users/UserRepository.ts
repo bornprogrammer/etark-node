@@ -27,7 +27,8 @@ export class UserRepository extends BaseRepository {
             user_id: params.user_id,
             city_id: params.city_id,
             lat: params.lat,
-            lon: params.long
+            lon: params.long,
+            complain_id: params.complain_id
         })
     }
 

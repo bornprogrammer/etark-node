@@ -13,8 +13,6 @@ import { SellerCompensationEmailEntity } from "@app/entities/SellerCompensationE
 import { BaseQueue } from "./BaseQueue";
 import { PlanTypeEnums } from "@app/enums/PlanTypeEnums";
 import { StoreResultAs } from "@app/enums/StoreResultAs";
-import { AppConstants } from "@app/constants/AppConstants";
-import { ETIME } from "constants";
 
 export class AfterPaytmCallbackEventEmitter extends BaseQueue {
     /**

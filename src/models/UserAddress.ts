@@ -2,7 +2,6 @@
 import { Model, DataTypes } from "sequelize";
 
 import { sequelizeConnection } from "@app/SequelizeConnection";
-
 export class UserAddress extends Model {
 }
 
@@ -26,13 +25,21 @@ UserAddress.init({
     },
     city_id: {
         type: DataTypes.INTEGER.UNSIGNED,
-        defaultValue:null
+        defaultValue: null
+    },
+    complain_id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        defaultValue: null
     },
     lat: {
         type: DataTypes.STRING,
     },
     lon: {
         type: DataTypes.STRING,
+    },
+    londistance_meters: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
     }
 }, {
     tableName: "user_address",
