@@ -36,10 +36,6 @@ UserAddress.init({
     },
     lon: {
         type: DataTypes.STRING,
-    },
-    londistance_meters: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false
     }
 }, {
     tableName: "user_address",

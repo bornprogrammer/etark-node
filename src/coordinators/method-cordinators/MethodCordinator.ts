@@ -39,7 +39,6 @@ export default class MethodCoordinator implements Coordinator {
                     if (callableObj.resultToBeReturnedAsFinalResult) {
                         this.finalResult = result;
                     }
-                    // this.doPreservedOrMergeResults(callableObj, callableResult);
                 }
             }
         } catch (error) {

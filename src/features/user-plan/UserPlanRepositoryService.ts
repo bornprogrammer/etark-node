@@ -23,6 +23,7 @@ import { EventEmitterIdentifierEnum } from "@app/enums/EventEmitterIdentifierEnu
 import { PaytmCallbackResponseEntity } from "@app/entities/PaytmCallbackResponseEntity";
 import { GetUserPlanStatusByUserPaymentIdParamsEntity } from "@app/repo-method-param-entities/GetUserPlanStatusByUserPaymentIdParamsEntity";
 import { UserPlan } from "@app/models/UserPlan";
+import { pickupDeliveyRepositoryIns } from "@app/repositories/PickupDeliveyRepository";
 
 export class UserPlanRepositoryService extends BaseRepositoryService {
     /**
@@ -69,16 +70,23 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
 
     public updateUserPlanStatus = async (methodParamEntity: MethodParamEntity) => {
         let params: PaytmCallbackResponseEntity = methodParamEntity.topMethodParam.paytm_resp;
+        let result = false
         if (params.STATUS === "TXN_SUCCESS") {
-            let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.getUserPlanDetailsByUserPaymentId, callableFunctionParams: params }).setMethod({ callableFunction: this.markUserPlanStatusSuccess }).coordinate();
+            result = await this.getMethodCoordinator().setMethod({ callableFunction: this.getUserPlanDetailsByUserPaymentId, callableFunctionParams: params, storeResultAs: StoreResultAs.GET_USER_PLAN_DETAILS_BY_USER_PAYMENT_ID }).setMethod({ callableFunction: this.markUserPlanStatusSuccess }).setMethod({ callableFunction: this.markPickupDeliverySuccess }).coordinate();
             return result;
         }
         return false;
     }
 
     public markUserPlanStatusSuccess = async (methodParamEntity: MethodParamEntity) => {
-        let params: UserPlan = methodParamEntity.lastInvokedMethodParam;
+        let params: UserPlan = methodParamEntity.methodReturnedValContainer[StoreResultAs.GET_USER_PLAN_DETAILS_BY_USER_PAYMENT_ID];
         let result = await userPlanRepositoryIns.updateUserPlanStatus({ id: params.id, status: "success" });
+        return result;
+    }
+
+    public markPickupDeliverySuccess = async (methodParamEntity: MethodParamEntity) => {
+        let params: UserPlan = methodParamEntity.methodReturnedValContainer[StoreResultAs.GET_USER_PLAN_DETAILS_BY_USER_PAYMENT_ID];
+        let result = await pickupDeliveyRepositoryIns.markPickupDeliverySuccess(params.id);
         return result;
     }
 
@@ -92,18 +100,6 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
     public afterPayment = async (methodParamEntity: MethodParamEntity) => {
         let paytmResp = methodParamEntity.topMethodParam.paytm_resp;
         afterPaytmCallbackEventEmitterIns.emit(EventEmitterIdentifierEnum.AFTER_PAYTM_CALLBACK_EVENTEMITTER, paytmResp);
-    }
-
-    public sendEmail = async (methodParamEntity: MethodParamEntity) => {
-        // let params = methodParamEntity.topMethodParam;
-        // console.log("sent email");
-        // let orderId = params.paytm_resp.ORDERID.replace(AppConstants.ORDER_ID_PREFIX, "");
-        // let orderId = userPlanServiceIns.removeOrderPrefixFromOrderNo(params.paytm_resp.ORDERID);
-        // if (params.paytm_resp.STATUS === "TXN_SUCCESS") {
-
-        // fileReaderServiceIns.readEmailTemplate("order-detail.html", this.sendOrderEmail.bind(null, result));
-        // }
-        // return params;
     }
 
     public getDetailsForOrderEmailTemp = async (orderId: string) => {

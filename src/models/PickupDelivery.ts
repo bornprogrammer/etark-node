@@ -3,12 +3,11 @@ import { Model, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 
 export interface PickupDeliveryAttirbutes {
-    id: number;
+    id?: number;
     user_plan_id: number;
     service_center_id: number;
     delivery_amount: number;
-    created_at: string;
-    updated_at: string;
+    distance_meters: number;
 }
 
 export class PickupDelivery extends Model implements PickupDeliveryAttirbutes {
@@ -16,8 +15,7 @@ export class PickupDelivery extends Model implements PickupDeliveryAttirbutes {
     user_plan_id: number;
     service_center_id: number;
     delivery_amount: number;
-    created_at: string;
-    updated_at: string;
+    distance_meters: number
 }
 
 PickupDelivery.init({
@@ -37,6 +35,13 @@ PickupDelivery.init({
     delivery_amount: {
         type: DataTypes.FLOAT,
         allowNull: false
+    },
+    distance_meters: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    },
+    status: {
+        type: DataTypes.ENUM('pending', 'success', 'service_denied')
     }
 }, {
     tableName: "pickup_deliveries",

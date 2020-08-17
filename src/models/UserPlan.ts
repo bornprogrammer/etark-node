@@ -24,6 +24,7 @@ export class UserPlan extends Model {
     public readonly UserPlanComponents?: UserPlanComponent[];
     public readonly userPayments?: [UserPayment];
     public readonly plan?: Plan;
+    public static readonly userPaymentsAs: string = "userPayments";
 }
 
 UserPlan.init({

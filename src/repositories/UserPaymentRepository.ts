@@ -1,6 +1,5 @@
 import BaseRepository from "@app/repositories/BaseRepository";
 import { UserPayment, UserPaymentAttributes } from "@app/models/UserPayment";
-import { UpdateUserPlanComponentPriceParamEntity } from "@app/repo-method-param-entities/UpdateUserPlanComponentPriceParamEntity";
 import { UpdateUserPaymentStatusParamsEntity } from "@app/repo-method-param-entities/UpdateUserPaymentStatusParamsEntity";
 
 class UserPaymentRepository extends BaseRepository {

@@ -39,7 +39,7 @@ export class UserRepository extends BaseRepository {
 
     public getUserPlanComponentDetailsByComplaintId = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let result = await sequelizeConnection.connection.query(`select plan_components.is_taxable,user_plan_components.id as user_plan_component_id,plan_components.component_display_name,plan_components.component_type,plan_components.component_price
+        let result = await sequelizeConnection.connection.query(`select user_plan.id as user_plan_id,plan_components.is_taxable,user_plan_components.id as user_plan_component_id,plan_components.component_display_name,plan_components.component_type,plan_components.component_price
         from user_plan inner join user_plan_components on user_plan.id = user_plan_components.user_plan_id inner join plan_components on user_plan_components.plan_components_id = plan_components.id
         where user_plan.complain_id = ${params.complain_id} and user_plan.status='pending' and user_plan_components.status='active'`, {
             type: QueryTypes.SELECT

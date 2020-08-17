@@ -107,6 +107,7 @@ export class UserPlanRepository extends BaseRepository {
 
     public getUserPlanStatusByUserPaymentId = async (params: GetUserPlanStatusByUserPaymentIdParamsEntity) => {
         let result = await UserPlan.findOne({
+            attributes: ['id'],
             include: [
                 {
                     model: UserPayment,
@@ -115,7 +116,7 @@ export class UserPlanRepository extends BaseRepository {
                         id: params.userPaymentId,
                         payment_status: params.userPaymentStatus
                     },
-                    as: "userPayments"
+                    as: UserPlan.userPaymentsAs
                 }
             ]
         })

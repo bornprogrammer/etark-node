@@ -12,6 +12,12 @@ import { ServiceCenterNotFound } from "@app/errors/ServiceCenterNotFound";
 import { googleDistanceMapApiServiceIns } from "@app/services/GoogleDistanceMapApiService";
 import { userPlanComponentRepositoryIns } from "@app/repositories/UserPlanComponentRepository";
 import { BaseRepositoryService } from "@app/services/BaseRepositoryService";
+import { PickupDeliveryAttirbutes } from "@app/models/PickupDelivery";
+import { pickupDeliveyRepositoryIns } from "@app/repositories/PickupDeliveyRepository";
+import { MinDistanceForServiceCenterReturnedEntity } from "@app/entities/MinDistanceForServiceCenterReturnedEntity";
+import { AfterAddingAddressEventEmitterEntity } from "@app/entities/AfterAddingAddressEventEmitterEntity";
+import { afterAddingAddressEventEmitterIns } from "@app/events/AfterAddingAddressEventEmitter";
+import { EventEmitterIdentifierEnum } from "@app/enums/EventEmitterIdentifierEnum";
 
 class UserRepositoryService extends BaseRepositoryService {
     /**
@@ -35,6 +41,7 @@ class UserRepositoryService extends BaseRepositoryService {
         for (const userPlanComponent of userPlanComponentDetails) {
             if (userPlanComponent.component_type === PlanComponents.PICKUP_DELIVERY) {
                 topParams.userPlanComponentId = userPlanComponent.user_plan_component_id;
+                topParams.userPlanId = userPlanComponent.user_plan_id; // for pickup delivery details
                 userPlanComponent.component_price = await this.updateComponentPriceForPickupNDelivery(topParams);
             } else if (userPlanComponent.component_type === PlanComponents.INSPECTION_CHARGE) {
                 userPlanComponent.component_price = await this.updateInspectionFee(topParams, userPlanComponent);
@@ -68,7 +75,7 @@ class UserRepositoryService extends BaseRepositoryService {
 
     public updateComponentPriceForPickupNDelivery = async (params: any) => {
         let updatedResult = await this.getMethodCoordinator().setMethod({ callableFunction: this.getServiceCenterList, callableFunctionParams: params }).setMethod({ callableFunction: this.getClosestServiceCenterNPickupNDeliveryPrice, storeResultAs: StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.updatePickupNDeliveryComponent, notBreakWhenReturnedValueNotTruthy: true }).setMethod({ callableFunction: this.addPickupNDelivery }).coordinate();
-        return updatedResult;
+        return updatedResult.price;
     }
 
     public getServiceCenterList = async (methodParamEntity: MethodParamEntity) => {
@@ -82,12 +89,15 @@ class UserRepositoryService extends BaseRepositoryService {
 
     public updatePickupNDeliveryComponent = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let closestServiceCenterNPickupNDeliveryPrice = methodParamEntity.methodReturnedValContainer[StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE];
-        let result = await userRepositoryIns.updateUserPlanComponentPrice({ componentPrice: closestServiceCenterNPickupNDeliveryPrice, userPlanComponentId: params.userPlanComponentId });
+        let closestServiceCenterNPickupNDeliveryPrice: MinDistanceForServiceCenterReturnedEntity = methodParamEntity.methodReturnedValContainer[StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE];
+        let result = await userRepositoryIns.updateUserPlanComponentPrice({ componentPrice: closestServiceCenterNPickupNDeliveryPrice.price, userPlanComponentId: params.userPlanComponentId });
     }
 
     public addPickupNDelivery = async (methodParamEntity: MethodParamEntity) => {
-
+        let params = methodParamEntity.topMethodParam;
+        let closestServiceCenterNPickupNDeliveryPrice: MinDistanceForServiceCenterReturnedEntity = methodParamEntity.methodReturnedValContainer[StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE];
+        let afterAddingAddressEventEmitterEntity: AfterAddingAddressEventEmitterEntity = { userPlanId: params.userPlanId, serviceCenterId: closestServiceCenterNPickupNDeliveryPrice.serviceCenterId, deliveryAmount: closestServiceCenterNPickupNDeliveryPrice.price, distance: closestServiceCenterNPickupNDeliveryPrice.distance };
+        afterAddingAddressEventEmitterIns.emit(EventEmitterIdentifierEnum.AFTER_ADDING_ADDRESS_EVENTEMITTER, afterAddingAddressEventEmitterEntity);
     }
 
     public updateTax = async (allComponentPrice: number, userPlanComponentDetails: any, taxableAmount: number) => {
@@ -116,7 +126,9 @@ class UserRepositoryService extends BaseRepositoryService {
         }
         price = Math.ceil(price);
         price = (price * 2) + AppConstants.DELIVERY_PRICE_MARGIN;
-        return price;
+        minDistanceResp.price = price;
+        minDistanceResp.serviceCenterId = serviceCenterObj.service_center_id;
+        return minDistanceResp;
     }
 
     public getSuccessPageDetail = async (methodParamEntity: MethodParamEntity) => {
@@ -125,7 +137,7 @@ class UserRepositoryService extends BaseRepositoryService {
         let result = await complaintRepositoryIns.getSuccessPageDetails(orderId, params.user_id);
         let successPageInfo = null;
         if (result) {
-            successPageInfo = { created_at: "", imei_number: "", order_no: "", isDownloadReportToBeShown: false }
+            successPageInfo = { created_at: "", imei_number: "", order_no: "", isDownloadReportToBeShown: false };
             successPageInfo.created_at = result.userPlan.userPayments[0]['createdAt'];
             successPageInfo.order_no = result.userPlan.userPayments[0]['order_no'];
             successPageInfo.imei_number = complaintServiceIns.getIMEIFieldValue(result.complainDetails);
@@ -134,6 +146,9 @@ class UserRepositoryService extends BaseRepositoryService {
         return successPageInfo;
     }
 
+    public upsertPickupDelivery = async (params: PickupDeliveryAttirbutes) => {
+        await pickupDeliveyRepositoryIns.upsert(params);
+    }
 }
 
 export const userRepositoryServiceIns = new UserRepositoryService();

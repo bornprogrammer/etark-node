@@ -6,6 +6,7 @@ import { MasterRoutes } from './master/MasterRoutes';
 import { ComplaintRoutes } from './complaints/ComplaintRoutes';
 import { UserPlanRoutes } from './user-plans/UserPlanRoutes';
 import { UserRoutes } from './user/UserRoutes';
+import { ServiceCenterRoutes } from './service-center/ServiceCenterRoutes';
 
 export default class AppRoutes {
 
@@ -22,6 +23,8 @@ export default class AppRoutes {
         router.use("/user-plan", UserPlanRoutes.setRoutes());
 
         router.use("/users", UserRoutes.setRoutes());
+
+        router.use("/sc", ServiceCenterRoutes.setRoutes());
 
         return router;
     }
