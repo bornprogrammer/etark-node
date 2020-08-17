@@ -10,6 +10,8 @@ export class ServiceCenterRoutes {
 
         router.get("/:id", serviceCenterControllerIns.getOrderList);
 
+        router.post("/:id", serviceCenterControllerIns.addServiceCenterOrderDetails);
+
         return router;
     }
 

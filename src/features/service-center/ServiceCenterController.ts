@@ -20,7 +20,7 @@ export class ServiceCenterController extends BaseController {
 
     public addServiceCenterOrderDetails = async (req: Request, res: Response) => {
         let params = await ServiceCenterRequestParamCoordinator.getInstance(req).getAddServiceCenterOrderDetails();
-        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: serviceCenterRepositoryServiceIns.getOrderList, callableFunctionParams: params }).send(req, res);
+        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: serviceCenterRepositoryServiceIns.processServiceCenterOrderDetails, callableFunctionParams: params }).send(req, res);
     }
 
 }

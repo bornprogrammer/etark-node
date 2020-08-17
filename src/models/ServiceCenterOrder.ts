@@ -3,7 +3,7 @@ import { sequelizeConnection } from "@app/SequelizeConnection";
 
 
 export interface ServiceCenterOrderAttributes {
-    id: number;
+    id?: number;
     pickup_delivery_id: number;
     imei_number: string;
     device_front_image: string;
