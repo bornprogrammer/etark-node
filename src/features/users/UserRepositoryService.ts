@@ -147,7 +147,8 @@ class UserRepositoryService extends BaseRepositoryService {
     }
 
     public upsertPickupDelivery = async (params: PickupDeliveryAttirbutes) => {
-        await pickupDeliveyRepositoryIns.upsert(params);
+        let result = await pickupDeliveyRepositoryIns.upsert(params);
+        return result;
     }
 }
 

@@ -1,5 +1,5 @@
 import BaseRepository from "./BaseRepository";
-
+import { Complaint } from "@app/models/Complaint";
 
 export class ServiceCenterRepository extends BaseRepository {
     /**
@@ -14,7 +14,11 @@ export class ServiceCenterRepository extends BaseRepository {
     }
 
     public getList = async (params: any) => {
-        // let result = 
-    }
+        let result = Complaint.findAll({
 
+        });
+        return result;
+    }
 }
+
+export const serviceCenterRepositoryIns = new ServiceCenterRepository();

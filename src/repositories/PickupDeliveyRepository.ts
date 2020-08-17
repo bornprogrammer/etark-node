@@ -56,6 +56,7 @@ export class PickupDeliveyRepository extends BaseRepository {
                 user_plan_id: userPlanId
             }
         })
+        return result;
     }
 
 }

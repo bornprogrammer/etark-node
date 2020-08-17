@@ -2,7 +2,7 @@ import { Model, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 
 export interface ServiceCenterActivityAttributes {
-    id: number;
+    id?: number;
     pickup_delivery_id: number;
     activity_type: string;
 }
