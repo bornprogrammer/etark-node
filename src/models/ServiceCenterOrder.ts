@@ -12,6 +12,7 @@ export interface ServiceCenterOrderAttributes {
     service_to_be_done: string;
     invoice_total_amount: number;
     invoice_image: string;
+    due_date: string;
 }
 
 export class ServiceCenterOrder extends Model implements ServiceCenterOrderAttributes {
@@ -24,6 +25,7 @@ export class ServiceCenterOrder extends Model implements ServiceCenterOrderAttri
     service_to_be_done: string;
     invoice_total_amount: number;
     invoice_image: string;
+    due_date: string;
 }
 
 ServiceCenterOrder.init({

@@ -8,7 +8,7 @@ export class ServiceCenterRoutes {
 
         let router = express.Router();
 
-        router.get("/", serviceCenterControllerIns.getOrderList);
+        router.get("/:id", serviceCenterControllerIns.getOrderList);
 
         return router;
     }

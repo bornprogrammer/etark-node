@@ -4,7 +4,7 @@ import { AfterAddingAddressEventEmitterEntity } from "@app/entities/AfterAddingA
 import { userRepositoryServiceIns } from "@app/features/users/UserRepositoryService";
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { serviceCenterRepositoryServiceIns } from "@app/features/service-center/ServiceCenterRepositoryService";
-import { PickupDelivery } from "@app/models/PickupDelivery";
+import { PickupDelivery, PickupDeliveryAttirbutes } from "@app/models/PickupDelivery";
 
 export class AfterAddingAddressEventEmitter extends BaseQueue {
     /**
@@ -15,12 +15,18 @@ export class AfterAddingAddressEventEmitter extends BaseQueue {
     }
 
     public async handleJob(data?: AfterAddingAddressEventEmitterEntity) {
-        // let result = await userRepositoryServiceIns.upsertPickupDelivery({ user_plan_id: data.userPlanId, service_center_id: data.serviceCenterId, delivery_amount: data.deliveryAmount, distance_meters: data.distance });
-        await this.upsertPickupDelivery(data);
+        await this.processPickupNDelivery(data);
     }
 
-    public upsertPickupDelivery = async (params: AfterAddingAddressEventEmitterEntity) => {
-        let result = await this.getMethodCoordinator().setMethod({ callableFunction: userRepositoryServiceIns.upsertPickupDelivery, callableFunctionParams: params }).setMethod({ callableFunction: this.addServiceCenterActivity }).coordinate();
+    public processPickupNDelivery = async (params: AfterAddingAddressEventEmitterEntity) => {
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.upsertPickupDelivery, callableFunctionParams: params }).setMethod({ callableFunction: this.addServiceCenterActivity }).coordinate();
+    }
+
+    public upsertPickupDelivery = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let pickupDeliveryAttirbutes = { user_plan_id: params.userPlanId, service_center_id: params.serviceCenterId, delivery_amount: params.deliveryAmount, distance_meters: params.distance };
+        let result = await userRepositoryServiceIns.upsertPickupDelivery(pickupDeliveryAttirbutes);
+        return result;
     }
 
     public addServiceCenterActivity = async (params: MethodParamEntity) => {

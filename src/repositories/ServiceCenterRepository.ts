@@ -13,9 +13,8 @@ export class ServiceCenterRepository extends BaseRepository {
 
     }
 
-    public getList = async (params: any) => {
-        let result = Complaint.findAll({
-
+    public getList = async (scId: number) => {
+        let result = await Complaint.scope(['complainDetails', 'getSuccessUserPlan', { method: ['getDeliveryDetails', scId] }]).findAll({
         });
         return result;
     }

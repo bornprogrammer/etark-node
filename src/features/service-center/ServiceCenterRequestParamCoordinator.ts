@@ -19,4 +19,9 @@ export class ServiceCenterRequestParamCoordinator extends RequestParamsCoordinat
         let params = this.setParamFromParamsAs("id", "sc_id").coordinate();
         return params;
     }
+
+    public getAddServiceCenterOrderDetails = async () => {
+        let params = this.setParamFromParamsAs("id", "sc_id").coordinate();
+        return params;
+    }
 }

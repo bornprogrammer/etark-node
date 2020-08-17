@@ -8,6 +8,9 @@ import { UserPlan } from "./UserPlan";
 import { UserPayment } from "./UserPayment";
 import { Plan } from "./Plan";
 import { User } from "./User";
+import { PickupDelivery } from "./PickupDelivery";
+import { ServiceCenterActivity } from "./ServiceCenterActivity";
+import { ServiceCenterOrder } from "./ServiceCenterOrder";
 
 export interface ComplaintAttributes {
     id: number,
@@ -79,7 +82,6 @@ Complaint.init({
                     include: [
                         {
                             model: Field,
-                            // required: true,
                             as: "field",
                             attributes: [
                                 'id',
@@ -121,15 +123,66 @@ Complaint.init({
                 ],
             }
         },
-        // complaintUser: {
-        //     include: [
-        //         {
-        //             model: User,
-        //             // required: true,
-        //             // as: "user"
-        //         }
-        //     ]
-        // },
+        getSuccessUserPlan: {
+            include: [
+                {
+                    model: UserPlan,
+                    required: true,
+                    as: "userPlan",
+                    where: {
+                        status: ['pending', 'success']
+                    },
+                    include: [
+                        {
+                            model: UserPayment,
+                            required: true,
+                            as: "userPayments",
+                            where: {
+                                payment_status: "completed"
+                            }
+                        },
+                        {
+                            model: Plan,
+                            required: true,
+                            as: "plan"
+                        }
+                    ]
+                },
+            ],
+        },
+        getDeliveryDetails(serviceCenterId: number) {
+            return {
+                include: [
+                    {
+                        model: UserPlan,
+                        required: true,
+                        as: "userPlan",
+                        include: [
+                            {
+                                model: PickupDelivery,
+                                as: UserPlan.pickupDeliveryDetailAs,
+                                required: true,
+                                where: {
+                                    status: ['success'],
+                                    service_center_id: serviceCenterId
+                                },
+                                include: [
+                                    {
+                                        model: ServiceCenterActivity,
+                                        as: PickupDelivery.serviceCenterActivityAs,
+                                        required: true,
+                                    },
+                                    {
+                                        model: ServiceCenterOrder,
+                                        as: PickupDelivery.serviceCenterOrderAs,
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
         byComplainId(complainId: number) {
             return {
                 where: {

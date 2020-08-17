@@ -3,6 +3,8 @@ import { sequelizeConnection } from "@app/SequelizeConnection";
 import { UserPlanComponent } from "./UserPlanComponent";
 import { UserPayment } from "./UserPayment";
 import { Plan } from "./Plan";
+import { PickupDelivery } from "./PickupDelivery";
+import { PickupDeliveyRepository } from "@app/repositories/PickupDeliveyRepository";
 
 
 export interface UserPlanAttributes {
@@ -25,6 +27,8 @@ export class UserPlan extends Model {
     public readonly userPayments?: [UserPayment];
     public readonly plan?: Plan;
     public static readonly userPaymentsAs: string = "userPayments";
+    public static pickupDeliveryDetail?: PickupDelivery;
+    public static readonly pickupDeliveryDetailAs: string = "pickupDeliveryDetail"
 }
 
 UserPlan.init({
@@ -61,3 +65,7 @@ UserPlan.hasMany(UserPayment, {
 });
 
 UserPayment.belongsTo(UserPlan);
+
+UserPlan.hasOne(PickupDelivery, { as: UserPlan.pickupDeliveryDetailAs, foreignKey: "user_plan_id" });
+
+PickupDelivery.belongsTo(UserPlan, { foreignKey: "user_plan_id" })

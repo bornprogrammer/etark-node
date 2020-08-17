@@ -38,14 +38,15 @@ export class PickupDeliveyRepository extends BaseRepository {
     }
 
     public upsert = async (params: PickupDeliveryAttirbutes) => {
-        let result = await this.findPickpDeliveryByUserPlanId(new FindPickpDeliveryByUserPlanIdParamsEntity(params.user_plan_id));
-        if (result) {
-            params.id = result.id;
-            await this.update(params);
+        let pickupDeliveryDetails = await this.findPickpDeliveryByUserPlanId(new FindPickpDeliveryByUserPlanIdParamsEntity(params.user_plan_id));
+        let result = null;
+        if (pickupDeliveryDetails) {
+            params.id = pickupDeliveryDetails.id;
+            result = await this.update(params);
         } else {
-            await this.create(params);
+            result = await this.create(params);
         }
-        return true;
+        return result;
     }
 
     public markPickupDeliverySuccess = async (userPlanId: number) => {
