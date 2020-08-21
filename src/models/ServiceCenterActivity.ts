@@ -25,7 +25,8 @@ ServiceCenterActivity.init({
         allowNull: false
     },
     activity_type: {
-        type: DataTypes.ENUM('allocated', 'received_by_service_center', 'service_denied', 'awaiting_customer_payment'),
+        type: DataTypes.ENUM('allocated', 'order_accepted', 'service_denied', 'service_denied_after_inspection', 'user_to_confirm', 'user_declined_payment', 'user_made_payment', 'inspection_fee_claimed', 'ready_to_dispatch', 'dispatched'),
+        defaultValue: "allocated"
     }
 }, {
     tableName: "service_center_activities",

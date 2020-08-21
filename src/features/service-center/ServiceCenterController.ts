@@ -3,8 +3,6 @@ import { Request, Response } from "express";
 import { ServiceCenterRequestParamCoordinator } from "./ServiceCenterRequestParamCoordinator";
 import { serviceCenterRepositoryServiceIns } from "./ServiceCenterRepositoryService";
 
-
-
 export class ServiceCenterController extends BaseController {
     /**
      *
@@ -22,7 +20,6 @@ export class ServiceCenterController extends BaseController {
         let params = await ServiceCenterRequestParamCoordinator.getInstance(req).getAddServiceCenterOrderDetails();
         await this.getCtrlMethodCoordinator().setMethod({ callableFunction: serviceCenterRepositoryServiceIns.processServiceCenterOrderDetails, callableFunctionParams: params }).send(req, res);
     }
-
 }
 
 export const serviceCenterControllerIns = new ServiceCenterController();

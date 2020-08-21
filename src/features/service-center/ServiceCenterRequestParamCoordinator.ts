@@ -1,5 +1,6 @@
 import RequestParamsCoordinator from "@app/coordinators/request-params-cordinators/RequestParamsCoordinator";
 import { Request } from "express";
+import { paginationStrategyIns } from "@app/strategies/PaginationStrategy";
 
 
 export class ServiceCenterRequestParamCoordinator extends RequestParamsCoordinator {
@@ -16,7 +17,8 @@ export class ServiceCenterRequestParamCoordinator extends RequestParamsCoordinat
     }
 
     public getOrderListParams = async () => {
-        let params = this.setParamFromParamsAs("id", "sc_id").coordinate();
+        let params = await this.setParamFromParamsAs("id", "sc_id").setParamFromQueryStr("order_type").setParamFromQueryStr("order_no").coordinate();
+        params = await paginationStrategyIns.extractOutPaginationParamsNMerge(this.request, params);
         return params;
     }
 

@@ -17,13 +17,13 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
 
     public getOrderList = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let result = await serviceCenterRepositoryIns.getList(params.sc_id);
+        let result = await serviceCenterRepositoryIns.getServiceCenterOrderList(params.sc_id);
         return result;
     }
 
     public processServiceCenterOrderDetails = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.addServiceCenterOrderDetails, callableFunctionParams: params }).setMethod({ callableFunction: this.addAwaitingCustomerPaymentServiceCenterActivity }).coordinate();
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.addServiceCenterOrderDetails, callableFunctionParams: params }).setMethod({ callableFunction: this.addUserToConfirmServiceCenterActivity }).coordinate();
         return result;
     }
 
@@ -34,9 +34,9 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         return result
     }
 
-    public addAwaitingCustomerPaymentServiceCenterActivity = async (methodParamEntity: MethodParamEntity) => {
+    public addUserToConfirmServiceCenterActivity = async (methodParamEntity: MethodParamEntity) => {
         let addServiceCenterOrderDetails = methodParamEntity.topMethodParam;
-        let result = await this.addServiceCenterActivity({ activityType: ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_AWAITING_CUSTOMER_PAYMENT, pickupDeliveryId: addServiceCenterOrderDetails.pickup_delivery_id });
+        let result = await this.addServiceCenterActivity({ activityType: ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM, pickupDeliveryId: addServiceCenterOrderDetails.pickup_delivery_id });
         return result;
     }
 

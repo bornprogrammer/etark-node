@@ -1,5 +1,6 @@
 import { Coordinator } from "../Coordinator";
 import { Request } from "express";
+import { UtilsHelper } from "@app/helpers/UtilsHelper";
 
 export default abstract class RequestParamsCoordinator implements Coordinator {
 
@@ -13,7 +14,7 @@ export default abstract class RequestParamsCoordinator implements Coordinator {
     }
 
     public setParamFromBody(key: string): RequestParamsCoordinator {
-        this.reqParamsContainer[key] = this.request.body[key];
+        this.reqParamsContainer[key] = this.request.body[key] || null;
         return this;
     }
 
@@ -29,6 +30,7 @@ export default abstract class RequestParamsCoordinator implements Coordinator {
 
     public setParamFromQueryStr(key: string): RequestParamsCoordinator {
         this.reqParamsContainer[key] = this.request.query[key];
+        this.reqParamsContainer[key] = this.reqParamsContainer[key] && this.reqParamsContainer[key].strlen > 0 ? this.reqParamsContainer[key] : null;
         return this;
     }
 

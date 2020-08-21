@@ -150,7 +150,7 @@ Complaint.init({
                 },
             ],
         },
-        getDeliveryDetails(serviceCenterId: number) {
+        getDeliveryDetails(serviceCenterId: number, activityTypes: string[]) {
             return {
                 include: [
                     {
@@ -171,6 +171,9 @@ Complaint.init({
                                         model: ServiceCenterActivity,
                                         as: PickupDelivery.serviceCenterActivityAs,
                                         required: true,
+                                        where: {
+                                            activity_type: activityTypes
+                                        }
                                     },
                                     {
                                         model: ServiceCenterOrder,
