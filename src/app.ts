@@ -5,9 +5,12 @@ import path from 'path';
 import AppRoutes from './routes/AppRoutes';
 
 import { sequelizeConnection } from './SequelizeConnection';
+import { Server } from 'http';
 export default class App {
 
     private app: express.Application;
+
+    public server: Server;
 
     constructor() {
 
@@ -19,7 +22,7 @@ export default class App {
 
         const port = process.env.PORT || 5000;
 
-        this.app.listen(port, () => {
+        this.server = this.app.listen(port, () => {
             console.log(`node app started at ${port}`);
         });
 
