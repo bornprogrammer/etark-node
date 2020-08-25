@@ -8,7 +8,6 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "preserveConstEnums": true,
-    // "resolveJsonModule": true,
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
@@ -18,6 +17,9 @@
       ],
       "@app/*": [
         "./src/*"
+      ],
+      "tests/*": [
+        "./tests/*"
       ]
     },
     "lib": [
@@ -27,7 +29,7 @@
   },
   "include": [
     "*",
-    "src/**/*.ts"
+    "src/**/*.ts", "tests/unit/features/service-center/ServiceCenter.test.ts"
   ],
   "exclude": [
     "src/locales",

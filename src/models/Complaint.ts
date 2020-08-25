@@ -173,7 +173,7 @@ Complaint.init({
                                         required: true,
                                         where: {
                                             activity_type: activityTypes
-                                        }
+                                        },
                                     },
                                     {
                                         model: ServiceCenterOrder,

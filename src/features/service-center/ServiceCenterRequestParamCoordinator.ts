@@ -23,7 +23,7 @@ export class ServiceCenterRequestParamCoordinator extends RequestParamsCoordinat
     }
 
     public getAddServiceCenterOrderDetails = async () => {
-        let params = this.setParamFromParamsAs("id", "sc_id").setParamFromBody("pickup_delivery_id").setParamFromBody("imei_number").setParamFromBody("device_front_image").setParamFromBody("device_back_image").setParamFromBody("phone_warranty").setParamFromBody("service_to_be_done").setParamFromBody("invoice_total_amount").setParamFromBody("invoice_image").setParamFromBody("due_date").coordinate();
+        let params = this.setParamFromParamsAs("id", "sc_id").setParamFromBody("pickup_delivery_id").setParamFromBody("imei_number").setParamFromBody("device_front_image").setParamFromBody("device_back_image").setParamFromBody("phone_warranty").setParamFromBody("service_to_be_done").setParamFromBody("invoice_total_amount").setParamFromBody("proforma_invoice_image").setParamFromBody("final_invoice_image").setParamFromBody("due_date").setParamFromBody("device_delivery_date").coordinate();
         return params;
     }
 }

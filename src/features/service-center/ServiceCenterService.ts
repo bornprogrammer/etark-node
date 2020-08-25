@@ -19,13 +19,13 @@ export class ServiceCenterService extends BaseService {
                 activityTypes = [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_ORDER_ACCEPTED];
                 break;
             case ServiceCenterOrderTypeEnum.ORDER_TYPE_IN_PROCESS:
-                activityTypes = [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_DISPATCHED, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT];
+                activityTypes = [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT];
                 break;
             case ServiceCenterOrderTypeEnum.ORDER_TYPE_DECLINED:
                 activityTypes = [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM];
                 break;
             case ServiceCenterOrderTypeEnum.ORDER_TYPE_COMPLETED:
-                activityTypes = [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_ALLOCATED];
+                activityTypes = [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_DISPATCHED];
                 break;
             default: // order type allocated
                 activityTypes = [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_ALLOCATED];

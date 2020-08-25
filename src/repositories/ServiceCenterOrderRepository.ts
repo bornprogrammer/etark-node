@@ -19,7 +19,9 @@ export class ServiceCenterOrderRepository extends BaseRepository {
             phone_warranty: params.phone_warranty,
             service_to_be_done: params.service_to_be_done,
             invoice_total_amount: params.invoice_total_amount,
-            invoice_image: params.invoice_image,
+            proforma_invoice_image: params.proforma_invoice_image,
+            final_invoice_image: params.final_invoice_image,
+            device_delivery_date: params.device_delivery_date,
             due_date: params.due_date
         });
         return result;

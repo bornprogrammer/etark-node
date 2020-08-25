@@ -1,7 +1,6 @@
 import BaseRepository from "./BaseRepository";
 import { Complaint } from "@app/models/Complaint";
-import { GetServiceCenterListParamsEntity } from "@app/repo-method-param-entities/GetClosestServiceCenterDetailsParamsEntity";
-import { GetServiceCenterOrderList } from "@app/repo-method-param-entities/GetServiceCenterOrderList";
+import { GetServiceCenterOrderListParamsEntity } from "@app/repo-method-param-entities/GetServiceCenterOrderListParamsEntity";
 
 export class ServiceCenterRepository extends BaseRepository {
     /**
@@ -15,10 +14,13 @@ export class ServiceCenterRepository extends BaseRepository {
 
     }
 
-    public getServiceCenterOrderList = async (params: GetServiceCenterOrderList) => {
+    public getServiceCenterOrderList = async (params: GetServiceCenterOrderListParamsEntity) => {
         let result = await Complaint.scope(['complainDetails', 'getSuccessUserPlan', { method: ['getDeliveryDetails', params.serviceCenterId, params.activityTypes] }]).findAll({
             limit: params.pagination.limit,
-            offset: params.pagination.offset
+            offset: params.pagination.offset,
+            order: [[
+                'id', 'desc'
+            ]]
         });
         return result;
     }

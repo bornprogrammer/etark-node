@@ -6,6 +6,8 @@ import { ServiceCenterActivityTypeEnum } from "@app/enums/ServiceCenterActivityT
 import { ServiceCenterOrderAttributes } from "@app/models/ServiceCenterOrder";
 import { serviceCenterOrderRepositoryIns } from "@app/repositories/ServiceCenterOrderRepository";
 import { AddServiceCenterActivityEntity } from "@app/entities/AddServiceCenterActivityEntity";
+import { GetServiceCenterOrderListParamsEntity } from "@app/repo-method-param-entities/GetServiceCenterOrderListParamsEntity";
+import { ServiceCenterService, serviceCenterServiceIns } from "./ServiceCenterService";
 
 export class ServiceCenterRepositoryService extends BaseRepositoryService {
     /**
@@ -17,7 +19,8 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
 
     public getOrderList = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let result = await serviceCenterRepositoryIns.getServiceCenterOrderList(params.sc_id);
+        let serviceCenterOrderList: GetServiceCenterOrderListParamsEntity = { activityTypes: await serviceCenterServiceIns.getServiceCenterActivityTypeByOrderType(params.activity_type), orderNo: params.order_no, pagination: params.pagination, serviceCenterId: params.sc_id };
+        let result = await serviceCenterRepositoryIns.getServiceCenterOrderList(serviceCenterOrderList);
         return result;
     }
 
@@ -29,7 +32,7 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
 
     public addServiceCenterOrderDetails = async (methodParamEntity: MethodParamEntity) => {
         let topParams = methodParamEntity.topMethodParam;
-        let addServiceCenterOrderDetailsParams: ServiceCenterOrderAttributes = { pickup_delivery_id: topParams.pickup_delivery_id, imei_number: topParams.imei_number, device_front_image: topParams.device_front_image, device_back_image: topParams.device_back_image, phone_warranty: topParams.phone_warranty, service_to_be_done: topParams.service_to_be_done, invoice_total_amount: topParams.invoice_total_amount, invoice_image: topParams.invoice_image, due_date: topParams.due_date };
+        let addServiceCenterOrderDetailsParams: ServiceCenterOrderAttributes = { pickup_delivery_id: topParams.pickup_delivery_id, imei_number: topParams.imei_number, device_front_image: topParams.device_front_image, device_back_image: topParams.device_back_image, phone_warranty: topParams.phone_warranty, service_to_be_done: topParams.service_to_be_done, invoice_total_amount: topParams.invoice_total_amount, proforma_invoice_image: topParams.proforma_invoice_image, due_date: topParams.due_date, final_invoice_image: topParams.final_invoice_image, device_delivery_date: topParams.device_delivery_date };
         let result = await serviceCenterOrderRepositoryIns.create(addServiceCenterOrderDetailsParams);
         return result
     }
