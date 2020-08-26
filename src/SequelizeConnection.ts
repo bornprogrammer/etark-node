@@ -15,8 +15,6 @@ export class SequelizeConnection {
         );
     }
 
-    // http://maps.googleapis.com/maps/AIzaSyDUfEmM-rNKTLvklGuTeHDKthxs0gaKCBo/distancematrix/json?origins=54.406505, 18.67708&destinations=54.446251, 18.570993&mode=driving&language=en-EN&sensor=false
-
     public async connect() {
         try {
             await this.connection.authenticate();

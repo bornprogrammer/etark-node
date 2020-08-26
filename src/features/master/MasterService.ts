@@ -2,6 +2,7 @@ import BaseService from "@app/services/BaseService";
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { MasterRepository, masterRepositoryIns } from "./MasterRepository";
 import { GoogleDistanceMapApiEntity } from "@app/entities/GoogleDistanceMapApiEntity";
+import BadHttpRequestError from "@app/errors/BadHttpRequestError";
 
 export class MasterService extends BaseService {
 

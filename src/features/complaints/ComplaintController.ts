@@ -1,6 +1,6 @@
 import { BaseController } from "@app/controllers/BaseController";
 import { ComplainRequestParamsCoordinator } from "./ComplainRequestParamsCoordinator";
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { complaintServiceIns } from "./ComplaintRepositoryService";
 
 export class ComplaintController extends BaseController {

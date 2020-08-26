@@ -1,3 +1,12 @@
 {
-    "name": "Test"
+    "name": "Test",
+    "db": {
+        "dbname": "etark",
+        "username": "root",
+        "password": "YCombi2020",
+        "host": "etark.c7yr7myjbwov.ap-south-1.rds.amazonaws.com"
+    },
+    "google_map": {
+        "google_map_key": "google_map_key"
+    }
 }

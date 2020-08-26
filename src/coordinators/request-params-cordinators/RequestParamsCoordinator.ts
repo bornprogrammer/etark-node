@@ -1,12 +1,11 @@
 import { Coordinator } from "../Coordinator";
 import { Request } from "express";
-import { UtilsHelper } from "@app/helpers/UtilsHelper";
 
 export default abstract class RequestParamsCoordinator implements Coordinator {
 
     protected request: Request;
 
-    private reqParamsContainer: any;
+    protected reqParamsContainer: any;
 
     protected constructor(request: Request) {
         this.request = request;

@@ -5,8 +5,12 @@ import path from 'path';
 import AppRoutes from './routes/AppRoutes';
 
 import { sequelizeConnection } from './SequelizeConnection';
+
 import { Server } from 'http';
-export default class App {
+import { HttpResponseError } from './errors/HttpResponseError';
+import { responseServiceIns } from './services/ResponseService';
+import InternalError from './errors/InternalError';
+class App {
 
     private app: express.Application;
 
@@ -32,7 +36,9 @@ export default class App {
         this.app.get('/ts/health-check', async (req: Request, res: Response) => {
             res.send('status is healthy 1.1');
         });
+
         this.app.use(express.static(path.join(__dirname, "./public")));
+
         this.app.use('/api', AppRoutes.routes());
     }
 
@@ -46,4 +52,4 @@ export default class App {
     }
 }
 
-new App();
+export const appInstance = new App();

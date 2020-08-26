@@ -1,9 +1,11 @@
-import RequestParamsCoordinator from "@app/coordinators/request-params-cordinators/RequestParamsCoordinator";
+
 import { Request } from "express";
 import { paginationStrategyIns } from "@app/strategies/PaginationStrategy";
+import RequestParamsValidatorCoordinator from "@app/coordinators/request-params-cordinators/RequestParamsValidatorCoordinator";
+import Joi from "joi";
+import { PhoneWarrantyTypeEnum } from "@app/enums/PhoneWarrantyTypeEnum";
 
-
-export class ServiceCenterRequestParamCoordinator extends RequestParamsCoordinator {
+export class ServiceCenterRequestParamCoordinator extends RequestParamsValidatorCoordinator {
 
     /**
      *
@@ -22,8 +24,25 @@ export class ServiceCenterRequestParamCoordinator extends RequestParamsCoordinat
         return params;
     }
 
-    public getAddServiceCenterOrderDetails = async () => {
-        let params = this.setParamFromParamsAs("id", "sc_id").setParamFromBody("pickup_delivery_id").setParamFromBody("imei_number").setParamFromBody("device_front_image").setParamFromBody("device_back_image").setParamFromBody("phone_warranty").setParamFromBody("service_to_be_done").setParamFromBody("invoice_total_amount").setParamFromBody("proforma_invoice_image").setParamFromBody("final_invoice_image").setParamFromBody("due_date").setParamFromBody("device_delivery_date").coordinate();
+    public getAddServiceCenterOrderDetails = async (req: Request) => {
+        let params = await this.validateRequestBody(this.getAddServiceCenterOrderDetailsSchema(), req);
         return params;
+    }
+
+    public getAddServiceCenterOrderDetailsSchema = () => {
+        let schema = Joi.object({
+            imei_number: Joi.string().required(),
+            device_front_image: Joi.string().required(),
+            pickup_delivery_id: Joi.number().required().min(1),
+            device_back_image: Joi.string().required(),
+            phone_warranty: Joi.any().valid(PhoneWarrantyTypeEnum.IN_WARRANTY, PhoneWarrantyTypeEnum.NON_WARRANTY, PhoneWarrantyTypeEnum.OUT_OF_WARRANTY),
+            service_to_be_done: Joi.string().required(),
+            invoice_total_amount: Joi.number().required().min(1),
+            proforma_invoice_image: Joi.string().required(),
+            final_invoice_image: Joi.string().required(),
+            due_date: Joi.string().required(),
+            device_delivery_date: Joi.string().required(),
+        })
+        return schema;
     }
 }

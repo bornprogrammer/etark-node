@@ -1,7 +1,6 @@
 import BaseRepository from "./BaseRepository";
 import { ServiceCenterOrder, ServiceCenterOrderAttributes } from "@app/models/ServiceCenterOrder";
 
-
 export class ServiceCenterOrderRepository extends BaseRepository {
     /**
      *

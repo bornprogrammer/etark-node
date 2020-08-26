@@ -19,7 +19,7 @@ export default class ResponseService {
         let responseEntity = null;
         if (UtilsHelper.isMethodReturnedValueTruthy(data)) {
             if (req.method.toLowerCase() === 'get') {
-                responseEntity = new HttpResponseFoundEntity(data, "succes");
+                responseEntity = new HttpResponseFoundEntity(data, "success");
             } else {
                 responseEntity = new HttpResourcesUpdatedEntity(data, "resources updated");
             }

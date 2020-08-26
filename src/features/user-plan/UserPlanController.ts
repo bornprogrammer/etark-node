@@ -1,5 +1,5 @@
 import { BaseController } from "@app/controllers/BaseController";
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { userPlanRepositoryServiceIns } from "./UserPlanRepositoryService";
 import { UserPlanRequestParamCoordinator } from "./UserPlanRequestParamCoordinator";
 import { ObjectHelper } from "@app/helpers/ObjectHelper";

@@ -29,7 +29,8 @@
   },
   "include": [
     "*",
-    "src/**/*.ts", "tests/unit/features/service-center/ServiceCenter.test.ts"
+    "src/**/*.ts",
+    "tests/**/**/*.ts"
   ],
   "exclude": [
     "src/locales",

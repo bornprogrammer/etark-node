@@ -1,7 +1,7 @@
 import { BaseController } from "@app/controllers/BaseController";
 import { MasterRequestParamCoordinator } from "./MasterRequestParamCoordinator";
 import { MasterService, masterServiceIns } from "./MasterService";
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { paytmServiceIns } from "@app/services/PaytmService";
 import { fileReaderServiceIns } from "@app/services/FileReaderService";
 import { complaintRepositoryIns } from "@app/repositories/ComplaintRepository";
@@ -33,9 +33,7 @@ export class MasterController extends BaseController {
     }
 
     public getCities = async (req: Request, res: Response) => {
-
-        let resutl = htmlToPDFConverterIns.convertInvoiceReport();
-
+        // let resutl = htmlToPDFConverterIns.convertInvoiceReport();
         await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getCities }).send(req, res);
     }
 

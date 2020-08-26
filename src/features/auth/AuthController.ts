@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { BaseController } from "./../../controllers/BaseController";
 import { AuthService, authServiceIns } from "./AuthService";
 import { AuthRequestParamsCoordinator } from "./AuthRequestParamsCoordinator";
