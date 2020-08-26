@@ -30,7 +30,7 @@ export class AuthRepository extends BaseRepository {
         if (!result) {
             throw new UnAuthorized();
         } else {
-            if (result.status === UserStatusEnum.SUSPENDED) {
+            if (result.status === UserStatusEnum.SUSPENDED) { 
                 throw new UserSuspended();
             }
         }
