@@ -7,7 +7,9 @@ import { PhoneWarrantyTypeEnum } from '@app/enums/PhoneWarrantyTypeEnum';
 require('mysql2/node_modules/iconv-lite').encodingExists('foo');
 
 describe("service center order details post api", () => {
+
     let appIns;
+    
     beforeEach(() => { appIns = appInstance.server });
 
     afterEach(async () => { await appIns.close() });

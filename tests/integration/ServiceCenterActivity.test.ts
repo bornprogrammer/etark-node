@@ -2,7 +2,6 @@
 
 import request from 'supertest';
 import { appInstance } from '@app/app';
-import { HttpResponseCode } from '@app/enums/HttpResponseCodes';
 import { PhoneWarrantyTypeEnum } from '@app/enums/PhoneWarrantyTypeEnum';
 require('mysql2/node_modules/iconv-lite').encodingExists('foo');
 

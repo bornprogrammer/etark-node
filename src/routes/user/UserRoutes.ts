@@ -1,17 +1,25 @@
 import express, { Router } from "express";
 import { userControllerIns } from "@app/features/users/UserController";
+import { BaseRoutes } from "../BaseRoutes";
 
-export class UserRoutes {
+export class UserRoutes extends BaseRoutes {
 
-    public static setRoutes = (): Router => {
+    /**
+     *
+     */
+    constructor() {
+        super();
+    }
 
-        let router = express.Router();
+    public setRoutes = (): Router => {
 
-        router.post("/:id/addresses", userControllerIns.addAddress);
+        this.router.post("/:id/addresses", this.setCtrlMethod(userControllerIns.addAddress));
 
-        router.get("/:id/payment/:order_id", userControllerIns.getSuccessPageDetail);
+        this.router.get("/:id/payment/:order_id", this.setCtrlMethod(userControllerIns.getSuccessPageDetail));
 
-        return router;
+        return this.router;
     }
 
 }
+
+export const userRoutesIns = new UserRoutes();

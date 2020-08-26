@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { BaseController } from "./../../controllers/BaseController";
 import { AuthRepositoryService, authRepositoryServiceIns } from "./AuthRepositoryService";
 import { AuthRequestParamsCoordinator } from "./AuthRequestParamsCoordinator";
@@ -15,13 +15,14 @@ class AuthController extends BaseController {
     }
 
     public login = async (req: Request, res: Response) => {
-        let params = AuthRequestParamsCoordinator.getInstance(req).getLoginParams();
-        this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mService.login, callableFunctionParams: params }).send(req, res);
+        let params = await AuthRequestParamsCoordinator.getInstance(req).getLoginParams(req);
+        let result = await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mService.login, callableFunctionParams: params }).send(req, res);
+        return result;
     }
 
     public createUser = async (req: Request, res: Response) => {
-        let params = AuthRequestParamsCoordinator.getInstance(req).getCreateUserParams();
-        this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mService.createUser, callableFunctionParams: params }).send(req, res);
+        let params = await AuthRequestParamsCoordinator.getInstance(req).getCreateUserParams(req);
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mService.createUser, callableFunctionParams: params }).send(req, res);
     }
 
 }

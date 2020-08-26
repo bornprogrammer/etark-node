@@ -10,6 +10,7 @@ import { Server } from 'http';
 import { HttpResponseError } from './errors/HttpResponseError';
 import { responseServiceIns } from './services/ResponseService';
 import InternalError from './errors/InternalError';
+import config from 'config';
 class App {
 
     private app: express.Application;
@@ -24,7 +25,9 @@ class App {
 
         this.app.use(require('cors')());
 
-        const port = process.env.PORT || 5000;
+        // const port = process.env.PORT || 5000;
+
+        const port = config.get("port");
 
         this.server = this.app.listen(port, () => {
             console.log(`node app started at ${port}`);

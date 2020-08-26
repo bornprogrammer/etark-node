@@ -2,31 +2,39 @@
 import { complaintControllerIns } from "@app/features/complaints/ComplaintController";
 import express, { Router } from 'express';
 import { multerUploadFileMiddlewareIns } from "@app/middlewares/MulterUploadFileMiddleware";
+import { BaseRoutes } from "../BaseRoutes";
 
-export class ComplaintRoutes {
+export class ComplaintRoutes extends BaseRoutes {
 
-    public static setRoutes(): Router {
+    /**
+     *
+     */
+    constructor() {
+        super();
+    }
 
-        let router: express.Router = express.Router();
+    public setRoutes(): Router {
 
-        router.post("/", complaintControllerIns.addComplaints);
+        this.router.post("/", this.setCtrlMethod(complaintControllerIns.addComplaints));
 
-        router.put("/:id", complaintControllerIns.updateComplaints);
+        this.router.put("/:id", this.setCtrlMethod(complaintControllerIns.updateComplaints));
 
-        router.post("/:id/device-images", complaintControllerIns.addDeviceImages);
+        this.router.post("/:id/device-images", this.setCtrlMethod(complaintControllerIns.addDeviceImages));
 
-        router.put("/:id/device-images", complaintControllerIns.updateDeviceImages);
+        this.router.put("/:id/device-images", this.setCtrlMethod(complaintControllerIns.updateDeviceImages));
 
-        router.get("/:id/winning-chances", complaintControllerIns.getChancesOfWinning);
+        this.router.get("/:id/winning-chances", this.setCtrlMethod(complaintControllerIns.getChancesOfWinning));
 
-        router.post("/:id/compentsation", complaintControllerIns.addCompensation);
+        this.router.post("/:id/compentsation", this.setCtrlMethod(complaintControllerIns.addCompensation));
 
-        router.put("/:id/compentsation/:complain_detail_id", complaintControllerIns.updateCompensation);
+        this.router.put("/:id/compentsation/:complain_detail_id", this.setCtrlMethod(complaintControllerIns.updateCompensation));
 
-        router.post("/upload-invoice", multerUploadFileMiddlewareIns.uploadSingle("invoice"), complaintControllerIns.uploadInvoice);
+        this.router.post("/upload-invoice", multerUploadFileMiddlewareIns.uploadSingle("invoice"), this.setCtrlMethod(complaintControllerIns.uploadInvoice));
 
-        router.post("/upload-device-image", multerUploadFileMiddlewareIns.uploadSingle("device-image"), complaintControllerIns.uploadInvoice);
-        return router;
+        this.router.post("/upload-device-image", multerUploadFileMiddlewareIns.uploadSingle("device-image"), this.setCtrlMethod(complaintControllerIns.uploadInvoice));
+        return this.router;
     }
 
 }
+
+export const complaintRoutesIns = new ComplaintRoutes();

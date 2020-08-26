@@ -1,19 +1,25 @@
-import express, { Router } from 'express';
+import { Router } from 'express';
 import { authControllerIns } from "./../../features/auth/AuthController";
+import { BaseRoutes } from '../BaseRoutes';
 
-export class AuthRoutes {
+export class AuthRoutes extends BaseRoutes {
 
-    public static setRoutes(): Router {
-
-        let router: express.Router = express.Router();
-
-        router.post("/login", authControllerIns.login);
-
-        router.post("/", authControllerIns.createUser);
-
-        return router;
-
+    /**
+     *
+     */
+    constructor() {
+        super();
     }
 
+    public setRoutes(): Router {
 
+        this.router.post("/login", this.setCtrlMethod(authControllerIns.login));
+
+        this.router.post("/", this.setCtrlMethod(authControllerIns.createUser));
+
+        return this.router;
+
+    }
 }
+
+export const authRoutesIns = new AuthRoutes();
