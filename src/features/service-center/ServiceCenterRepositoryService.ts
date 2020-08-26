@@ -53,6 +53,11 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         return result;
     }
 
+    public setActivity = async (params: MethodParamEntity) => {
+        let topMethodParam = params.topMethodParam;
+        
+    }
+
 }
 
 export const serviceCenterRepositoryServiceIns = new ServiceCenterRepositoryService();

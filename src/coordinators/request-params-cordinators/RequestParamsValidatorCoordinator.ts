@@ -22,29 +22,34 @@ export default abstract class RequestParamsValidatorCoordinator extends RequestP
         return result;
     }
 
+    public validateRequestContainer = async (schema: any) => {
+        let result = await this.validate(schema, this.reqParamsContainer);
+        return result;
+    }
+
     public validateRequestQueryParams = async (schema: any, req: Request) => {
         let result = await this.validate(schema, req.query);
         return result;
     }
 
-    // public setParamFromBody(key: string): RequestParamsValidatorCoordinator {
-    //     super.setParamFromBody(key);
-    //     return this;
-    // }
+    public setParamFromBody(key: string): RequestParamsValidatorCoordinator {
+        super.setParamFromBody(key);
+        return this;
+    }
 
-    // public setParamFromParams(key: string): RequestParamsValidatorCoordcinator {
-    //     super.setParamFromParams(key);
-    //     return this;
-    // }
+    public setParamFromParams(key: string): RequestParamsValidatorCoordinator {
+        super.setParamFromParams(key);
+        return this;
+    }
 
-    // public setParamFromParamsAs(key: string, as: string): RequestParamsValidatorCoordinator {
-    //     super.setParamFromParamsAs(key, as);
-    //     return this;
-    // }
+    public setParamFromParamsAs(key: string, as: string): RequestParamsValidatorCoordinator {
+        super.setParamFromParamsAs(key, as);
+        return this;
+    }
 
-    // public setParamFromQueryStr(key: string): RequestParamsValidatorCoordinator {
-    //     super.setParamFromQueryStr(key);
-    //     return this;
-    // }
+    public setParamFromQueryStr(key: string): RequestParamsValidatorCoordinator {
+        super.setParamFromQueryStr(key);
+        return this;
+    }
 
 } 

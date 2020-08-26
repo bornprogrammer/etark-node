@@ -33,6 +33,39 @@ export class ServiceCenterService extends BaseService {
         }
         return activityTypes;
     }
+
+    public getServiceCenterLastActivityType = async (activityType: ServiceCenterActivityTypeEnum) => {
+        let lastActivityType = null;
+        switch (activityType) {
+            case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_ORDER_ACCEPTED:
+                lastActivityType = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_ALLOCATED;
+                break;
+            case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED:
+                lastActivityType = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_ALLOCATED;
+                break;
+            case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED_AFTER_INSPECTION:
+                lastActivityType = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_ORDER_ACCEPTED;
+                break;
+            case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT:
+                lastActivityType = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM;
+                break;
+            case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_INSPECTION_FEE_CLAIMED:
+                lastActivityType = [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED_AFTER_INSPECTION, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT];
+                break;
+            case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH:
+                lastActivityType = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT;
+                break;
+            case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_DISPATCHED:
+                lastActivityType = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH;
+                break;
+            case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_FAILURE:
+                lastActivityType = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT;
+                break;
+            default:
+                break;
+        }
+        return lastActivityType;
+    }
 }
 
 export const serviceCenterServiceIns = new ServiceCenterService();

@@ -10,4 +10,5 @@ export enum ServiceCenterActivityTypeEnum {
     ACTIVITY_TYPE_INSPECTION_FEE_CLAIMED = "inspection_fee_claimed",
     ACTIVITY_TYPE_READY_TO_DISPATCH = "ready_to_dispatch",
     ACTIVITY_TYPE_DISPATCHED = "dispatched",
+    ACTIVITY_TYPE_FAILURE = "failure",
 }

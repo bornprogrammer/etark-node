@@ -3,7 +3,7 @@ import { AuthRepository, authRepositoryIns } from "./AuthRepository";
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import BadHttpRequestError from "@app/errors/BadHttpRequestError";
 
-export class AuthService extends BaseService {
+export class AuthRepositoryService extends BaseService {
 
     protected mAuthRepository: AuthRepository;
 
@@ -26,5 +26,4 @@ export class AuthService extends BaseService {
     }
 }
 
-
-export const authServiceIns = new AuthService(authRepositoryIns);
+export const authRepositoryServiceIns = new AuthRepositoryService(authRepositoryIns);

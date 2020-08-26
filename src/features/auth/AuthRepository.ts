@@ -48,6 +48,8 @@ export class AuthRepository extends BaseRepository {
                 [Op.or]: [
                     {
                         mobile_number: params.mobile_number,
+                    },
+                    {
                         email: params.email
                     }
                 ]

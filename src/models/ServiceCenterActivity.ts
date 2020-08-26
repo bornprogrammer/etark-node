@@ -7,7 +7,6 @@ export interface ServiceCenterActivityAttributes {
     activity_type: string;
 }
 
-
 export class ServiceCenterActivity extends Model implements ServiceCenterActivityAttributes {
     id: number;
     pickup_delivery_id: number;
@@ -25,7 +24,7 @@ ServiceCenterActivity.init({
         allowNull: false
     },
     activity_type: {
-        type: DataTypes.ENUM('allocated', 'order_accepted', 'service_denied', 'service_denied_after_inspection', 'user_to_confirm', 'user_declined_payment', 'user_made_payment', 'inspection_fee_claimed', 'ready_to_dispatch', 'dispatched'),
+        type: DataTypes.ENUM('allocated', 'order_accepted', 'service_denied', 'service_denied_after_inspection', 'user_to_confirm', 'user_declined_payment', 'user_made_payment', 'inspection_fee_claimed', 'ready_to_dispatch', 'dispatched', 'failure'),
         defaultValue: "allocated"
     }
 }, {

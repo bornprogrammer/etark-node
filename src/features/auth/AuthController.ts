@@ -1,15 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import { BaseController } from "./../../controllers/BaseController";
-import { AuthService, authServiceIns } from "./AuthService";
+import { AuthRepositoryService, authRepositoryServiceIns } from "./AuthRepositoryService";
 import { AuthRequestParamsCoordinator } from "./AuthRequestParamsCoordinator";
 
 class AuthController extends BaseController {
 
-    protected mService: AuthService;
+    protected mService: AuthRepositoryService;
     /**
      *
      */
-    constructor(authService: AuthService) {
+    constructor(authService: AuthRepositoryService) {
         super();
         this.mService = authService;
     }
@@ -26,4 +26,4 @@ class AuthController extends BaseController {
 
 }
 
-export const authControllerIns = new AuthController(authServiceIns);
+export const authControllerIns = new AuthController(authRepositoryServiceIns);

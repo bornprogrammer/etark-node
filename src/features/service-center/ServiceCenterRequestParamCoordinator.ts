@@ -4,6 +4,7 @@ import { paginationStrategyIns } from "@app/strategies/PaginationStrategy";
 import RequestParamsValidatorCoordinator from "@app/coordinators/request-params-cordinators/RequestParamsValidatorCoordinator";
 import Joi from "joi";
 import { PhoneWarrantyTypeEnum } from "@app/enums/PhoneWarrantyTypeEnum";
+import { ServiceCenterActivityTypeEnum } from "@app/enums/ServiceCenterActivityTypeEnum";
 
 export class ServiceCenterRequestParamCoordinator extends RequestParamsValidatorCoordinator {
 
@@ -43,6 +44,19 @@ export class ServiceCenterRequestParamCoordinator extends RequestParamsValidator
             due_date: Joi.string().required(),
             device_delivery_date: Joi.string().required(),
         })
+        return schema;
+    }
+
+    public getSetActivityParams = async (req: Request) => {
+        let params = await this.setParamFromParams("pickup_delivery_id").setParamFromParams("activity_type").validateRequestContainer(this.getSetActivityParamsSchema());
+        return params;
+    }
+
+    public getSetActivityParamsSchema = () => {
+        let schema = Joi.object({
+            pickup_delivery_id: Joi.number().min(1),
+            activity_type: Joi.any().valid(ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_ORDER_ACCEPTED, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED_AFTER_INSPECTION, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_INSPECTION_FEE_CLAIMED, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_DISPATCHED, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_FAILURE)
+        });
         return schema;
     }
 }

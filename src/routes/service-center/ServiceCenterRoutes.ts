@@ -6,19 +6,11 @@ export class ServiceCenterRoutes extends BaseRoutes {
 
     public setRoutes = (): Router => {
 
-        // let router = express.Router();
-
-        this.router.get("/:id", serviceCenterControllerIns.getOrderList);
-
-        // this.router.post("/:id", async (req, res) => {
-        //     try {
-        //         await serviceCenterControllerIns.addServiceCenterOrderDetails(req, res);
-        //     } catch (error) {
-        //         responseServiceIns.sendErrorResponse(res, error);
-        //     }
-        // });
+        this.router.get("/:id", this.setCtrlMethod(serviceCenterControllerIns.getOrderList));
 
         this.router.post("/:id", this.setCtrlMethod(serviceCenterControllerIns.addServiceCenterOrderDetails));
+
+        this.router.patch("/activity/:pickup_delivery_id/:activity_type", this.setCtrlMethod(serviceCenterControllerIns.setActivity));
         return this.router;
     }
 
