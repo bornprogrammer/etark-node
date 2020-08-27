@@ -1,6 +1,8 @@
 import BaseService from "@app/services/BaseService";
 import { ServiceCenterOrderTypeEnum } from "@app/enums/ServiceCenterOrderTypeEnum";
 import { ServiceCenterActivityTypeEnum } from "@app/enums/ServiceCenterActivityTypeEnum";
+import { ServiceCenterActivity } from "@app/models/ServiceCenterActivity";
+import ArrayHelper from "@app/helpers/ArrayHelper";
 
 
 
@@ -65,6 +67,15 @@ export class ServiceCenterService extends BaseService {
                 break;
         }
         return lastActivityType;
+    }
+
+    public isLastDBActivityValid = async (serviceCenterDBActivities: ServiceCenterActivity[], activityType: ServiceCenterActivityTypeEnum) => {
+        let isLastDBActivityValid = false;
+        if (ArrayHelper.isArrayValid(serviceCenterDBActivities)) {
+            let lastDBActivity = serviceCenterDBActivities[serviceCenterDBActivities.length - 1].activity_type;
+            isLastDBActivityValid = activityType === lastDBActivity;
+        }
+        return isLastDBActivityValid;
     }
 }
 

@@ -42,7 +42,7 @@ export default class MethodCoordinator implements Coordinator {
                 }
             }
         } catch (error) {
-            console.log("error came ", error);
+            console.log("coordinate error came ", error);
             throw error;
         }
         return this.finalResult || result;

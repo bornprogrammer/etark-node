@@ -1,6 +1,8 @@
 import BaseRepository from "./BaseRepository";
 import { Complaint } from "@app/models/Complaint";
 import { GetServiceCenterOrderListParamsEntity } from "@app/repo-method-param-entities/GetServiceCenterOrderListParamsEntity";
+import { ServiceCenterActivity } from "@app/models/ServiceCenterActivity";
+import { GetServiceCenterAllActivitiesDetailsParamsEntity } from "@app/repo-method-param-entities/GetServiceCenterAllActivitiesDetailsParamsEntity";
 
 export class ServiceCenterRepository extends BaseRepository {
     /**
@@ -22,6 +24,21 @@ export class ServiceCenterRepository extends BaseRepository {
                 'id', 'desc'
             ]]
         });
+        return result;
+    }
+
+    public getServiceCenterAllActivitiesDetails = async (params: GetServiceCenterAllActivitiesDetailsParamsEntity) => {
+        let result = await ServiceCenterActivity.findAll({
+            attributes: [
+                'activity_type'
+            ],
+            where: {
+                pickup_delivery_id: params.pickupDeliveryId
+            },
+            order: [
+                ['id', 'asc']
+            ]
+        })
         return result;
     }
 }

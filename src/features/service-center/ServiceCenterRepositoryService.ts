@@ -7,7 +7,7 @@ import { ServiceCenterOrderAttributes } from "@app/models/ServiceCenterOrder";
 import { serviceCenterOrderRepositoryIns } from "@app/repositories/ServiceCenterOrderRepository";
 import { AddServiceCenterActivityEntity } from "@app/entities/AddServiceCenterActivityEntity";
 import { GetServiceCenterOrderListParamsEntity } from "@app/repo-method-param-entities/GetServiceCenterOrderListParamsEntity";
-import { ServiceCenterService, serviceCenterServiceIns } from "./ServiceCenterService";
+import { serviceCenterServiceIns } from "./ServiceCenterService";
 
 export class ServiceCenterRepositoryService extends BaseRepositoryService {
     /**
@@ -55,9 +55,23 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
 
     public setActivity = async (params: MethodParamEntity) => {
         let topMethodParam = params.topMethodParam;
-        
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isLastDBActivityValid, callableFunctionParams: topMethodParam }).setMethod({ callableFunction: this.setCurrentActivity }).coordinate();
+        return result
     }
 
+    public isLastDBActivityValid = async (params: MethodParamEntity) => {
+        let topParams = params.topMethodParam;
+        let lastActivity = await serviceCenterServiceIns.getServiceCenterLastActivityType(topParams.activity_type);
+        let allServiceCenterActivities = await serviceCenterRepositoryIns.getServiceCenterAllActivitiesDetails({ pickupDeliveryId: topParams.pickup_delivery_id });
+        let isLastActivityValid = await serviceCenterServiceIns.isLastDBActivityValid(allServiceCenterActivities, lastActivity);
+        return isLastActivityValid;
+    }
+
+    public setCurrentActivity = async (param: MethodParamEntity) => {
+        let topParams = param.topMethodParam;
+        let result = await this.addServiceCenterActivity({ activityType: topParams.activity_type, pickupDeliveryId: topParams.pickup_delivery_id });
+        return result;
+    }
 }
 
 export const serviceCenterRepositoryServiceIns = new ServiceCenterRepositoryService();
