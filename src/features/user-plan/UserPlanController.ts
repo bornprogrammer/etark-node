@@ -15,17 +15,17 @@ export class UserPlanController extends BaseController {
 
     public addUserPlan = async (req: Request, res: Response) => {
         let params = UserPlanRequestParamCoordinator.getInstance(req).getAddUsePlanParams();
-        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: userPlanRepositoryServiceIns.addUserPlan, callableFunctionParams: params }).send(req, res);
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: userPlanRepositoryServiceIns.addUserPlan, callableFunctionParams: params }).send(req, res);
     }
 
     public updateUserPlan = async (req: Request, res: Response) => {
         let params = UserPlanRequestParamCoordinator.getInstance(req).getUpdateUsePlanParams();
-        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: userPlanRepositoryServiceIns.updateUserPlan, callableFunctionParams: params }).send(req, res);
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: userPlanRepositoryServiceIns.updateUserPlan, callableFunctionParams: params }).send(req, res);
     }
 
     public makePayment = async (req: Request, res: Response) => {
         let params = UserPlanRequestParamCoordinator.getInstance(req).getMakePaymentParams();
-        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: userPlanRepositoryServiceIns.makePayment, callableFunctionParams: params }).send(req, res);
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: userPlanRepositoryServiceIns.makePayment, callableFunctionParams: params }).send(req, res);
     }
 
     public paytmCallback = async (req: Request, res: Response) => {

@@ -13,17 +13,17 @@ export class ServiceCenterController extends BaseController {
 
     public getOrderList = async (req: Request, res: Response) => {
         let params = await ServiceCenterRequestParamCoordinator.getInstance(req).getOrderListParams();
-        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: serviceCenterRepositoryServiceIns.getOrderList, callableFunctionParams: params }).send(req, res);
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: serviceCenterRepositoryServiceIns.getOrderList, callableFunctionParams: params }).send(req, res);
     }
 
     public addServiceCenterOrderDetails = async (req: Request, res: Response) => {
         let params = await ServiceCenterRequestParamCoordinator.getInstance(req).getAddServiceCenterOrderDetails(req);
-        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: serviceCenterRepositoryServiceIns.processServiceCenterOrderDetails, callableFunctionParams: params }).send(req, res);
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: serviceCenterRepositoryServiceIns.processServiceCenterOrderDetails, callableFunctionParams: params }).send(req, res);
     }
 
     public setActivity = async (req: Request, res: Response) => {
         let params = await ServiceCenterRequestParamCoordinator.getInstance(req).getSetActivityParams(req);
-        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: serviceCenterRepositoryServiceIns.setActivity, callableFunctionParams: params }).send(req, res);
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: serviceCenterRepositoryServiceIns.setActivity, callableFunctionParams: params }).send(req, res);
     }
 }
 

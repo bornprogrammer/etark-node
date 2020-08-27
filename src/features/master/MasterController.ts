@@ -20,21 +20,21 @@ export class MasterController extends BaseController {
 
     public getMakerListByCategoryId = async (req: Request, res: Response) => {
         let params = MasterRequestParamCoordinator.getInstance(req).getMakerListByCategoryIdParams();
-        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getMakerListByCategoryId, callableFunctionParams: params }).send(req, res);
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getMakerListByCategoryId, callableFunctionParams: params }).send(req, res);
     }
 
     public getMerchantList = async (req: Request, res: Response) => {
         let params = MasterRequestParamCoordinator.getInstance(req).getMerchantListParams();
-        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getMerchantList, callableFunctionParams: params }).send(req, res);
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getMerchantList, callableFunctionParams: params }).send(req, res);
     }
 
     public getPlans = async (req: Request, res: Response) => {
-        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getPlans }).send(req, res);
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getPlans }).send(req, res);
     }
 
     public getCities = async (req: Request, res: Response) => {
         // let resutl = htmlToPDFConverterIns.convertInvoiceReport();
-        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getCities }).send(req, res);
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getCities }).send(req, res);
     }
 
     public addServiceCenter = async (req: Request, res: Response) => {
@@ -42,7 +42,7 @@ export class MasterController extends BaseController {
     }
 
     public testApi = async (req: Request, res: Response) => {
-        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.testApi }).send(req, res);
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.testApi }).send(req, res);
     }
 }
 
