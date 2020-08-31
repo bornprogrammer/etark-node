@@ -1,6 +1,7 @@
 import RequestParamsCoordinator from "./RequestParamsCoordinator";
 import { Request } from "express";
 import BadHttpRequestError from "@app/errors/BadHttpRequestError";
+import { object } from "joi";
 
 
 export default abstract class RequestParamsValidatorCoordinator extends RequestParamsCoordinator {
@@ -17,14 +18,20 @@ export default abstract class RequestParamsValidatorCoordinator extends RequestP
         }
     }
 
-    public validateRequestBody = async (schema: any, req: Request) => {
-        let result = await this.validate(schema, req.body);
+    public validateRequestBody = async (schema: any) => {
+        let result = await this.validate(schema, this.request.body);
         return result;
     }
 
     public validateRequestContainer = async (schema: any) => {
         let result = await this.validate(schema, this.reqParamsContainer);
         return result;
+    }
+
+    public validateRequestContainerNBody = async (schema: any) => {
+        Object.assign(this.reqParamsContainer, this.request.body);
+        let values = await this.validateRequestContainer(schema);
+        return values;
     }
 
     public validateRequestQueryParams = async (schema: any, req: Request) => {

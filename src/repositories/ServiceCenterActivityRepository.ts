@@ -11,10 +11,21 @@ export class ServiceCenterActivityRepository extends BaseRepository {
         super();
     }
 
-    public create(params: ServiceCenterActivityAttributes) {
-        let result = ServiceCenterActivity.create({
+    public create = async (params: ServiceCenterActivityAttributes) => {
+        let result = await ServiceCenterActivity.create({
             pickup_delivery_id: params.pickup_delivery_id,
             activity_type: params.activity_type
+        });
+        return result;
+    }
+
+    public removeServiceCenter = async (pickupDeliveryID: number) => {
+        let result = await ServiceCenterActivity.update({
+            status: "service_denied"
+        }, {
+            where: {
+                id: pickupDeliveryID
+            }
         });
         return result;
     }

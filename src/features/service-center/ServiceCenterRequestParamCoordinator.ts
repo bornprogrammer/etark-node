@@ -25,8 +25,8 @@ export class ServiceCenterRequestParamCoordinator extends RequestParamsValidator
         return params;
     }
 
-    public getAddServiceCenterOrderDetails = async (req: Request) => {
-        let params = await this.validateRequestBody(this.getAddServiceCenterOrderDetailsSchema(), req);
+    public getAddServiceCenterOrderDetails = async () => {
+        let params = await this.validateRequestBody(this.getAddServiceCenterOrderDetailsSchema());
         return params;
     }
 
@@ -40,23 +40,53 @@ export class ServiceCenterRequestParamCoordinator extends RequestParamsValidator
             service_to_be_done: Joi.string().required(),
             invoice_total_amount: Joi.number().required().min(1),
             proforma_invoice_image: Joi.string().required(),
-            final_invoice_image: Joi.string().required(),
             due_date: Joi.string().required(),
             device_delivery_date: Joi.string().required(),
         })
         return schema;
     }
 
-    public getSetActivityParams = async (req: Request) => {
-        let params = await this.setParamFromParams("pickup_delivery_id").setParamFromParams("activity_type").validateRequestContainer(this.getSetActivityParamsSchema());
+    public getSetActivityParams = async () => {
+        let schema = await this.getSetActivityParamsSchema();
+        let params = await this.setParamFromParams("pickup_delivery_id").setParamFromParams("activity_type").validateRequestContainer(schema);
         return params;
     }
 
-    public getSetActivityParamsSchema = () => {
+    public getSetActivityParamsSchema = async () => {
         let schema = Joi.object({
             pickup_delivery_id: Joi.number().min(1),
-            activity_type: Joi.any().valid(ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_ORDER_ACCEPTED, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED_AFTER_INSPECTION, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_INSPECTION_FEE_CLAIMED, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_DISPATCHED, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_FAILURE)
+            activity_type: Joi.any().valid(ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_ORDER_ACCEPTED, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED_AFTER_INSPECTION, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_INSPECTION_FEE_CLAIMED, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_DISPATCHED, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_FAILURE, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT)
         });
+        return schema;
+    }
+
+    public getAddDispatchDetailParams = async () => {
+        let schema = await this.getAddDispatchDetailParamsSchema();
+        let params = await this.setParamFromParams("pickup_delivery_id").validateRequestContainerNBody(schema);
+        return params;
+    }
+
+    private getAddDispatchDetailParamsSchema = async () => {
+        let schema = await Joi.object({
+            pickup_delivery_id: Joi.number().min(1),
+            device_front_image: Joi.string().min(3).required(),
+            device_back_image: Joi.string().min(3).required(),
+            final_invoice_image: Joi.string().min(3).required(),
+        })
+        return schema;
+    }
+
+    public getLoginParams = async () => {
+        let schema = await this.getLoginParamsSchema();
+        let params = await this.validateRequestBody(schema);
+        return params;
+    }
+
+    private getLoginParamsSchema = async () => {
+        let schema = await Joi.object({
+            email: Joi.string().min(3).email().required(),
+            password: Joi.string().min(6).max(16).required(),
+        })
         return schema;
     }
 }

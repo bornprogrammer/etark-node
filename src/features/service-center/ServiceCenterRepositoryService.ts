@@ -8,6 +8,11 @@ import { serviceCenterOrderRepositoryIns } from "@app/repositories/ServiceCenter
 import { AddServiceCenterActivityEntity } from "@app/entities/AddServiceCenterActivityEntity";
 import { GetServiceCenterOrderListParamsEntity } from "@app/repo-method-param-entities/GetServiceCenterOrderListParamsEntity";
 import { serviceCenterServiceIns } from "./ServiceCenterService";
+import { afterSetActivityEventEmitterIns } from "@app/events/AfterSetActivityEventEmitter";
+import { EventEmitterIdentifierEnum } from "@app/enums/EventEmitterIdentifierEnum";
+import BadHttpRequestError from "@app/errors/BadHttpRequestError";
+import { deviceDispatchDetailsRepositoryIns } from "@app/repositories/DeviceDispatchDetailsRepository";
+import UnAuthorized from "@app/errors/UnAuthorized";
 
 export class ServiceCenterRepositoryService extends BaseRepositoryService {
     /**
@@ -32,7 +37,7 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
 
     public addServiceCenterOrderDetails = async (methodParamEntity: MethodParamEntity) => {
         let topParams = methodParamEntity.topMethodParam;
-        let addServiceCenterOrderDetailsParams: ServiceCenterOrderAttributes = { pickup_delivery_id: topParams.pickup_delivery_id, imei_number: topParams.imei_number, device_front_image: topParams.device_front_image, device_back_image: topParams.device_back_image, phone_warranty: topParams.phone_warranty, service_to_be_done: topParams.service_to_be_done, invoice_total_amount: topParams.invoice_total_amount, proforma_invoice_image: topParams.proforma_invoice_image, due_date: topParams.due_date, final_invoice_image: topParams.final_invoice_image, device_delivery_date: topParams.device_delivery_date };
+        let addServiceCenterOrderDetailsParams: ServiceCenterOrderAttributes = { pickup_delivery_id: topParams.pickup_delivery_id, imei_number: topParams.imei_number, device_front_image: topParams.device_front_image, device_back_image: topParams.device_back_image, phone_warranty: topParams.phone_warranty, service_to_be_done: topParams.service_to_be_done, invoice_total_amount: topParams.invoice_total_amount, proforma_invoice_image: topParams.proforma_invoice_image, due_date: topParams.due_date, device_delivery_date: topParams.device_delivery_date };
         let result = await serviceCenterOrderRepositoryIns.create(addServiceCenterOrderDetailsParams);
         return result
     }
@@ -55,7 +60,7 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
 
     public setActivity = async (params: MethodParamEntity) => {
         let topMethodParam = params.topMethodParam;
-        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isLastDBActivityValid, callableFunctionParams: topMethodParam }).setMethod({ callableFunction: this.setCurrentActivity }).coordinate();
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isLastDBActivityValid, callableFunctionParams: topMethodParam }).setMethod({ callableFunction: this.setCurrentActivity, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.afterSetActivity }).coordinate();
         return result
     }
 
@@ -64,12 +69,57 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         let lastActivity = await serviceCenterServiceIns.getServiceCenterLastActivityType(topParams.activity_type);
         let allServiceCenterActivities = await serviceCenterRepositoryIns.getServiceCenterAllActivitiesDetails({ pickupDeliveryId: topParams.pickup_delivery_id });
         let isLastActivityValid = await serviceCenterServiceIns.isLastDBActivityValid(allServiceCenterActivities, lastActivity);
+        if (!isLastActivityValid) {
+            throw new BadHttpRequestError();
+        }
         return isLastActivityValid;
     }
 
     public setCurrentActivity = async (param: MethodParamEntity) => {
         let topParams = param.topMethodParam;
         let result = await this.addServiceCenterActivity({ activityType: topParams.activity_type, pickupDeliveryId: topParams.pickup_delivery_id });
+        return result;
+    }
+
+    public removeServiceCenter = async (pickupDeliveryId: number) => {
+        await serviceCenterActivityRepositoryIns.removeServiceCenter(pickupDeliveryId);
+    }
+
+    public afterSetActivity = async (params: MethodParamEntity) => {
+        let topParams = params.topMethodParam;
+        if (topParams.activity_type === ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED) {
+            this.removeServiceCenter(topParams.pickup_delivery_id);
+        }
+        afterSetActivityEventEmitterIns.emit(EventEmitterIdentifierEnum.AFTER_SET_ACTIVITY_EVENTEMITTER, params.topMethodParam);
+    }
+
+    public assignAnotherServiceCenter = async () => {
+    }
+
+    public addDispatchDetail = async (params: MethodParamEntity) => {
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.createDispatchDetails, callableFunctionParams: params.topMethodParam }).setMethod({ callableFunction: this.addReadyToDispatchActivity }).coordinate();
+        return result;
+    }
+
+    public createDispatchDetails = async (params: MethodParamEntity) => {
+        let topParams = params.topMethodParam;
+        let result = await deviceDispatchDetailsRepositoryIns.create({ pick_delivery_id: topParams.pickup_delivery_id, device_back_image: topParams.device_back_image, device_front_image: topParams.device_front_image, final_invoice_image: topParams.final_invoice_image });
+        console.log("result", result);
+        return result;
+    }
+
+    public addReadyToDispatchActivity = async (params: MethodParamEntity) => {
+        let topParams = params.topMethodParam;
+        let result = await this.addServiceCenterActivity({ activityType: ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH, pickupDeliveryId: topParams.pickup_delivery_id });
+        return result;
+    }
+
+    public login = async (params: MethodParamEntity) => {
+        let topParams = params.topMethodParam;
+        let result = await serviceCenterRepositoryIns.login({ email: topParams.email, password: topParams.password });
+        if (!result) {
+            throw new UnAuthorized();
+        }
         return result;
     }
 }

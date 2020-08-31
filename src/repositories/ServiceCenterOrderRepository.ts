@@ -19,7 +19,6 @@ export class ServiceCenterOrderRepository extends BaseRepository {
             service_to_be_done: params.service_to_be_done,
             invoice_total_amount: params.invoice_total_amount,
             proforma_invoice_image: params.proforma_invoice_image,
-            final_invoice_image: params.final_invoice_image,
             device_delivery_date: params.device_delivery_date,
             due_date: params.due_date
         });

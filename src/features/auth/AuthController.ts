@@ -15,14 +15,24 @@ class AuthController extends BaseController {
     }
 
     public login = async (req: Request, res: Response) => {
-        let params = await AuthRequestParamsCoordinator.getInstance(req).getLoginParams(req);
+        let params = await AuthRequestParamsCoordinator.getInstance(req).getLoginParams();
         let result = await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mService.login, callableFunctionParams: params }).send(req, res);
         return result;
     }
 
     public createUser = async (req: Request, res: Response) => {
-        let params = await AuthRequestParamsCoordinator.getInstance(req).getCreateUserParams(req);
+        let params = await AuthRequestParamsCoordinator.getInstance(req).getCreateUserParams();
         return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mService.createUser, callableFunctionParams: params }).send(req, res);
+    }
+
+    public forgotPassword = async (req: Request, res: Response) => {
+        let params = await AuthRequestParamsCoordinator.getInstance(req).getForgotPasswordParams();
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mService.forgotPassword, callableFunctionParams: params }).send(req, res);
+    }
+
+    public resetPassword = async (req: Request, res: Response) => {
+        let params = await AuthRequestParamsCoordinator.getInstance(req).getResetPasswordParams();
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mService.resetPassword, callableFunctionParams: params }).send(req, res);
     }
 
 }

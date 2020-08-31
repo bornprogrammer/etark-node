@@ -1,8 +1,6 @@
 import { Request } from "express";
-import RequestParamsCoordinator from "@app/coordinators/request-params-cordinators/RequestParamsCoordinator";
 import RequestParamsValidatorCoordinator from "@app/coordinators/request-params-cordinators/RequestParamsValidatorCoordinator";
 import Joi from "joi";
-import { join } from "path";
 
 export class AuthRequestParamsCoordinator extends RequestParamsValidatorCoordinator {
     /**
@@ -16,10 +14,10 @@ export class AuthRequestParamsCoordinator extends RequestParamsValidatorCoordina
         return new AuthRequestParamsCoordinator(request);
     }
 
-    public async getLoginParams(req: Request): Promise<any> {
+    public async getLoginParams(): Promise<any> {
         // let values =  this.setParamFromBody("mobile_number").setParamFromBody("password").coordinate();
         let schema = await this.getLoginParamsSchema();
-        let values = await this.validateRequestBody(schema, req);
+        let values = await this.validateRequestBody(schema);
         return values;
     }
 
@@ -31,8 +29,8 @@ export class AuthRequestParamsCoordinator extends RequestParamsValidatorCoordina
         return schema;
     }
 
-    public async getCreateUserParams(req: Request): Promise<any> {
-        let values = await this.validateRequestBody(this.getCreateUserParamsSchema(), req);
+    public async getCreateUserParams(): Promise<any> {
+        let values = await this.validateRequestBody(this.getCreateUserParamsSchema());
         return values;
     }
 
@@ -42,6 +40,30 @@ export class AuthRequestParamsCoordinator extends RequestParamsValidatorCoordina
             password: Joi.string().min(6).max(16).required(),
             name: Joi.string().min(2).required(),
             email: Joi.string().min(3).email().required(),
+        });
+    }
+
+    public async getForgotPasswordParams(): Promise<any> {
+        let values = await this.validateRequestBody(this.getForgotPasswordParamsSchema());
+        return values;
+    }
+
+    protected getForgotPasswordParamsSchema = () => {
+        return Joi.object({
+            email: Joi.string().min(3).email().required(),
+        });
+    }
+
+    public async getResetPasswordParams(): Promise<any> {
+        let values = await this.setParamFromParams("email").validateRequestContainerNBody(this.getResetPasswordParamsSchema());
+        return values;
+    }
+
+    protected getResetPasswordParamsSchema = () => {
+        return Joi.object({
+            email: Joi.string().min(3).email().required(),
+            password: Joi.string().min(6).max(16).required(),
+            confirm_password: Joi.string().valid(Joi.ref('password')).required(),
         });
     }
 }

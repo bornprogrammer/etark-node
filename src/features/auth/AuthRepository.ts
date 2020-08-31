@@ -6,6 +6,8 @@ import { UserAlreadyExists } from "@app/errors/UserAlreadyExists";
 import { UserStatusEnum } from "@app/enums/UserStatusEnum";
 import { UserSuspended } from "@app/errors/UserSuspended";
 import UnAuthorized from "@app/errors/UnAuthorized";
+import { SrvRecord } from "dns";
+import { ResetPasswordByEmailParamsEntity } from "@app/repo-method-param-entities/ResetPasswordByEmailParamsEntity";
 
 export class AuthRepository extends BaseRepository {
 
@@ -30,7 +32,7 @@ export class AuthRepository extends BaseRepository {
         if (!result) {
             throw new UnAuthorized();
         } else {
-            if (result.status === UserStatusEnum.SUSPENDED) { 
+            if (result.status === UserStatusEnum.SUSPENDED) {
                 throw new UserSuspended();
             }
         }
@@ -65,6 +67,28 @@ export class AuthRepository extends BaseRepository {
         let params = methodParamEntity.topMethodParam;
         let user = await User.create(params);
         return user;
+    }
+
+    public isEmailValid = async (email: string) => {
+        let user = await User.findOne({
+            where: {
+                email: email,
+                status: "active"
+            }
+        });
+        return user;
+    }
+
+    public resetPasswordByEmail = async (params: ResetPasswordByEmailParamsEntity) => {
+        let result = await User.update({
+            password: params.password
+        }, {
+            where: {
+                email: params.email,
+                status: "active"
+            }
+        })
+        return result;
     }
 }
 

@@ -4,8 +4,8 @@ import { HttpResponseError } from './HttpResponseError';
 
 export default class UnAuthorized extends HttpResponseError {
 
-    constructor() {
-        super(HttpResponseCode.UNAUTHORIZED, "either username or password is wrong");
+    constructor(message?: string) {
+        super(HttpResponseCode.UNAUTHORIZED, message || "either username or password is wrong");
     }
 
 }

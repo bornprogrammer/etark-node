@@ -63,6 +63,15 @@ export class ServiceCenterService extends BaseService {
             case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_FAILURE:
                 lastActivityType = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT;
                 break;
+            case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM: // comment from this line after testing
+                lastActivityType = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_ORDER_ACCEPTED;
+                break;
+            case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT:
+                lastActivityType = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM;
+                break;
+            case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT:
+                lastActivityType = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM;
+                break;
             default:
                 break;
         }

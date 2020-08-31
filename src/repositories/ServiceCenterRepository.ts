@@ -3,6 +3,8 @@ import { Complaint } from "@app/models/Complaint";
 import { GetServiceCenterOrderListParamsEntity } from "@app/repo-method-param-entities/GetServiceCenterOrderListParamsEntity";
 import { ServiceCenterActivity } from "@app/models/ServiceCenterActivity";
 import { GetServiceCenterAllActivitiesDetailsParamsEntity } from "@app/repo-method-param-entities/GetServiceCenterAllActivitiesDetailsParamsEntity";
+import { ServiceCenterLoginParamsEntity } from "@app/repo-method-param-entities/ServiceCenterLoginParamsEntity";
+import { ServiceCenters } from "@app/models/ServiceCenters";
 
 export class ServiceCenterRepository extends BaseRepository {
     /**
@@ -38,6 +40,21 @@ export class ServiceCenterRepository extends BaseRepository {
             order: [
                 ['id', 'asc']
             ]
+        })
+        return result;
+    }
+
+    public login = async (params: ServiceCenterLoginParamsEntity) => {
+        let result = await ServiceCenters.findOne({
+            attributes: [
+                'id',
+                'email',
+                'name'
+            ],
+            where: {
+                email: params.email,
+                password: params.password
+            }
         })
         return result;
     }

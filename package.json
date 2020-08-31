@@ -42,7 +42,7 @@
   "scripts": {
     "start": "node -r tsconfig-paths/register -r ts-node/register -r dotenv/config ./src/app.ts",
     "start:watch": "nodemon",
-    "test": "jest --watchAll --maxWorkers=1",
+    "test": "jest --watch --maxWorkers=1",
     "build": "tsc",
     "prod": "node -r tsconfig-paths/register dist/app.js"
   },

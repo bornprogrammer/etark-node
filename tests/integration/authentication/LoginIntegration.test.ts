@@ -39,45 +39,39 @@ export class LoginIntegration extends BasePostRestAPIIntegration {
     public testInvalidMobileNumber = async () => {
         this.postData = this.getLoginParams();
         this.postData.mobile_number = "";
-        let result = await this.callAPI();
-        expect(result.status).toBe(HttpResponseCode.BAD_REQUEST);
+        let result = await this.callNCompareStatus(HttpResponseCode.BAD_REQUEST)
         expect(result.body.message).toContain("mobile_number");
     }
 
     public testInvalidMobileNumberLength = async () => {
         this.postData = this.getLoginParams();
         this.postData.mobile_number = "09946584";
-        let result = await this.callAPI();
-        expect(result.status).toBe(HttpResponseCode.BAD_REQUEST);
+        let result = await this.callNCompareStatus(HttpResponseCode.BAD_REQUEST);
         expect(result.body.message).toContain("mobile_number");
     }
 
     public testUnRegisteredMobileNumberLength = async () => {
         this.postData = this.getLoginParams();
         this.postData.mobile_number = "6677994455";
-        let result = await this.callAPI();
-        expect(result.status).toBe(HttpResponseCode.UNAUTHORIZED);
-        // expect(result.body.message).toContain("mobile_number");
+        let result = await this.callNCompareStatus(HttpResponseCode.UNAUTHORIZED);
     }
 
     public testEmptyPassword = async () => {
         this.postData = this.getLoginParams();
         this.postData.password = "";
-        let result = await this.callAPI();
-        expect(result.status).toBe(HttpResponseCode.BAD_REQUEST);
+        let result = await this.callNCompareStatus(HttpResponseCode.BAD_REQUEST);
     }
 
     public testWrongPassword = async () => {
         this.postData = this.getLoginParams();
         this.postData.password = "password";
-        let result = await this.callAPI();
-        expect(result.status).toBe(HttpResponseCode.UNAUTHORIZED);
+        let result = await this.callNCompareStatus(HttpResponseCode.UNAUTHORIZED);
     }
 
     public testValidLogin = async () => {
         this.postData = this.getLoginParams();
-        let result = await this.callAPI();
-        expect(result.status).toBe(HttpResponseCode.RESOURCES_CREATED);
+
+        let result = await this.callNCompareStatus(HttpResponseCode.RESOURCES_CREATED);
     }
 }
 

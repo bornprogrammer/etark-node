@@ -1,4 +1,5 @@
 import { appInstance } from "@app/app"
+import { HttpResponseCode } from "@app/enums/HttpResponseCodes";
 require('mysql2/node_modules/iconv-lite').encodingExists('foo');
 
 export abstract class BaseRestAPIIntegration {
@@ -26,6 +27,12 @@ export abstract class BaseRestAPIIntegration {
     public abstract async describe();
 
     public abstract async callAPI(urlPath: string);
+
+    public callNCompareStatus = async (statusCode: HttpResponseCode, urlPath?: string) => {
+        let result = await this.callAPI(urlPath);
+        expect(result.status).toBe(statusCode);
+        return result;
+    }
 
     protected async beforeCallingAPI(): Promise<any> {
 

@@ -4,7 +4,7 @@ import { AfterAddingAddressEventEmitterEntity } from "@app/entities/AfterAddingA
 import { userRepositoryServiceIns } from "@app/features/users/UserRepositoryService";
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { serviceCenterRepositoryServiceIns } from "@app/features/service-center/ServiceCenterRepositoryService";
-import { PickupDelivery, PickupDeliveryAttirbutes } from "@app/models/PickupDelivery";
+import { PickupDelivery } from "@app/models/PickupDelivery";
 
 export class AfterAddingAddressEventEmitter extends BaseQueue {
     /**

@@ -18,6 +18,7 @@ import { MinDistanceForServiceCenterReturnedEntity } from "@app/entities/MinDist
 import { AfterAddingAddressEventEmitterEntity } from "@app/entities/AfterAddingAddressEventEmitterEntity";
 import { afterAddingAddressEventEmitterIns } from "@app/events/AfterAddingAddressEventEmitter";
 import { EventEmitterIdentifierEnum } from "@app/enums/EventEmitterIdentifierEnum";
+import { UpdateComponentPriceForPickupNDeliveryEntity } from "@app/entities/UpdateComponentPriceForPickupNDeliveryEntity";
 
 class UserRepositoryService extends BaseRepositoryService {
     /**
@@ -73,7 +74,7 @@ class UserRepositoryService extends BaseRepositoryService {
         return result;
     }
 
-    public updateComponentPriceForPickupNDelivery = async (params: any) => {
+    public updateComponentPriceForPickupNDelivery = async (params: UpdateComponentPriceForPickupNDeliveryEntity) => {
         let updatedResult = await this.getMethodCoordinator().setMethod({ callableFunction: this.getServiceCenterList, callableFunctionParams: params }).setMethod({ callableFunction: this.getClosestServiceCenterNPickupNDeliveryPrice, storeResultAs: StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.updatePickupNDeliveryComponent, notBreakWhenReturnedValueNotTruthy: true }).setMethod({ callableFunction: this.addPickupNDelivery }).coordinate();
         return updatedResult.price;
     }

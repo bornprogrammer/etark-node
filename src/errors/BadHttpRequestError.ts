@@ -7,8 +7,8 @@ export default class BadHttpRequestError extends HttpResponseError {
     /**
      *
      */
-    constructor(message: string) {
-        super(HttpResponseCode.BAD_REQUEST, message);
+    constructor(message?: string) {
+        super(HttpResponseCode.BAD_REQUEST, message || "Please check params/body again");
     }
 
 }
