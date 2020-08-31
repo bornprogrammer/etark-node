@@ -122,6 +122,19 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         }
         return result;
     }
+
+    public getOrderTrends = async (params: MethodParamEntity) => {
+        let topParams = params.topMethodParam;
+        let result = {
+            total_order: 45,
+            total_order_percentage: 2.98,
+            order_ongoing: 14,
+            order_ongoing_percentage: -1.09,
+            order_completed: 22,
+            order_completed_percentage: -5.48
+        }
+        return result;
+    }
 }
 
 export const serviceCenterRepositoryServiceIns = new ServiceCenterRepositoryService();

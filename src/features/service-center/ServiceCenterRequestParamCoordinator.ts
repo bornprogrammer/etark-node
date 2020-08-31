@@ -89,4 +89,17 @@ export class ServiceCenterRequestParamCoordinator extends RequestParamsValidator
         })
         return schema;
     }
+
+    public getOrderTrendsParams = async () => {
+        let schema = await this.getOrderTrendsParamsSchema();
+        let params = await this.setParamFromParamsAs("id", 'sc_id').validateRequestContainer(schema);
+        return params;
+    }
+
+    private getOrderTrendsParamsSchema = async () => {
+        let schema = await Joi.object({
+            sc_id: Joi.number().min(1),
+        })
+        return schema;
+    }
 }

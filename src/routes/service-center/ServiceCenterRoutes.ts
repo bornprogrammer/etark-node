@@ -16,6 +16,8 @@ export class ServiceCenterRoutes extends BaseRoutes {
 
         this.router.post("/auth/login", this.setCtrlMethod(serviceCenterControllerIns.login));
 
+        this.router.get("/:id/orders-trends", this.setCtrlMethod(serviceCenterControllerIns.getOrderTrends));
+
         return this.router;
     }
 }
