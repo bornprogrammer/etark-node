@@ -27,6 +27,7 @@ export abstract class BaseRoutes {
             let result = await ctrlCallback(req, res);
             responseServiceIns.sendResponse(req, res, result);
         } catch (error) {
+            console.log("error", error);
             if (error instanceof HttpResponseError) {
                 responseServiceIns.sendErrorResponse(res, error);
             } else {

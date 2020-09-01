@@ -1,7 +1,7 @@
 
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { Complaint, ComplaintAttributes } from "@app/models/Complaint";
-import { ComplaintDetails } from "@app/models/ComplaintDetails";
+import { ComplaintDetails, ComplaintDetailsAttributes } from "@app/models/ComplaintDetails";
 import BaseRepository from "@app/repositories/BaseRepository";
 
 export class ComplaintRepository extends BaseRepository {
@@ -42,6 +42,13 @@ export class ComplaintRepository extends BaseRepository {
             await ComplaintDetails.create({ complaint_id: lastInvokedMethodParam.id, field_id: complaintDetailsObj.field_id, field_val: complaintDetailsObj.field_val });
         }
         return lastInvokedMethodParam;
+    }
+
+    public addComplaintStrength = async (complaintDetailsObj: ComplaintDetailsAttributes) => {
+        // for (const complaintDetailsObj of params) {
+        await ComplaintDetails.create({ complaint_id: complaintDetailsObj.complaint_id, field_id: complaintDetailsObj.field_id, field_val: complaintDetailsObj.field_val });
+        // }
+        return true;
     }
 
     public addDeviceImages = async (methodParamEntity: MethodParamEntity) => {

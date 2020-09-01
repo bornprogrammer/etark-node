@@ -19,6 +19,8 @@ export class ComplaintRoutes extends BaseRoutes {
 
         this.router.post("/:id/strengths", this.setCtrlMethod(complaintControllerIns.addComplainStrength));
 
+        this.router.put("/:id/strengths", this.setCtrlMethod(complaintControllerIns.updateComplainStrength));
+
         this.router.put("/:id", this.setCtrlMethod(complaintControllerIns.updateComplaints));
 
         this.router.post("/:id/device-images", this.setCtrlMethod(complaintControllerIns.addDeviceImages));

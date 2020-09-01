@@ -1,6 +1,6 @@
 import RequestParamsCoordinator from "@app/coordinators/request-params-cordinators/RequestParamsCoordinator";
 import { Request } from "express";
-import Joi from "joi";
+import Joi, { number } from "joi";
 import RequestParamsValidatorCoordinator from "@app/coordinators/request-params-cordinators/RequestParamsValidatorCoordinator";
 import { ETIME } from "constants";
 
@@ -81,13 +81,17 @@ export class ComplainRequestParamsCoordinator extends RequestParamsValidatorCoor
     }
 
     public getaddComplainStrengthParams = async () => {
-        let values = await this.validateRequestBody(this.getaddComplainStrengthParamsSchema());
-        values = this.mapComplaintKeyNameToID(values);
-        return values;
+        let schema = await this.getaddComplainStrengthParamsSchema();
+        let values = await this.setParamFromParamsAs("id", "complain_id").validateRequestContainerNBody(schema);
+        let complainStrengthDetails = { complain_id: values.complain_id, complain_strength_details: null };
+        delete values.complain_id;
+        complainStrengthDetails.complain_strength_details = this.mapComplaintKeyNameToID(values);
+        return complainStrengthDetails;
     }
 
     private getaddComplainStrengthParamsSchema = async () => {
         let schema = await Joi.object({
+            complain_id: Joi.number().min(1),
             problem_after_cleanup: Joi.string().required().valid('yes', 'no'),
             problem_occured_within_year: Joi.string().required().valid('yes', 'no'),
             phone_damaged_by_anyone_else: Joi.string().required().valid('yes', 'no'),

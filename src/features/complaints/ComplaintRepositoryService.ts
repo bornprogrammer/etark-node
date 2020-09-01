@@ -247,8 +247,23 @@ export class ComplaintRepositoryService extends BaseService {
     }
 
     public addComplainStrength = async (params: MethodParamEntity) => {
-        let result = params;
-        return result;
+        let complainStrengthDetails = params.topMethodParam;
+        if (ArrayHelper.isArrayValid(complainStrengthDetails.complain_strength_details)) {
+            for (const item of complainStrengthDetails.complain_strength_details) {
+                await complaintRepositoryIns.addComplaintStrength({ complaint_id: complainStrengthDetails.complain_id, field_id: item.field_id, field_val: item.field_val });
+            }
+        }
+        return true;
+    }
+
+    public updateComplainStrength = async (params: MethodParamEntity) => {
+        let complainStrengthDetails = params.topMethodParam;
+        if (ArrayHelper.isArrayValid(complainStrengthDetails.complain_strength_details)) {
+            for (const item of complainStrengthDetails.complain_strength_details) {
+                await complaintDetailsRepositoryIns.updateByComplainIdNFieldId({ complainId: complainStrengthDetails.complain_id, fieldId: item.field_id, fieldVal: item.field_val });
+            }
+        }
+        return true;
     }
 }
 

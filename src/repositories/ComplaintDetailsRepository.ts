@@ -27,8 +27,6 @@ export class ComplaintDetailsRepository extends BaseRepository {
 
     public updateByComplainIdNFieldId = async (complainDetail: UpdateComplainDetailByFieldIdParamsEntity) => {
         let result = null;
-        // if (ArrayHelper.isArrayValid(complainDetails)) {
-        // for (const complainDetail of complainDetails) {
         result = await ComplaintDetails.update({
             field_val: complainDetail.fieldVal
         }, {
@@ -37,8 +35,6 @@ export class ComplaintDetailsRepository extends BaseRepository {
                 field_id: complainDetail.fieldId
             }
         });
-        // }
-        // }
         return result;
     }
 }
