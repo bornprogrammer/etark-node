@@ -1,5 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
+import { ServiceCenterDetail } from "./ServiceCenterDetail";
 
 
 export interface ServiceCentersAttributes {
@@ -35,7 +36,7 @@ export class ServiceCenters extends Model implements ServiceCentersAttributes {
     email: string;
     service_center_type: string;
     password: string;
-
+    public serviceCenterDetails?: ServiceCenterDetail[];
 }
 
 ServiceCenters.init({
@@ -89,9 +90,12 @@ ServiceCenters.init({
     password: {
         type: DataTypes.STRING,
     }
-
 }, {
     sequelize: sequelizeConnection.connection,
     tableName: "service_centers",
     underscored: true,
 })
+
+ServiceCenters.hasMany(ServiceCenterDetail, { foreignKey: "service_center_id", as: "serviceCenterDetails" });
+
+ServiceCenterDetail.belongsTo(ServiceCenters, { as: "" });

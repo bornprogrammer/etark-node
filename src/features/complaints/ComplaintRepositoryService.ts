@@ -245,6 +245,11 @@ export class ComplaintRepositoryService extends BaseService {
         result = await complaintDetailsRepositoryIns.updateByComplainIdNFieldId({ complainId: params.complaint_id, fieldVal: complainDetails[1].field_val, fieldId: complainDetails[1].field_id });
         return result;
     }
+
+    public addComplainStrength = async (params: MethodParamEntity) => {
+        let result = params;
+        return result;
+    }
 }
 
 export const complaintServiceIns = new ComplaintRepositoryService();

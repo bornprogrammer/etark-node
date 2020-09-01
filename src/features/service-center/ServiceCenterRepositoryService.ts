@@ -135,6 +135,13 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         }
         return result;
     }
+
+    public doesSCExists = async (params: MethodParamEntity) => {
+        let topParams = params.topMethodParam;
+        let result = await serviceCenterRepositoryIns.doesSCExistsByCityIdNMakerId({ cityId: topParams.city_id, makerId: topParams.maker_id });
+        let finalResult = { does_sc_exists: result ? true : false };
+        return finalResult;
+    }
 }
 
 export const serviceCenterRepositoryServiceIns = new ServiceCenterRepositoryService();

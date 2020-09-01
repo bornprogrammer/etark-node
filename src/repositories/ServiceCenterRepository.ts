@@ -5,6 +5,8 @@ import { ServiceCenterActivity } from "@app/models/ServiceCenterActivity";
 import { GetServiceCenterAllActivitiesDetailsParamsEntity } from "@app/repo-method-param-entities/GetServiceCenterAllActivitiesDetailsParamsEntity";
 import { ServiceCenterLoginParamsEntity } from "@app/repo-method-param-entities/ServiceCenterLoginParamsEntity";
 import { ServiceCenters } from "@app/models/ServiceCenters";
+import { DoesSCExistsByCityIdNMakerIdEntityParams } from "@app/repo-method-param-entities/DoesSCExistsByCityIdNMakerIdEntityParams";
+import { ServiceCenterDetail } from "@app/models/ServiceCenterDetail";
 
 export class ServiceCenterRepository extends BaseRepository {
     /**
@@ -54,6 +56,25 @@ export class ServiceCenterRepository extends BaseRepository {
             where: {
                 email: params.email,
                 password: params.password
+            }
+        })
+        return result;
+    }
+
+    public doesSCExistsByCityIdNMakerId = async (params: DoesSCExistsByCityIdNMakerIdEntityParams): Promise<ServiceCenters> => {
+        let result = await ServiceCenters.findOne({
+            include: [
+                {
+                    model: ServiceCenterDetail,
+                    required: true,
+                    as: "serviceCenterDetails",
+                    where: {
+                        maker_id: params.makerId
+                    }
+                },
+            ],
+            where: {
+                city_id: params.cityId
             }
         })
         return result;

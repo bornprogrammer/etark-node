@@ -1,7 +1,10 @@
 import RequestParamsCoordinator from "@app/coordinators/request-params-cordinators/RequestParamsCoordinator";
 import { Request } from "express";
+import Joi from "joi";
+import RequestParamsValidatorCoordinator from "@app/coordinators/request-params-cordinators/RequestParamsValidatorCoordinator";
+import { ETIME } from "constants";
 
-export class ComplainRequestParamsCoordinator extends RequestParamsCoordinator {
+export class ComplainRequestParamsCoordinator extends RequestParamsValidatorCoordinator {
     /**
      *
      */
@@ -68,12 +71,30 @@ export class ComplainRequestParamsCoordinator extends RequestParamsCoordinator {
     }
 
     private getIdForComplaintField = (key: string) => {
-        let complaintKeyWithId = { "imei_number": 1, "model_name": 2, "phone_price": 4, "purchase_mode": 5, "merchant_id": 6, "how_long_phone_owned": 7, "under_warranty": 8, "problem_description": 9, "is_device_fake": 10, "uploaed_invoice_copy": 11, "communicated_ecom_firm": 12, "problem_type": 13, "merchant_response": 14, "device_front_image": 15, device_back_image: 16, merchant_name_offline: 20 };
+        let complaintKeyWithId = { "imei_number": 1, "model_name": 2, "phone_price": 4, "purchase_mode": 5, "merchant_id": 6, "how_long_phone_owned": 7, "under_warranty": 8, "problem_description": 9, "is_device_fake": 10, "uploaed_invoice_copy": 11, "communicated_ecom_firm": 12, "problem_type": 13, "merchant_response": 14, "device_front_image": 15, device_back_image: 16, merchant_name_offline: 20, problem_after_cleanup: 21, problem_occured_within_year: 22, phone_damaged_by_anyone_else: 23, liquid_damaged_report_generated: 24, problem_occured_within_6month: 25, complaint_againts_some_accessory: 26 };
         return complaintKeyWithId[key];
     }
 
     private buildComplaintFields = (fieldId: string, fieldVal: string) => {
         let complaintFields = { field_id: fieldId, field_val: fieldVal };
         return complaintFields;
+    }
+
+    public getaddComplainStrengthParams = async () => {
+        let values = await this.validateRequestBody(this.getaddComplainStrengthParamsSchema());
+        values = this.mapComplaintKeyNameToID(values);
+        return values;
+    }
+
+    private getaddComplainStrengthParamsSchema = async () => {
+        let schema = await Joi.object({
+            problem_after_cleanup: Joi.string().required().valid('yes', 'no'),
+            problem_occured_within_year: Joi.string().required().valid('yes', 'no'),
+            phone_damaged_by_anyone_else: Joi.string().required().valid('yes', 'no'),
+            liquid_damaged_report_generated: Joi.string().required().valid('yes', 'no'),
+            problem_occured_within_6month: Joi.string().required().valid('yes', 'no'),
+            complaint_againts_some_accessory: Joi.string().required().valid('yes', 'no'),
+        })
+        return schema;
     }
 }

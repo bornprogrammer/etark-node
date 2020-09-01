@@ -18,6 +18,8 @@ export class ServiceCenterRoutes extends BaseRoutes {
 
         this.router.get("/:id/orders-trends", this.setCtrlMethod(serviceCenterControllerIns.getOrderTrends));
 
+        this.router.get("/existance/:city_id/:maker_id", this.setCtrlMethod(serviceCenterControllerIns.doesSCExists));
+
         return this.router;
     }
 }

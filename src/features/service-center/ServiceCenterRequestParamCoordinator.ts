@@ -102,4 +102,18 @@ export class ServiceCenterRequestParamCoordinator extends RequestParamsValidator
         })
         return schema;
     }
+
+    public getDoesSCExistsParams = async () => {
+        let schema = await this.getDoesSCExistsParamsSchema();
+        let params = await this.setParamFromParams("city_id").setParamFromParams("maker_id").validateRequestContainer(schema);
+        return params;
+    }
+
+    private getDoesSCExistsParamsSchema = async () => {
+        let schema = await Joi.object({
+            city_id: Joi.number().min(1),
+            maker_id: Joi.number().min(1),
+        })
+        return schema;
+    }
 }
