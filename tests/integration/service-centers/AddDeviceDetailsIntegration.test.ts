@@ -1,6 +1,6 @@
 import { BasePostRestAPIIntegration } from "../bases/BasePostRestAPIIntegration";
 import { HttpResponseCode } from "@app/enums/HttpResponseCodes";
-
+import config from "config";
 
 export class AddDeviceDetailsIntegration extends BasePostRestAPIIntegration {
 
@@ -10,7 +10,7 @@ export class AddDeviceDetailsIntegration extends BasePostRestAPIIntegration {
      */
     constructor() {
         super();
-        this.pickupDeliveryId = "52";
+        this.pickupDeliveryId = config.get("pickup_delivery_id");
         this.url = "sc/dispatch-details/";
         this.testSuiteName = "add device details";
     }

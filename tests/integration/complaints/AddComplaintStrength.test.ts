@@ -1,8 +1,6 @@
 import { BasePostRestAPIIntegration } from "../bases/BasePostRestAPIIntegration";
 import { HttpResponseCode } from "@app/enums/HttpResponseCodes";
 
-
-
 export class AddComplaintStrength extends BasePostRestAPIIntegration {
 
     /**

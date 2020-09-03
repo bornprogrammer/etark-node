@@ -29,7 +29,7 @@ export default abstract class RequestParamsCoordinator implements Coordinator {
 
     public setParamFromQueryStr(key: string): RequestParamsCoordinator {
         this.reqParamsContainer[key] = this.request.query[key];
-        this.reqParamsContainer[key] = this.reqParamsContainer[key] && this.reqParamsContainer[key].strlen > 0 ? this.reqParamsContainer[key] : null;
+        this.reqParamsContainer[key] = (this.reqParamsContainer[key] && this.reqParamsContainer[key].length > 0) ? this.reqParamsContainer[key] : null;
         return this;
     }
 

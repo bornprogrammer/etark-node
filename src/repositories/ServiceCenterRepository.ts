@@ -21,7 +21,10 @@ export class ServiceCenterRepository extends BaseRepository {
     }
 
     public getServiceCenterOrderList = async (params: GetServiceCenterOrderListParamsEntity) => {
-        let result = await Complaint.scope(['complainDetails', 'getSuccessUserPlan', { method: ['getDeliveryDetails', params.serviceCenterId, params.activityTypes] }]).findAll({
+        let result = await Complaint.scope(['defaultScope', 'complainDetails', 'getSuccessUserPlan', { method: ['getDeliveryDetails', params.serviceCenterId, params.activityTypes] }]).findAll({
+            attributes: [
+                'id'
+            ],
             limit: params.pagination.limit,
             offset: params.pagination.offset,
             order: [[

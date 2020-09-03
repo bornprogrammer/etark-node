@@ -24,7 +24,8 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
 
     public getOrderList = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let serviceCenterOrderList: GetServiceCenterOrderListParamsEntity = { activityTypes: await serviceCenterServiceIns.getServiceCenterActivityTypeByOrderType(params.activity_type), orderNo: params.order_no, pagination: params.pagination, serviceCenterId: params.sc_id };
+        let activityTypes = await serviceCenterServiceIns.getServiceCenterActivityTypeByOrderType(params.order_type);
+        let serviceCenterOrderList: GetServiceCenterOrderListParamsEntity = { activityTypes: activityTypes, orderNo: params.order_no, pagination: params.pagination, serviceCenterId: params.sc_id };
         let result = await serviceCenterRepositoryIns.getServiceCenterOrderList(serviceCenterOrderList);
         return result;
     }

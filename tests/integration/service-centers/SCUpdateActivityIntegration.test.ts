@@ -1,6 +1,7 @@
 import { BasePatchRestAPIIntegration } from "../bases/BasePatchRestAPIIntegration";
 import { HttpResponseCode } from "@app/enums/HttpResponseCodes";
 import { ServiceCenterActivityTypeEnum } from "@app/enums/ServiceCenterActivityTypeEnum";
+import config from "config";
 
 export class SCUpdateActivityIntegration extends BasePatchRestAPIIntegration {
 
@@ -10,7 +11,7 @@ export class SCUpdateActivityIntegration extends BasePatchRestAPIIntegration {
      */
     constructor() {
         super();
-        this.pickupDeliveryId = 55;
+        this.pickupDeliveryId = config.get("pickup_delivery_id");
         this.url = "sc/activity/";
         this.testSuiteName = "update service center activity";
     }
@@ -23,9 +24,9 @@ export class SCUpdateActivityIntegration extends BasePatchRestAPIIntegration {
 
     public describe = () => {
 
-        describe("validate api flow", () => {
+        describe("validate api flows", () => {
 
-            beforeAll(this.setURLWithPickupDeliveryId);
+            this.setURLWithPickupDeliveryId();
 
             it("should validate wrong activity type", this.validateWrongActivityType);
 
@@ -34,6 +35,8 @@ export class SCUpdateActivityIntegration extends BasePatchRestAPIIntegration {
         })
 
         describe("user made payment flow", () => {
+
+            beforeAll(this.setURLWithPickupDeliveryId);
 
             it("should pass order activity as right order activity type", this.passOrderAcceptedActivityType);
 
