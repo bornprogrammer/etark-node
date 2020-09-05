@@ -33,7 +33,7 @@ export class UserPlanController extends BaseController {
         let result = await this.getCtrlMethodCoordinator().setMethod({ callableFunction: userPlanRepositoryServiceIns.paytmCallback, callableFunctionParams: params }).returnResp(req, res);
         const status = result ? params.paytm_resp.STATUS : "TXN_FAILURE";
         const queryStr = ObjectHelper.buildStrFromKeyNValueOfObject({ status, orderId: params.paytm_resp.ORDERID }, "=", "&");
-        const urlToRedirect = AppConstants.CLIENT_URL_AFTER_PAYTM_RESPONSE + "/confirm?" + queryStr;
+        const urlToRedirect = AppConstants.CLIENT_URL_AFTER_PAYTM_RESPONSE + "confirm?" + queryStr;
         console.log("queryStr", urlToRedirect);
         res.redirect(urlToRedirect);
     }
