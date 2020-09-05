@@ -61,19 +61,31 @@ class PaytmService {
         return paytmTxnToken;
     }
 
-    // public refund = async (params: PaytmRefundParamsEntity) => {
-    //     try {
-    //         let paytmParams = { head: { "signature": checkSum }, body: this.paytmParamsBody };
-    //         let url = this.urlStag + "theia/api/v1/initiateTransaction?mid=weoglH66146360524361&orderId=" + this.paytmParamsBody.orderId;
-    //         let response = await httpPostServiceIns(url).setPayload(paytmParams).call();
-    //         return response;
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+    public generatePaytmTxnTokenForRefund = async (params: PaytmRefundParamsEntity) => {
+        // this.setParams(paytmChecksumEntity);
+        let checkSum = await this.paytmchecksum.generateSignature(JSON.stringify(this.paytmParamsBody), this.merchantKey);
+        let paytmTxnToken = await this.callPaymtm(checkSum);
+        return paytmTxnToken;
+    }
 
-    public getRefundBody = async () => {
-        // let refundBody = Object.assign()
+    public refund = async (params: PaytmRefundParamsEntity) => {
+        try {
+            let body = await this.getRefundBody(params);
+            // let paytmParams = { head: { "signature": checkSum }, body: body };
+            let url = this.urlStag + "/refund/apply";
+            let response = await httpPostServiceIns(url).setPayload({ body }).call();
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    private getRefundBody = async (params: PaytmRefundParamsEntity) => {
+        let refundBody = Object.assign({}, this.getRefundBody);
+        refundBody['orderId'] = params.orderId;
+        refundBody['txnId'] = params.txnId;
+        refundBody['refId'] = params.refundId;
+        return refundBody;
     }
 
     public isPaytmCheckSumValid = (paytmResponse: any): boolean => {
