@@ -93,7 +93,7 @@ Complaint.init({
                         }
                     ],
                     required: true
-                },
+                }
             ]
         },
         getPlan(orderId: number) {

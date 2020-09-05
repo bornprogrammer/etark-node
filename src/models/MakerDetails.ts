@@ -16,7 +16,7 @@ interface MakerDetailsAttributes {
     status: string;
     inspection_charges: string;
 }
-interface MakerDetailsCreationAttributes extends Optional<MakerDetailsAttributes, 'id'> { }
+// interface MakerDetailsCreationAttributes extends Optional<MakerDetailsAttributes, 'id'> { }
 // export class MakerDetails extends Model<MakerDetailsAttributes, MakerDetailsCreationAttributes> implements MakerDetailsAttributes {
 export class MakerDetails extends Model {
     id: number;
@@ -59,7 +59,9 @@ MakerDetails.init({
     timestamps: false
 })
 
-MakerDetails.hasMany(Complaint, { foreignKey: "maker_detail_id" });
+// MakerDetails.hasMany(Complaint, { foreignKey: "maker_detail_id" });
 
-Complaint.belongsTo(MakerDetails, { as: "makerDetail", foreignKey: "maker_detail_id" });
+// MakerDetails.hasMany(Complaint, { as: "complaints", foreignKey: "maker_detail_id" })
+
+// Complaint.belongsTo(MakerDetails, { as: "makerDetail", foreignKey: "maker_detail_id" });
 

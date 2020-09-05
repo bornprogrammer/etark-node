@@ -30,7 +30,8 @@ export class ServiceCenterRepository extends BaseRepository {
         }
         let result = await Complaint.scope(['defaultScope', 'complainDetails', { method: ['getSuccessUserPlan', where] }, { method: ['getDeliveryDetails', params.serviceCenterId, params.activityTypes, params.activityIds] }]).findAll({
             attributes: [
-                'id'
+                'id',
+                'maker_detail_id'
             ],
             limit: params.pagination.limit,
             offset: params.pagination.offset,
