@@ -23,7 +23,7 @@ export class MasterController extends BaseController {
         return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getMakerListByCategoryId, callableFunctionParams: params }).send(req, res);
     }
 
-    public getMerchantList = async (req: Request, res: Response) => {   
+    public getMerchantList = async (req: Request, res: Response) => {
         let params = MasterRequestParamCoordinator.getInstance(req).getMerchantListParams();
         return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getMerchantList, callableFunctionParams: params }).send(req, res);
     }
@@ -33,7 +33,7 @@ export class MasterController extends BaseController {
     }
 
     public getCities = async (req: Request, res: Response) => {
-        // let resutl = htmlToPDFConverterIns.convertInvoiceReport();
+        let resutl = paytmServiceIns.generatePaytmTxnTokenForRefund({ orderId: "E-Tark447", txnId: "20200905111212800110168773801876552", refundId: "E-Tark/REF/449", amount: 3.00 });
         return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getCities }).send(req, res);
     }
 

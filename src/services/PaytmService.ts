@@ -62,18 +62,18 @@ class PaytmService {
     }
 
     public generatePaytmTxnTokenForRefund = async (params: PaytmRefundParamsEntity) => {
-        // this.setParams(paytmChecksumEntity);
-        let checkSum = await this.paytmchecksum.generateSignature(JSON.stringify(this.paytmParamsBody), this.merchantKey);
-        let paytmTxnToken = await this.callPaymtm(checkSum);
+        let refundParamsBody = await this.getRefundBody(params);
+        let checkSum = await this.paytmchecksum.generateSignature(JSON.stringify(refundParamsBody), this.merchantKey);
+        console.log("refund checksome", checkSum);
+        let paytmTxnToken = await this.refund(checkSum, refundParamsBody);
         return paytmTxnToken;
     }
 
-    public refund = async (params: PaytmRefundParamsEntity) => {
+    public refund = async (checkSum: string, body: any) => {
         try {
-            let body = await this.getRefundBody(params);
-            // let paytmParams = { head: { "signature": checkSum }, body: body };
-            let url = this.urlStag + "/refund/apply";
-            let response = await httpPostServiceIns(url).setPayload({ body }).call();
+            let paytmParams = { head: { "signature": checkSum }, body: body };
+            let url = this.urlStag + "refund/apply";
+            let response = await httpPostServiceIns(url).setPayload(paytmParams).call();
             return response;
         } catch (error) {
             console.log(error);
@@ -81,10 +81,7 @@ class PaytmService {
     }
 
     private getRefundBody = async (params: PaytmRefundParamsEntity) => {
-        let refundBody = Object.assign({}, this.getRefundBody);
-        refundBody['orderId'] = params.orderId;
-        refundBody['txnId'] = params.txnId;
-        refundBody['refId'] = params.refundId;
+        let refundBody = { mid: this.mid, txnType: "REFUND", orderId: params.orderId, txnId: params.txnId, refId: params.refundId, refundAmount: params.amount };
         return refundBody;
     }
 

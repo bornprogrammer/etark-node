@@ -60,7 +60,7 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         if (ArrayHelper.isArrayValid(orderListResponse)) {
             newOrderListResponse = [];
             orderListResponse.forEach((complain) => {
-                let complainDetails = { complainId: complain.id, maker_detail_id: complain.maker_detail_id, complainDetail: {}, serviceCenterOrderDetails: {}, deviceDispatchDetail: {}, userPaymentDetails: {}, orderDetails: {}, pickup_details: {} };
+                let complainDetails = { complainId: complain.id, maker_detail_id: complain.maker_detail_id, complainDetail: {}, serviceCenterOrderDetails: {}, deviceDispatchDetail: {}, userPaymentDetails: {}, orderDetails: {}, pickup_details: {}, serviceCenterActivityDetails: { lastActivityType: null } };
                 newOrderListResponse.push(complainDetails);
                 complain.complainDetails.forEach((complainDet) => {
                     complainDetails.complainDetail[complainDet.field.field_name] = complainDet['field_val'];
@@ -73,6 +73,7 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
                     complainDetails.orderDetails = complain.userPlan.userPayments[0];
                 }
                 complainDetails.pickup_details['id'] = complain.userPlan.pickupDeliveryDetail.id;
+                complainDetails.serviceCenterActivityDetails.lastActivityType = complain.userPlan.pickupDeliveryDetail.serviceCenterActivity[0].activity_type;
             })
         }
         return newOrderListResponse;

@@ -8,6 +8,7 @@ export enum ServiceCenterActivityTypeEnum {
     ACTIVITY_TYPE_USER_DECLINED_PAYMENT = "user_declined_payment",
     ACTIVITY_TYPE_USER_MADE_PAYMENT = "user_made_payment",
     ACTIVITY_TYPE_INSPECTION_FEE_CLAIMED = "inspection_fee_claimed",
+    ACTIVITY_TYPE_INSPECTION_FEE_DENIED = "inspection_fee_denied",
     ACTIVITY_TYPE_READY_TO_DISPATCH = "ready_to_dispatch",
     ACTIVITY_TYPE_DISPATCHED = "dispatched",
     ACTIVITY_TYPE_FAILURE = "failure",
