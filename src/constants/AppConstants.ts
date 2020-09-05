@@ -10,6 +10,9 @@ export class AppConstants {
     public static readonly CLIENT_URL_AFTER_PAYTM_RESPONSE = "http://etark-beta.s3-website.ap-south-1.amazonaws.com/";
     public static readonly ML_MODEL_BASE_URL = "http://3.7.68.33/";
     public static readonly SERVER_BASE_URL = "http://13.235.67.24";
+    // public static readonly PAYTM_CALLBACK_URL = AppConstants.SERVER_BASE_URL + ":" + process.env.PORT + "";
     public static readonly ML_MODEL_CHANCES_OF_WINNING_URL = AppConstants.ML_MODEL_BASE_URL + "home";
     public static readonly ML_MODEL_COMPENSATION_URL = AppConstants.ML_MODEL_BASE_URL + "compensation";
+    public static readonly PAYTM_URL = "https://securegw.paytm.in"
+    public static readonly PAYTM_STAGE_URL = "https://securegw-stage.paytm.in/"
 }

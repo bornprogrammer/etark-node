@@ -13,6 +13,10 @@
         "pass": "mail_password",
         "from": "mail_user"
     },
+    "paytm": {
+        "merchant_key": "merchant_key",
+        "merchant_id": "merchant_id"
+    },
     "google_map": {
         "google_map_key": "google_map_key"
     },
