@@ -7,6 +7,9 @@ import { ServiceCenterLoginParamsEntity } from "@app/repo-method-param-entities/
 import { ServiceCenters } from "@app/models/ServiceCenters";
 import { DoesSCExistsByCityIdNMakerIdEntityParams } from "@app/repo-method-param-entities/DoesSCExistsByCityIdNMakerIdEntityParams";
 import { ServiceCenterDetail } from "@app/models/ServiceCenterDetail";
+import { sequelizeConnection } from "@app/SequelizeConnection";
+import { QueryTypes } from "sequelize";
+import { ServiceCenterActivityTypeEnum } from "@app/enums/ServiceCenterActivityTypeEnum";
 
 export class ServiceCenterRepository extends BaseRepository {
     /**
@@ -21,7 +24,11 @@ export class ServiceCenterRepository extends BaseRepository {
     }
 
     public getServiceCenterOrderList = async (params: GetServiceCenterOrderListParamsEntity) => {
-        let result = await Complaint.scope(['defaultScope', 'complainDetails', 'getSuccessUserPlan', { method: ['getDeliveryDetails', params.serviceCenterId, params.activityTypes] }]).findAll({
+        let where = { payment_status: 'completed' };
+        if (params.orderNo) {
+            where['order_no'] = params.orderNo;
+        }
+        let result = await Complaint.scope(['defaultScope', 'complainDetails', { method: ['getSuccessUserPlan', where] }, { method: ['getDeliveryDetails', params.serviceCenterId, params.activityTypes, params.activityIds] }]).findAll({
             attributes: [
                 'id'
             ],
@@ -31,6 +38,36 @@ export class ServiceCenterRepository extends BaseRepository {
                 'id', 'desc'
             ]]
         });
+        return result;
+    }
+
+    public getLastActivityIds = async (serviceCenterId: number) => {
+        let query = `select activities.activity_id from pickup_deliveries inner join (select max(id) as activity_id,pickup_delivery_id from service_center_activities group by pickup_delivery_id) as activities on pickup_deliveries.id = activities.pickup_delivery_id where service_center_id =:service_center_id`;
+        let result = await sequelizeConnection.connection.query(query, { type: QueryTypes.SELECT, replacements: { service_center_id: serviceCenterId } });
+        return result;
+    }
+
+    public getFirstActivityIds = async (serviceCenterId: number) => {
+        let query = `select activities.activity_id from pickup_deliveries inner join (select min(id) as activity_id,pickup_delivery_id from service_center_activities group by pickup_delivery_id) as activities on pickup_deliveries.id = activities.pickup_delivery_id where service_center_id =:service_center_id`;
+        let result = await sequelizeConnection.connection.query(query, { type: QueryTypes.SELECT, replacements: { service_center_id: serviceCenterId } });
+        return result;
+    }
+
+    public getAllOrderCount = async (scId: number) => {
+        let query = `select count(activities.activity_id) as order_count from pickup_deliveries inner join (select min(id) as activity_id,pickup_delivery_id from service_center_activities group by pickup_delivery_id) as activities on pickup_deliveries.id = activities.pickup_delivery_id where service_center_id =:service_center_id`;
+        let result = await sequelizeConnection.connection.query(query, { type: QueryTypes.SELECT, replacements: { service_center_id: scId } });
+        return result[0]['order_count'];
+    }
+
+    public getCompletedOrderCount = async (scId: number) => {
+        let result = await this.getOrderCountByType(scId, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_DISPATCHED);
+        return result[0]['order_count'];
+    }
+
+    public getOrderCountByType = async (scId: number, lastActivityType: ServiceCenterActivityTypeEnum) => {
+        let query = `select count(activities.activity_id) as order_count from pickup_deliveries inner join (select max(id) as activity_id,pickup_delivery_id from service_center_activities group by pickup_delivery_id) as activities on pickup_deliveries.id = activities.pickup_delivery_id inner join service_center_activities on activities.activity_id=service_center_activities.id and service_center_activities.activity_type='${lastActivityType}'
+        where service_center_id =:service_center_id`;
+        let result = await sequelizeConnection.connection.query(query, { type: QueryTypes.SELECT, replacements: { service_center_id: scId } });
         return result;
     }
 

@@ -3,6 +3,7 @@ import { Model, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { ServiceCenterActivity } from "./ServiceCenterActivity";
 import { ServiceCenterOrder } from "./ServiceCenterOrder";
+import { DeviceDispatchDetails } from "./DeviceDispatchDetails";
 
 export interface PickupDeliveryAttirbutes {
     id?: number;
@@ -19,9 +20,11 @@ export class PickupDelivery extends Model implements PickupDeliveryAttirbutes {
     delivery_amount: number;
     distance_meters: number;
     public readonly serviceCenterActivity?: ServiceCenterActivity[];
-    public readonly serviceCenterOrder?: ServiceCenterOrder;
+    public readonly serviceCenterOrder?: ServiceCenterOrder[];
+    public readonly deviceDispatchDetails?: DeviceDispatchDetails
     public static readonly serviceCenterActivityAs: string = "serviceCenterActivityAs";
-    public static readonly serviceCenterOrderAs: string = "serviceCenterOrderAs";
+    public static readonly serviceCenterOrderAs: string = "serviceCenterOrder";
+    public static readonly deviceDispatchDetailsAs: string = "deviceDispatchDetails";
 }
 
 PickupDelivery.init({
@@ -62,3 +65,7 @@ ServiceCenterActivity.belongsTo(PickupDelivery, { foreignKey: "pickup_delivery_i
 PickupDelivery.hasMany(ServiceCenterOrder, { as: PickupDelivery.serviceCenterOrderAs, foreignKey: "pickup_delivery_id" });
 
 ServiceCenterOrder.belongsTo(PickupDelivery, { foreignKey: "pickup_delivery_id" });
+
+PickupDelivery.hasOne(DeviceDispatchDetails, { as: PickupDelivery.deviceDispatchDetailsAs, foreignKey: "pick_delivery_id" });
+
+DeviceDispatchDetails.belongsTo(PickupDelivery, { foreignKey: "pick_delivery_id" });

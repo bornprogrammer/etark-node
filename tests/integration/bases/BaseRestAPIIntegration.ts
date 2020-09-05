@@ -1,17 +1,19 @@
 import { appInstance } from "@app/app"
 import { HttpResponseCode } from "@app/enums/HttpResponseCodes";
+import { extend } from "joi";
+import { BaseTest } from "tests/BaseTest.test";
 require('mysql2/node_modules/iconv-lite').encodingExists('foo');
 
-export abstract class BaseRestAPIIntegration {
+export abstract class BaseRestAPIIntegration extends BaseTest {
 
     protected serverIns: any;
 
     protected url: string;
 
-    protected testSuiteName: string;
+    // protected testSuiteName: string;
 
     constructor() {
-
+        super();
     }
 
     public async runTest() {
@@ -24,7 +26,7 @@ export abstract class BaseRestAPIIntegration {
         describe(this.testSuiteName, this.describe);
     }
 
-    public abstract async describe();
+    // public abstract async describe();
 
     public abstract async callAPI(urlPath: string);
 

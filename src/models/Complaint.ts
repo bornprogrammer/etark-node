@@ -11,6 +11,9 @@ import { User } from "./User";
 import { PickupDelivery } from "./PickupDelivery";
 import { ServiceCenterActivity } from "./ServiceCenterActivity";
 import { ServiceCenterOrder } from "./ServiceCenterOrder";
+import { Op } from "sequelize";
+import { DeviceDispatchDetails } from "./DeviceDispatchDetails";
+import { Where } from "sequelize/types/lib/utils";
 
 export interface ComplaintAttributes {
     id: number,
@@ -123,34 +126,35 @@ Complaint.init({
                 ],
             }
         },
-        getSuccessUserPlan: {
-            include: [
-                {
-                    model: UserPlan,
-                    required: true,
-                    as: "userPlan",
-                    where: {
-                        status: ['success']
-                    },
-                    include: [
-                        {
-                            model: UserPayment,
-                            required: true,
-                            as: "userPayments",
-                            where: {
-                                payment_status: "completed"
-                            }
+        getSuccessUserPlan(where: Where) {
+            return {
+                include: [
+                    {
+                        model: UserPlan,
+                        required: true,
+                        as: "userPlan",
+                        where: {
+                            status: ['success']
                         },
-                        {
-                            model: Plan,
-                            required: true,
-                            as: "plan"
-                        }
-                    ]
-                },
-            ],
+                        include: [
+                            {
+                                model: UserPayment,
+                                required: true,
+                                as: "userPayments",
+                                attributes: ['order_no'],
+                                where: where
+                            },
+                            {
+                                model: Plan,
+                                required: true,
+                                as: "plan"
+                            }
+                        ]
+                    },
+                ],
+            }
         },
-        getDeliveryDetails(serviceCenterId: number, activityTypes: string[]) {
+        getDeliveryDetails(serviceCenterId: number, activityTypes: string[], activityIds: number[]) {
             return {
                 include: [
                     {
@@ -172,12 +176,17 @@ Complaint.init({
                                         as: PickupDelivery.serviceCenterActivityAs,
                                         required: true,
                                         where: {
-                                            activity_type: activityTypes
-                                        }
+                                            activity_type: activityTypes,
+                                            id: activityIds,
+                                        },
                                     },
                                     {
                                         model: ServiceCenterOrder,
                                         as: PickupDelivery.serviceCenterOrderAs,
+                                    },
+                                    {
+                                        model: DeviceDispatchDetails,
+                                        as: PickupDelivery.deviceDispatchDetailsAs,
                                     }
                                 ]
                             }

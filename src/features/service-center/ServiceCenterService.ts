@@ -29,6 +29,9 @@ export class ServiceCenterService extends BaseService {
             case ServiceCenterOrderTypeEnum.ORDER_TYPE_COMPLETED:
                 activityTypes = [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_DISPATCHED];
                 break;
+            // case ServiceCenterOrderTypeEnum.ORDER_TYPE_ALL:
+            //     activityTypes = [ServiceCenterOrderTypeEnum.ORDER_TYPE_ALL];
+            //     break;
             default: // order type allocated
                 activityTypes = [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_ALLOCATED];
                 break;

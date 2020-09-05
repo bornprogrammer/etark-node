@@ -24,10 +24,10 @@ export class UserPlan extends Model {
     plan_id: number;
     status: string;
     public readonly UserPlanComponents?: UserPlanComponent[];
-    public readonly userPayments?: [UserPayment];
+    public readonly userPayments?: UserPayment[];
     public readonly plan?: Plan;
     public static readonly userPaymentsAs: string = "userPayments";
-    public static pickupDeliveryDetail?: PickupDelivery;
+    public readonly pickupDeliveryDetail?: PickupDelivery;
     public static readonly pickupDeliveryDetailAs: string = "pickupDeliveryDetail"
 }
 

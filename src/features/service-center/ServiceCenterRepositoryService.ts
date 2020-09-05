@@ -13,6 +13,9 @@ import { EventEmitterIdentifierEnum } from "@app/enums/EventEmitterIdentifierEnu
 import BadHttpRequestError from "@app/errors/BadHttpRequestError";
 import { deviceDispatchDetailsRepositoryIns } from "@app/repositories/DeviceDispatchDetailsRepository";
 import UnAuthorized from "@app/errors/UnAuthorized";
+import { ServiceCenterOrderTypeEnum } from "@app/enums/ServiceCenterOrderTypeEnum";
+import ArrayHelper from "@app/helpers/ArrayHelper";
+import { Complaint } from "@app/models/Complaint";
 
 export class ServiceCenterRepositoryService extends BaseRepositoryService {
     /**
@@ -24,10 +27,54 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
 
     public getOrderList = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let activityTypes = await serviceCenterServiceIns.getServiceCenterActivityTypeByOrderType(params.order_type);
-        let serviceCenterOrderList: GetServiceCenterOrderListParamsEntity = { activityTypes: activityTypes, orderNo: params.order_no, pagination: params.pagination, serviceCenterId: params.sc_id };
+        let result = null;
+        if (params.order_type === ServiceCenterOrderTypeEnum.ORDER_TYPE_ALL) {
+            result = await this.getOrderListForAllType(params);
+        } else {
+            result = await this.getOrderListByOrderType(params);
+        }
+        result = await this.convertOrderListResponse(result);
+        return result;
+    }
+
+    public getOrderListByOrderType = async (topParams: any) => {
+        let lastActivityIds = await serviceCenterRepositoryIns.getLastActivityIds(topParams.sc_id);
+        let lastActivityIdArr = ArrayHelper.extractKeyFromArrayOfObject(lastActivityIds, 'activity_id');
+        let activityTypes = await serviceCenterServiceIns.getServiceCenterActivityTypeByOrderType(topParams.order_type);
+        let serviceCenterOrderList: GetServiceCenterOrderListParamsEntity = { activityTypes: activityTypes, orderNo: topParams.order_no, pagination: topParams.pagination, serviceCenterId: topParams.sc_id, activityIds: lastActivityIdArr };
         let result = await serviceCenterRepositoryIns.getServiceCenterOrderList(serviceCenterOrderList);
         return result;
+    }
+
+    public getOrderListForAllType = async (topParams: any) => {
+        let lastActivityIds = await serviceCenterRepositoryIns.getFirstActivityIds(topParams.sc_id);
+        let lastActivityIdArr = ArrayHelper.extractKeyFromArrayOfObject(lastActivityIds, 'activity_id');
+        let activityTypes = await serviceCenterServiceIns.getServiceCenterActivityTypeByOrderType(topParams.order_type);
+        let serviceCenterOrderList: GetServiceCenterOrderListParamsEntity = { activityTypes: activityTypes, orderNo: topParams.order_no, pagination: topParams.pagination, serviceCenterId: topParams.sc_id, activityIds: lastActivityIdArr };
+        let result = await serviceCenterRepositoryIns.getServiceCenterOrderList(serviceCenterOrderList);
+        return result;
+    }
+
+    private convertOrderListResponse = async (orderListResponse: Complaint[]) => {
+        let newOrderListResponse = null;
+        if (ArrayHelper.isArrayValid(orderListResponse)) {
+            newOrderListResponse = [];
+            orderListResponse.forEach((complain) => {
+                let complainDetails = { complainId: complain.id, complainDetail: {}, serviceCenterOrderDetails: {}, deviceDispatchDetail: {}, userPaymentDetails: {}, orderDetails: {} };
+                newOrderListResponse.push(complainDetails);
+                complain.complainDetails.forEach((complainDet) => {
+                    complainDetails.complainDetail[complainDet.field.field_name] = complainDet['field_val'];
+                })
+                if (ArrayHelper.isArrayValid(complain.userPlan.pickupDeliveryDetail.serviceCenterOrder)) {
+                    complainDetails.serviceCenterOrderDetails = complain.userPlan.pickupDeliveryDetail.serviceCenterOrder[0];
+                }
+
+                if (ArrayHelper.isArrayValid(complain.userPlan.userPayments)) {
+                    complainDetails.orderDetails = complain.userPlan.userPayments[0];
+                }
+            })
+        }
+        return newOrderListResponse;
     }
 
     public processServiceCenterOrderDetails = async (methodParamEntity: MethodParamEntity) => {
@@ -127,13 +174,18 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
     public getOrderTrends = async (params: MethodParamEntity) => {
         let topParams = params.topMethodParam;
         let result = {
-            total_order: 45,
-            total_order_percentage: 2.98,
-            order_ongoing: 14,
-            order_ongoing_percentage: -1.09,
-            order_completed: 22,
-            order_completed_percentage: -5.48
+            trends_detais: {
+                total_order: 45,
+                total_order_percentage: 2.98,
+                order_ongoing: 14,
+                order_ongoing_percentage: -1.09,
+                order_completed: 22,
+                order_completed_percentage: -5.48
+            },
+            order_type_count_details: { all: 0, completed: 2, order_request: 2, in_process: 2, decline: 1 }
         }
+        result.order_type_count_details.all = await serviceCenterRepositoryIns.getAllOrderCount(topParams.sc_id);
+        result.order_type_count_details.completed = await serviceCenterRepositoryIns.getCompletedOrderCount(topParams.sc_id);
         return result;
     }
 

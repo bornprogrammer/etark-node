@@ -10,6 +10,8 @@ export enum ServiceCenterOrderTypeEnum {
 
     ORDER_TYPE_DECLINED = "declined",
 
-    ORDER_TYPE_COMPLETED = "completed"
+    ORDER_TYPE_COMPLETED = "completed",
+
+    ORDER_TYPE_ALL = "all"
 
 }
