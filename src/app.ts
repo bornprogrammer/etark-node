@@ -7,9 +7,7 @@ import AppRoutes from './routes/AppRoutes';
 import { sequelizeConnection } from './SequelizeConnection';
 
 import { Server } from 'http';
-import { HttpResponseError } from './errors/HttpResponseError';
-import { responseServiceIns } from './services/ResponseService';
-import InternalError from './errors/InternalError';
+
 import config from 'config';
 class App {
 
