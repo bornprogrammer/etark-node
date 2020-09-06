@@ -71,6 +71,10 @@ ServiceCenterOrder.init({
     device_delivery_date: {
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    due_date: {
+        type: DataTypes.STRING,
+        allowNull: false,
     }
 }, {
     sequelize: sequelizeConnection.connection,

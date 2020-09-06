@@ -140,11 +140,12 @@ class UserRepositoryService extends BaseRepositoryService {
         let result = await complaintRepositoryIns.getSuccessPageDetails(orderId, params.user_id);
         let successPageInfo = null;
         if (result) {
-            successPageInfo = { created_at: "", imei_number: "", order_no: "", isDownloadReportToBeShown: false };
+            successPageInfo = { created_at: "", imei_number: "", order_no: "", isDownloadReportToBeShown: false, report_link: "#" };
             successPageInfo.created_at = result.userPlan.userPayments[0]['createdAt'];
             successPageInfo.order_no = result.userPlan.userPayments[0]['order_no'];
             successPageInfo.imei_number = complaintServiceIns.getIMEIFieldValue(result.complainDetails);
-            successPageInfo.isDownloadReportToBeShown = result.userPlan.plan.plan_type === PlanComponents.PICKUP_DELIVERY;
+            successPageInfo.isDownloadReportToBeShown = result.userPlan.plan.plan_type !== PlanComponents.PICKUP_DELIVERY;
+            successPageInfo.report_link = "http://13.235.67.24:5000/files/businesscard.pdf";
         }
         return successPageInfo;
     }
