@@ -11,6 +11,8 @@ export interface PickupDeliveryAttirbutes {
     service_center_id: number;
     delivery_amount: number;
     distance_meters: number;
+    user_address_id?: number;
+    status?: string;
 }
 
 export class PickupDelivery extends Model implements PickupDeliveryAttirbutes {
@@ -19,6 +21,7 @@ export class PickupDelivery extends Model implements PickupDeliveryAttirbutes {
     service_center_id: number;
     delivery_amount: number;
     distance_meters: number;
+    user_address_id?: number;
     public readonly serviceCenterActivity?: ServiceCenterActivity[];
     public readonly serviceCenterOrder?: ServiceCenterOrder[];
     public readonly deviceDispatchDetails?: DeviceDispatchDetails
@@ -46,6 +49,10 @@ PickupDelivery.init({
         allowNull: false
     },
     distance_meters: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    },
+    user_address_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     },

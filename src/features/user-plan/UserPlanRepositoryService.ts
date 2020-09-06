@@ -16,7 +16,7 @@ import { UpdateUserPaymentStatusParamsEntity } from "@app/repo-method-param-enti
 import { userPaymentDetailsRepositoryIns } from "@app/repositories/UserPaymentDetailsRepository";
 import { UserPaymentDetails } from "@app/models/UserPaymentDetails";
 import { BaseRepositoryService } from "@app/services/BaseRepositoryService";
-import { userPlanServiceIns } from "./UserPlanService";
+import { userPlanServiceIns, UserPlanService } from "./UserPlanService";
 import { UpdateUserPaymentStatusError } from "@app/errors/UpdateUserPaymentStatusError";
 import { afterPaytmCallbackEventEmitterIns } from "@app/events/AfterPaytmCallbackEventEmitter";
 import { EventEmitterIdentifierEnum } from "@app/enums/EventEmitterIdentifierEnum";
@@ -24,6 +24,10 @@ import { PaytmCallbackResponseEntity } from "@app/entities/PaytmCallbackResponse
 import { GetUserPlanStatusByUserPaymentIdParamsEntity } from "@app/repo-method-param-entities/GetUserPlanStatusByUserPaymentIdParamsEntity";
 import { UserPlan } from "@app/models/UserPlan";
 import { pickupDeliveyRepositoryIns } from "@app/repositories/PickupDeliveyRepository";
+import { PaytmRefundParamsEntity } from "@app/entities/PaytmRefundParamsEntity";
+import { UtilsHelper } from "@app/helpers/UtilsHelper";
+import { UserRefund } from "@app/models/UserRefund";
+import { UserRefundRepository, userRefundRepositoryIns } from "@app/repositories/UserRefundRepository";
 
 export class UserPlanRepositoryService extends BaseRepositoryService {
     /**
@@ -193,6 +197,48 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
         return result;
     }
 
+    public refundInspectionFee = async (pickupDeliveryId: number) => {
+        let result = await this.getMethodCoordinator().setMethod({
+            callableFunction: this.getUserPlanInspectionFeeDetailsForRefund, callableFunctionParams: pickupDeliveryId, storeResultAs: StoreResultAs.INSPECTION_FEE_DETAILS
+        }).setMethod({ callableFunction: this.requestRefundFromPaytm }).setMethod({ callableFunction: this.storeRefundResponses }).coordinate();
+        return result;
+    }
+
+    public getUserPlanInspectionFeeDetailsForRefund = async (params: MethodParamEntity) => {
+        let pickupDeliveryId = params.topMethodParam;
+        let result = await userPlanRepositoryIns.getUserPlanInspectionFeeDetailsForRefund(pickupDeliveryId);
+        let paytmRefundParamsEntity = await this.extractOutInspectionFeeDetails(result);
+        return paytmRefundParamsEntity;
+    }
+
+    private extractOutInspectionFeeDetails = async (userPlanInspectionFeeDetailsForRefund: UserPlan) => {
+        let details: PaytmRefundParamsEntity = { orderId: null, amount: null, txnId: null, refundId: null };
+        details.orderId = userPlanInspectionFeeDetailsForRefund.userPayments[0].order_no;
+        let gatewayResponse = JSON.parse(userPlanInspectionFeeDetailsForRefund.userPayments[0].userPaymentDetails[0].gateway_response);
+        details.txnId = gatewayResponse.TXNID;
+        details.refundId = details.orderId;
+        let inspectionFeePlanTypeId = userPlanInspectionFeeDetailsForRefund.plan['PlanComponents'][0]['id'];
+        userPlanInspectionFeeDetailsForRefund['userPlanComponentAs'].forEach((item) => {
+            if (item.plan_components_id === inspectionFeePlanTypeId) {
+                details.amount = item.component_price;
+            }
+        });
+        return details;
+    }
+
+    public requestRefundFromPaytm = async (params: MethodParamEntity) => {
+        let paytmRefundParamsEntity: PaytmRefundParamsEntity = params.methodReturnedValContainer[StoreResultAs.INSPECTION_FEE_DETAILS];
+        paytmRefundParamsEntity.refundId = userPlanServiceIns.removeOrderPrefixFromOrderNo(paytmRefundParamsEntity.orderId);
+        let result = await paytmServiceIns.generatePaytmTxnTokenForRefund(paytmRefundParamsEntity);
+        return result;
+    }
+
+    public storeRefundResponses = async (params: MethodParamEntity) => {
+        let paytmResponse = params.lastInvokedMethodParam;
+        let inspectionFeeDetails = params.methodReturnedValContainer[StoreResultAs.INSPECTION_FEE_DETAILS];
+        let orderId = userPlanServiceIns.removeOrderPrefixFromOrderNo(inspectionFeeDetails.orderId);
+        await userRefundRepositoryIns.create({ gateway_response: JSON.stringify(paytmResponse), user_payment_id: parseInt(orderId) });
+    }
 }
 
 export const userPlanRepositoryServiceIns = new UserPlanRepositoryService();

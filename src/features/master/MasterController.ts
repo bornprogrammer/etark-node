@@ -33,7 +33,7 @@ export class MasterController extends BaseController {
     }
 
     public getCities = async (req: Request, res: Response) => {
-        let resutl = paytmServiceIns.generatePaytmTxnTokenForRefund({ orderId: "E-Tark447", txnId: "20200905111212800110168773801876552", refundId: "E-Tark/REF/449", amount: 3.00 });
+        // let resutl = paytmServiceIns.generatePaytmTxnTokenForRefund({ orderId: "E-Tark452", txnId: "20200906111212800110168511602070946", refundId: "E-Tark/REF/452", amount: 790 });
         return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mMasterService.getCities }).send(req, res);
     }
 

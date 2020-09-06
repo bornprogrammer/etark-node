@@ -14,6 +14,8 @@ import { ComplaintDetailByFieldNameParamsEntity } from "@app/repo-method-param-e
 import { User } from "@app/models/User";
 import { Maker } from "@app/models/Maker";
 import { GetInspectionFeeComponentParamsEntity } from "@app/repo-method-param-entities/GetInspectionFeeComponentParamsEntity";
+import { sequelizeConnection } from "@app/SequelizeConnection";
+import { QueryTypes } from "sequelize";
 
 export class ComplaintRepository extends BaseRepository {
     /**
@@ -170,6 +172,21 @@ export class ComplaintRepository extends BaseRepository {
             }
         })
         return result;
+    }
+
+    public getDeniedServiceCenterList = async (userPlanId: number) => {
+        let query = `select complaints.id as complaint_id,complaints.user_id,pickup_deliveries.service_center_id,pickup_deliveries.user_address_id
+        from complaints inner join user_plan on complaints.id = user_plan.complain_id inner join pickup_deliveries on user_plan.id = pickup_deliveries.user_plan_id
+        where complaints.status in ('pending') and user_plan.status='success' and pickup_deliveries.status='service_denied' and user_plan.id=:user_plan_id`;
+        let result = await sequelizeConnection.connection.query(query, { type: QueryTypes.SELECT, replacements: { user_plan_id: userPlanId } });
+        return result;
+    }
+
+    public getUserPlanIdByPickupDeliveryId = async (pickupDeliveryId: number) => {
+        let userPlanIdQuery = `select user_plan_id from pickup_deliveries where pickup_deliveries.status='service_denied' and pickup_deliveries.id=:pickup_deliverie_id`;
+
+        let userPlanIdResult = await sequelizeConnection.connection.query(userPlanIdQuery, { type: QueryTypes.SELECT, replacements: { pickup_deliverie_id: pickupDeliveryId } });
+        return userPlanIdResult[0]['user_plan_id'];
     }
 }
 

@@ -1,5 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
+import { UserPaymentDetails } from "./UserPaymentDetails";
 
 export interface UserPaymentAttributes {
     id?: number;
@@ -22,6 +23,8 @@ export class UserPayment extends Model {
     tax: number;
     paytm_checksum?: string;
     gateway_charge?: number;
+    public readonly userPaymentDetails?: UserPaymentDetails[];
+    public static readonly userPaymentDetailsAs?: string = "userPaymentDetails";
 }
 
 UserPayment.init({
@@ -66,3 +69,7 @@ UserPayment.init({
     tableName: "user_payment",
     underscored: true,
 })
+
+UserPayment.hasMany(UserPaymentDetails, { foreignKey: "user_payment_id", as: UserPayment.userPaymentDetailsAs });
+
+UserPaymentDetails.belongsTo(UserPayment, { foreignKey: "user_payment_id" });

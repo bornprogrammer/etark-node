@@ -19,6 +19,8 @@ import { AfterAddingAddressEventEmitterEntity } from "@app/entities/AfterAddingA
 import { afterAddingAddressEventEmitterIns } from "@app/events/AfterAddingAddressEventEmitter";
 import { EventEmitterIdentifierEnum } from "@app/enums/EventEmitterIdentifierEnum";
 import { UpdateComponentPriceForPickupNDeliveryEntity } from "@app/entities/UpdateComponentPriceForPickupNDeliveryEntity";
+import ArrayHelper from "@app/helpers/ArrayHelper";
+import { GetServiceCenterListParamsEntity } from "@app/repo-method-param-entities/GetClosestServiceCenterDetailsParamsEntity";
 
 class UserRepositoryService extends BaseRepositoryService {
     /**
@@ -97,7 +99,7 @@ class UserRepositoryService extends BaseRepositoryService {
     public addPickupNDelivery = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
         let closestServiceCenterNPickupNDeliveryPrice: MinDistanceForServiceCenterReturnedEntity = methodParamEntity.methodReturnedValContainer[StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE];
-        let afterAddingAddressEventEmitterEntity: AfterAddingAddressEventEmitterEntity = { userPlanId: params.userPlanId, serviceCenterId: closestServiceCenterNPickupNDeliveryPrice.serviceCenterId, deliveryAmount: closestServiceCenterNPickupNDeliveryPrice.price, distance: closestServiceCenterNPickupNDeliveryPrice.distance };
+        let afterAddingAddressEventEmitterEntity: AfterAddingAddressEventEmitterEntity = { userPlanId: params.userPlanId, serviceCenterId: closestServiceCenterNPickupNDeliveryPrice.serviceCenterId, deliveryAmount: closestServiceCenterNPickupNDeliveryPrice.price, distance: closestServiceCenterNPickupNDeliveryPrice.distance, userAddressId: params.userAddressId, status: params.status };
         afterAddingAddressEventEmitterIns.emit(EventEmitterIdentifierEnum.AFTER_ADDING_ADDRESS_EVENTEMITTER, afterAddingAddressEventEmitterEntity);
     }
 
@@ -150,6 +152,30 @@ class UserRepositoryService extends BaseRepositoryService {
     public upsertPickupDelivery = async (params: PickupDeliveryAttirbutes) => {
         let result = await pickupDeliveyRepositoryIns.upsert(params);
         return result;
+    }
+
+    public assignNewServiceCenter = async (pickupDeliveryId: number) => {
+        let deniedServiceList = await this.getDeniedServiceCenterList(pickupDeliveryId);
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.getRemainingServiceCenterList, callableFunctionParams: deniedServiceList }).setMethod({ callableFunction: this.getClosestServiceCenterNPickupNDeliveryPrice, storeResultAs: StoreResultAs.CLOSEST_SERVICE_CENTER_N_PICKUP_N_DELIVERY_PRICE }).setMethod({ callableFunction: this.addPickupNDelivery }).coordinate();
+        return result;
+    }
+
+    public getDeniedServiceCenterList = async (pickupDeliveryId: number) => {
+        let userPlanId = await complaintRepositoryIns.getUserPlanIdByPickupDeliveryId(pickupDeliveryId);
+        let serviceDeniedSCDetails = await complaintRepositoryIns.getDeniedServiceCenterList(userPlanId);
+        let serviceCenterIds = ArrayHelper.extractKeyFromArrayOfObject(serviceDeniedSCDetails, 'service_center_id');
+        serviceCenterIds
+        let serviceCenterListParamsEntity = { complainId: serviceDeniedSCDetails[0]['complaint_id'], serviceCenterIds: ArrayHelper.convertArrayToMysqlInOpStr(serviceCenterIds), userAddressId: serviceDeniedSCDetails[0]['user_address_id'], userPlanId: userPlanId, status: 'success' };
+        return serviceCenterListParamsEntity;
+    }
+
+    public getRemainingServiceCenterList = async (methodParamEntity: MethodParamEntity) => {
+        let serviceCenterListParamsEntity = methodParamEntity.topMethodParam;
+        let serviceCenterList = await userRepositoryIns.getServiceCenterList(serviceCenterListParamsEntity);
+        if (!UtilsHelper.isMethodReturnedValueTruthy(serviceCenterList)) {
+            throw new ServiceCenterNotFound();
+        }
+        return serviceCenterList;
     }
 }
 

@@ -39,4 +39,4 @@ PlanComponent.belongsTo(Plan);
 
 Plan.hasMany(UserPlan, { foreignKey: "plan_id" });
 
-UserPlan.belongsTo(Plan, { as: "plan", foreignKey: "plan_id" });
+UserPlan.belongsTo(Plan, { as: UserPlan.planAs, foreignKey: "plan_id" });

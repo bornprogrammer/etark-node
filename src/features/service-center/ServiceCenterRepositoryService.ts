@@ -16,6 +16,8 @@ import UnAuthorized from "@app/errors/UnAuthorized";
 import { ServiceCenterOrderTypeEnum } from "@app/enums/ServiceCenterOrderTypeEnum";
 import ArrayHelper from "@app/helpers/ArrayHelper";
 import { Complaint } from "@app/models/Complaint";
+import { userPlanRepositoryServiceIns } from "../user-plan/UserPlanRepositoryService";
+import { pickupDeliveyRepositoryIns } from "@app/repositories/PickupDeliveyRepository";
 
 export class ServiceCenterRepositoryService extends BaseRepositoryService {
     /**
@@ -132,13 +134,13 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
     }
 
     public removeServiceCenter = async (pickupDeliveryId: number) => {
-        await serviceCenterActivityRepositoryIns.removeServiceCenter(pickupDeliveryId);
+        await pickupDeliveyRepositoryIns.markPickupDeliveryServiceDenied(pickupDeliveryId);
     }
 
     public afterSetActivity = async (params: MethodParamEntity) => {
         let topParams = params.topMethodParam;
         if (topParams.activity_type === ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED) {
-            this.removeServiceCenter(topParams.pickup_delivery_id);
+            await this.removeServiceCenter(topParams.pickup_delivery_id);
         }
         afterSetActivityEventEmitterIns.emit(EventEmitterIdentifierEnum.AFTER_SET_ACTIVITY_EVENTEMITTER, params.topMethodParam);
     }

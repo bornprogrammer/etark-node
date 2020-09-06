@@ -4,7 +4,6 @@ import { UserPlanComponent } from "./UserPlanComponent";
 import { UserPayment } from "./UserPayment";
 import { Plan } from "./Plan";
 import { PickupDelivery } from "./PickupDelivery";
-import { PickupDeliveyRepository } from "@app/repositories/PickupDeliveyRepository";
 
 
 export interface UserPlanAttributes {
@@ -29,6 +28,8 @@ export class UserPlan extends Model {
     public static readonly userPaymentsAs: string = "userPayments";
     public readonly pickupDeliveryDetail?: PickupDelivery;
     public static readonly pickupDeliveryDetailAs: string = "pickupDeliveryDetail"
+    public static readonly userPlanComponentAs?: string = "userPlanComponentAs";
+    public static readonly planAs?: string = "plan";
 }
 
 UserPlan.init({
@@ -56,12 +57,12 @@ UserPlan.init({
 }
 )
 
-UserPlan.hasMany(UserPlanComponent);
+UserPlan.hasMany(UserPlanComponent, { as: UserPlan.userPlanComponentAs, foreignKey: "user_plan_id" });
 
-UserPlanComponent.belongsTo(UserPlan);
+UserPlanComponent.belongsTo(UserPlan, { foreignKey: "user_plan_id" });
 
 UserPlan.hasMany(UserPayment, {
-    as: "userPayments"
+    as: UserPlan.userPaymentsAs
 });
 
 UserPayment.belongsTo(UserPlan);

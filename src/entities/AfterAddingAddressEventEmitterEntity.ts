@@ -4,4 +4,6 @@ export interface AfterAddingAddressEventEmitterEntity {
     userPlanId: number;
     deliveryAmount: number;
     distance: number;
+    userAddressId?: number;
+    status?: string;
 }

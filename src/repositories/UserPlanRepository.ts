@@ -9,6 +9,9 @@ import { QueryTypes } from "sequelize";
 import { GetUserPlanStatusByUserPaymentIdParamsEntity } from "@app/repo-method-param-entities/GetUserPlanStatusByUserPaymentIdParamsEntity";
 import { UserPayment } from "@app/models/UserPayment";
 import { AppConstants } from "@app/constants/AppConstants";
+import { Plan } from "@app/models/Plan";
+import { PickupDelivery } from "@app/models/PickupDelivery";
+import { UserPaymentDetails } from "@app/models/UserPaymentDetails";
 
 export class UserPlanRepository extends BaseRepository {
     /**
@@ -27,6 +30,7 @@ export class UserPlanRepository extends BaseRepository {
             include: [
                 {
                     model: UserPlanComponent,
+                    as: UserPlan.userPlanComponentAs,
                     where: {
                         status: params.userPlanComponentStatus,
                     },
@@ -49,7 +53,7 @@ export class UserPlanRepository extends BaseRepository {
         let result = await this.getUserPlanComponentDetails(params);
         let userPlanComponentPriceDetails = { grand_total: 0, sub_total: 0, tax: 0, gateway_charge: 0 };
         let taxableAmount = 0;
-        result.UserPlanComponents.forEach((userPlanComponentObject: UserPlanComponent) => {
+        result['userPlanComponentAs'].forEach((userPlanComponentObject: UserPlanComponent) => {
             userPlanComponentPriceDetails.sub_total += userPlanComponentObject.component_price;
             if (userPlanComponentObject.planComponent.is_taxable === 1) {
                 taxableAmount += userPlanComponentObject.component_price;
@@ -119,6 +123,63 @@ export class UserPlanRepository extends BaseRepository {
                     as: UserPlan.userPaymentsAs
                 }
             ]
+        })
+        return result;
+    }
+
+    public getUserPlanInspectionFeeDetailsForRefund = async (pickupDeliveryId: number) => {
+        let result = await UserPlan.findOne({
+            include: [
+                {
+                    model: UserPlanComponent,
+                    as: UserPlan.userPlanComponentAs,
+                    required: true,
+                    where: {
+                        status: 'active'
+                    }
+                },
+                {
+                    model: Plan,
+                    required: true,
+                    as: UserPlan.planAs,
+                    include: [
+                        {
+                            model: PlanComponent,
+                            required: true,
+                            where: {
+                                component_type: 'inspection_charge'
+                            }
+                        }
+                    ]
+                },
+                {
+                    model: PickupDelivery,
+                    required: true,
+                    where: {
+                        id: pickupDeliveryId,
+                        status: 'success'
+                    },
+                    as: UserPlan.pickupDeliveryDetailAs
+                },
+                {
+                    model: UserPayment,
+                    required: true,
+                    as: UserPlan.userPaymentsAs,
+                    where: {
+                        payment_status: "completed"
+                    },
+                    include: [
+                        {
+                            model: UserPaymentDetails,
+                            required: true,
+                            as: UserPayment.userPaymentDetailsAs
+                        }
+                    ]
+                }
+            ],
+            where: {
+                status: 'success'
+            }
         })
         return result;
     }

@@ -9,7 +9,9 @@ export class PickupDeliveyRepository extends BaseRepository {
             user_plan_id: params.user_plan_id,
             service_center_id: params.service_center_id,
             delivery_amount: params.delivery_amount,
-            distance_meters: params.distance_meters
+            distance_meters: params.distance_meters,
+            user_address_id: params.user_address_id,
+            status: params.status || 'pending'
         })
         return result;
     }
@@ -28,7 +30,8 @@ export class PickupDeliveyRepository extends BaseRepository {
         let result = await PickupDelivery.update({
             service_center_id: params.service_center_id,
             delivery_amount: params.delivery_amount,
-            distance_meters: params.distance_meters
+            distance_meters: params.distance_meters,
+            user_address_id: params.user_address_id
         }, {
             where: {
                 id: params.id
@@ -55,6 +58,17 @@ export class PickupDeliveyRepository extends BaseRepository {
         }, {
             where: {
                 user_plan_id: userPlanId
+            }
+        })
+        return result;
+    }
+
+    public markPickupDeliveryServiceDenied = async (pickupDeliveryId: number) => {
+        let result = await PickupDelivery.update({
+            status: 'service_denied'
+        }, {
+            where: {
+                id: pickupDeliveryId
             }
         })
         return result;

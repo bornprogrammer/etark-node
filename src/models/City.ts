@@ -1,5 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
+import { PickupDelivery } from "./PickupDelivery";
 
 
 
@@ -29,3 +30,7 @@ City.init({
     underscored: true,
     timestamps: false
 })
+
+// City.hasMany(PickupDelivery);
+
+// PickupDelivery.belongsTo(City, { as: "cityDetail" });

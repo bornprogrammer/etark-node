@@ -18,7 +18,14 @@ export default class ArrayHelper {
             })
         }
         return values;
-
+    }
+    public static convertArrayToMysqlInOpStr(arrays: any[]): string {
+        let values = null;
+        if (ArrayHelper.isArrayValid(arrays)) {
+            values = arrays.join("','");
+            values = "('" + values + "')";
+        }
+        return values;
     }
 
 }

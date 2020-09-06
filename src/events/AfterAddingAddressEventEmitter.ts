@@ -4,7 +4,7 @@ import { AfterAddingAddressEventEmitterEntity } from "@app/entities/AfterAddingA
 import { userRepositoryServiceIns } from "@app/features/users/UserRepositoryService";
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { serviceCenterRepositoryServiceIns } from "@app/features/service-center/ServiceCenterRepositoryService";
-import { PickupDelivery } from "@app/models/PickupDelivery";
+import { PickupDelivery, PickupDeliveryAttirbutes } from "@app/models/PickupDelivery";
 
 export class AfterAddingAddressEventEmitter extends BaseQueue {
     /**
@@ -24,7 +24,7 @@ export class AfterAddingAddressEventEmitter extends BaseQueue {
 
     public upsertPickupDelivery = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let pickupDeliveryAttirbutes = { user_plan_id: params.userPlanId, service_center_id: params.serviceCenterId, delivery_amount: params.deliveryAmount, distance_meters: params.distance };
+        let pickupDeliveryAttirbutes: PickupDeliveryAttirbutes = { user_plan_id: params.userPlanId, service_center_id: params.serviceCenterId, delivery_amount: params.deliveryAmount, distance_meters: params.distance, user_address_id: params.userAddressId, status: params.status };
         let result = await userRepositoryServiceIns.upsertPickupDelivery(pickupDeliveryAttirbutes);
         return result;
     }

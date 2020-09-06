@@ -1,5 +1,8 @@
 import { BaseQueue } from "./BaseQueue";
 import { EventEmitterIdentifierEnum } from "@app/enums/EventEmitterIdentifierEnum";
+import { userPlanRepositoryServiceIns } from "@app/features/user-plan/UserPlanRepositoryService";
+import { ServiceCenterActivityTypeEnum } from "@app/enums/ServiceCenterActivityTypeEnum";
+import { userRepositoryServiceIns } from "@app/features/users/UserRepositoryService";
 
 
 export class AfterSetActivityEventEmitter extends BaseQueue {
@@ -14,9 +17,20 @@ export class AfterSetActivityEventEmitter extends BaseQueue {
 
     public async handleJob(data?: any) {
         let params = data;
+        await this.refundInspectionFee(params);
     }
 
-    
+    public refundInspectionFee = async (params: any) => {
+        if (params.activity_type === ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_INSPECTION_FEE_DENIED) {
+            await userPlanRepositoryServiceIns.refundInspectionFee(params.pickup_delivery_id);
+        } else if (params.activity_type === ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED) {
+            await this.assignAnotherServiceCenter(params);
+        }
+    }
+
+    public assignAnotherServiceCenter = async (params: any) => {
+        await userRepositoryServiceIns.assignNewServiceCenter(params.pickup_delivery_id);
+    }
 }
 
 export const afterSetActivityEventEmitterIns = new AfterSetActivityEventEmitter();
