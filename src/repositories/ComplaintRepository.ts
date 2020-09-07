@@ -90,7 +90,7 @@ export class ComplaintRepository extends BaseRepository {
 
     public getComplaintDetailsForComplaintInvoiceReport = async (orderId: number): Promise<Complaint> => {
         let where = { id: orderId, payment_status: 'completed' };
-        let result = await Complaint.scope(['defaultScope', { method: ['getSuccessUserPlan', where] }]).findOne({
+        let result = await Complaint.scope(['defaultScope', 'getUserPlanComponentDetails', { method: ['getSuccessUserPlan', where] }]).findOne({
             include: [
                 {
                     model: User,

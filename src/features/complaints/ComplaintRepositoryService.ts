@@ -270,7 +270,6 @@ export class ComplaintRepositoryService extends BaseService {
 
     public getComplaintDetailsForComplaintInvoiceReport = async (orderNo: number) => {
         let result = await complaintRepositoryIns1.getComplaintDetailsForComplaintInvoiceReport(orderNo);
-        let extractedDetails = await complaintServiceIns1.extractOutPaymentDetails(result);
     }
 
 }

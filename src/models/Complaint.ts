@@ -15,6 +15,8 @@ import { Op } from "sequelize";
 import { DeviceDispatchDetails } from "./DeviceDispatchDetails";
 import { Where } from "sequelize/types/lib/utils";
 import { City } from "./City";
+import { UserPlanComponent } from "./UserPlanComponent";
+import { PlanComponent } from "./PlanComponents";
 
 export interface ComplaintAttributes {
     id: number,
@@ -94,6 +96,29 @@ Complaint.init({
                         }
                     ],
                     required: true
+                }
+            ]
+        },
+        getUserPlanComponentDetails: {
+            include: [
+                {
+                    model: UserPlan,
+                    required: true,
+                    as: "userPlan",
+                    include: [
+                        {
+                            model: UserPlanComponent,
+                            required: true,
+                            as: UserPlan.userPlanComponentAs,
+                            include: [
+                                {
+                                    model: PlanComponent,
+                                    as: "planComponent"
+                                }
+                            ]
+
+                        }
+                    ]
                 }
             ]
         },

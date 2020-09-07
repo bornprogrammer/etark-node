@@ -40,7 +40,7 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
 
     public generateReport = async (params: MethodParamEntity) => {
         await this.generateComplainReport(params);
-        await this.generateInvoiceReport(params);
+        // await this.generateInvoiceReport(params);
     }
 
     public generateComplainReport = async (params: MethodParamEntity) => {
@@ -61,7 +61,7 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
     }
 
     public generateInvoiceReport = async (params: MethodParamEntity) => {
-        let result = complaintServiceIns.getComplaintDetailsForComplaintReport
+        let result = complaintServiceIns.getComplaintDetailsForComplaintInvoiceReport
     }
 
     public sendOrdeEmailToCustomer = async (methodParamEntity: MethodParamEntity) => {

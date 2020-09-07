@@ -62,7 +62,10 @@ export class UserRepository extends BaseRepository {
     }
 
     public getUserAddressByOrderId = async (orderId: number) => {
-        let result = `sele`;
+        let query = `select *
+        from user_payment inner join pickup_deliveries on user_payment.user_plan_id=pickup_deliveries.user_plan_id inner join user_address on pickup_deliveries.user_address_id = user_address.id
+        where user_payment.payment_status='completed' and pickup_deliveries.status='success' and user_payment.id=:user_payment_id`;
+        let result = await sequelizeConnection.connection.query(query, { type: QueryTypes.SELECT, replacements: { user_payment_id: orderId } });
     }
 }
 

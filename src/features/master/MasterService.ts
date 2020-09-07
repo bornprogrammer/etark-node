@@ -9,6 +9,8 @@ import { FieldDetails } from "@app/models/FieldDetails";
 import { SmartphoneComplainFieldsEnum } from "@app/enums/SmartphoneComplainFieldsEnum";
 import { fileReaderServiceIns } from "@app/services/FileReaderService";
 import { htmlToPDFConverterIns } from "@app/services/HTMLToPDFConverter";
+import { Utils } from "sequelize";
+import { UtilsHelper } from "@app/helpers/UtilsHelper";
 
 export class MasterService extends BaseService {
 
