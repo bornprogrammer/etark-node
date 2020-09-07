@@ -26,7 +26,7 @@ export class HTMLToPDFConverter {
     // }
 
     public convertComplainAnalysisReport = async (htmlReplacementData: any, callback: CallableFunction) => {
-        fileReaderServiceIns.readEmailTemplate('compaint-report.html', (error, htmlString: string) => {
+        await fileReaderServiceIns.readEmailTemplate('compaint-report.html', (error, htmlString: string) => {
             if (htmlReplacementData) {
                 htmlReplacementData.base_url = UtilsHelper.getBaseURL();
                 htmlString = UtilsHelper.replaceAllStr(htmlReplacementData, htmlString);
@@ -40,7 +40,7 @@ export class HTMLToPDFConverter {
     }
 
     public convertInvoiceReport = async (htmlReplacementData: any, callback: CallableFunction) => {
-        fileReaderServiceIns.readEmailTemplate('invoice.html', (error, htmlString: string) => {
+        await fileReaderServiceIns.readEmailTemplate('invoice.html', (error, htmlString: string) => {
             if (htmlReplacementData) {
                 htmlReplacementData.base_url = UtilsHelper.getBaseURL();
                 htmlString = UtilsHelper.replaceAllStr(htmlReplacementData, htmlString);

@@ -28,6 +28,9 @@ import { PaytmRefundParamsEntity } from "@app/entities/PaytmRefundParamsEntity";
 import { UtilsHelper } from "@app/helpers/UtilsHelper";
 import { UserRefund } from "@app/models/UserRefund";
 import { UserRefundRepository, userRefundRepositoryIns } from "@app/repositories/UserRefundRepository";
+import ArrayHelper from "@app/helpers/ArrayHelper";
+import { FieldDetails } from "@app/models/FieldDetails";
+import { SmartphoneComplainFieldIdEnum } from "@app/enums/SmartphoneComplainFieldIdEnum";
 
 export class UserPlanRepositoryService extends BaseRepositoryService {
     /**
@@ -107,7 +110,8 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
     }
 
     public getDetailsForOrderEmailTemp = async (orderId: string) => {
-        let result = await userPlanRepositoryIns.getDetailsForOrderEmailTemp(orderId);
+        let fieldIds = ArrayHelper.convertArrayToMysqlInOpStr([SmartphoneComplainFieldIdEnum.INVOICE_REPORT, SmartphoneComplainFieldIdEnum.COMPLAINT_REPORT]);
+        let result = await userPlanRepositoryIns.getDetailsForOrderEmailTemp(orderId, fieldIds);
         return result;
     }
 

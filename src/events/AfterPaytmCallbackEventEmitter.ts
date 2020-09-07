@@ -31,17 +31,19 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
 
     public async handleJob(data?: any) {
         await this.sendEmail(data);
-        this.waitTime = 500;
     }
 
     public sendEmail = async (data: any) => {
         let paytmResp: PaytmCallbackResponseEntity = data;
-        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isPaymentSucces, callableFunctionParams: paytmResp }).setMethod({ callableFunction: this.generateReport, notBreakWhenReturnedValueNotTruthy: true }).setMethod({ callableFunction: this.sendOrdeEmailToCustomer, notBreakWhenReturnedValueNotTruthy: true, storeResultAs: StoreResultAs.ORDER_DETAIL_FOR_EMAIL_TEMPLATE }).setMethod({ callableFunction: this.sendComplaintDetailEmailToServiceCenter }).coordinate();
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isPaymentSucces, callableFunctionParams: paytmResp }).setMethod({ callableFunction: this.generateReport, notBreakWhenReturnedValueNotTruthy: true, storeResultAs: StoreResultAs.ORDER_DETAIL_FOR_EMAIL_TEMPLATE }).coordinate();
+        // .setMethod({ callableFunction: this.sendOrdeEmailToCustomer, notBreakWhenReturnedValueNotTruthy: true, storeResultAs: StoreResultAs.ORDER_DETAIL_FOR_EMAIL_TEMPLATE })
+        // .setMethod({ callableFunction: this.sendComplaintDetailEmailToServiceCenter })
     }
 
     public generateReport = async (params: MethodParamEntity) => {
         await this.generateComplainReport(params);
         await this.generateInvoiceReport(params);
+        return await this.sendOrdeEmailToCustomer(params);
     }
 
     public generateComplainReport = async (params: MethodParamEntity) => {
@@ -49,7 +51,7 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
         let orderID = userPlanServiceIns.removeOrderPrefixFromOrderNo(paytmResp.ORDERID);
         let objectDetails = await complaintServiceIns.getComplaintDetailsForComplaintReport(parseInt(orderID));
         if (objectDetails) {
-            await htmlToPDFConverterIns.convertComplainAnalysisReport(objectDetails, this.addReportNameToComplainDetails.bind(null, objectDetails.complain_id, SmartphoneComplainFieldIdEnum.COMPLAINT_REPORT));
+            await htmlToPDFConverterIns.convertComplainAnalysisReport(objectDetails, await this.addReportNameToComplainDetails.bind(null, objectDetails.complain_id, SmartphoneComplainFieldIdEnum.COMPLAINT_REPORT));
         }
     }
 
@@ -69,21 +71,29 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
         let userDetails = result.complainDetails.user;
         let companyDetails = { company_name: AppConstants.COMPANY_NAME, gstin: config.get("company.gstin"), pan: config.get("company.pan"), city_name: result.userAddress[0]['name'], base_url: UtilsHelper.getBaseURL(), customer_name: userDetails.name };
         Object.assign(companyDetails, paymentDetails);
-        await htmlToPDFConverterIns.convertInvoiceReport(companyDetails, this.addReportNameToComplainDetails.bind(null, result.complainDetails.id, SmartphoneComplainFieldIdEnum.INVOICE_REPORT));
+        await htmlToPDFConverterIns.convertInvoiceReport(companyDetails, await this.addReportNameToComplainDetails.bind(null, result.complainDetails.id, SmartphoneComplainFieldIdEnum.INVOICE_REPORT));
     }
 
     public sendOrdeEmailToCustomer = async (methodParamEntity: MethodParamEntity) => {
-        let paytmResp = methodParamEntity.topMethodParam;
-        let result = await userPlanRepositoryServiceIns.getDetailsForOrderEmailTemp(userPlanServiceIns.removeOrderPrefixFromOrderNo(paytmResp.ORDERID));
-        if (result) {
-            fileReaderServiceIns.readEmailTemplate("order-detail.html", this.sendOrderEmail.bind(null, result));
+        let result = null;
+        try {
+            setTimeout(async () => {
+                let paytmResp = methodParamEntity.topMethodParam;
+                let result = await userPlanRepositoryServiceIns.getDetailsForOrderEmailTemp(userPlanServiceIns.removeOrderPrefixFromOrderNo(paytmResp.ORDERID));
+                if (result) {
+                    fileReaderServiceIns.readEmailTemplate("order-detail.html", this.sendOrderEmail.bind(null, result));
+                }
+                this.sendComplaintDetailEmailToServiceCenter(result, methodParamEntity.topMethodParam);
+            }, 5000);
+        } catch (error) {
+            throw error;
         }
         return result;
     }
 
-    public sendComplaintDetailEmailToServiceCenter = async (methodParamEntity: MethodParamEntity) => {
-        let paytmResp = methodParamEntity.topMethodParam;
-        let orderDetail = methodParamEntity.methodReturnedValContainer[StoreResultAs.ORDER_DETAIL_FOR_EMAIL_TEMPLATE];
+    public sendComplaintDetailEmailToServiceCenter = async (orderDetail: any, paytmResp: any) => {
+        // let paytmResp = methodParamEntity.topMethodParam;
+        // let orderDetail = methodParamEntity.methodReturnedValContainer[StoreResultAs.ORDER_DETAIL_FOR_EMAIL_TEMPLATE];
         if (this.isPlanPremiumPlan(orderDetail[0])) {
             let orderId = userPlanServiceIns.removeOrderPrefixFromOrderNo(paytmResp.ORDERID);
             let serviceCenterCompensationEmailDetails = await complaintServiceIns.getComplainDetailsForServiceCenterEmail(parseInt(orderId));
@@ -100,10 +110,16 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
     }
 
     public sendOrderEmail = async (orderDetail, error, data) => {
-        console.log("orderDetail", orderDetail);
         let orderDetailObj = orderDetail[0];
         orderDetailObj.is_download_report_to_be_shown = await this.isDownloadReportToBeShown(orderDetailObj) ? "inline-block" : "none";
-        // orderDetailObj.email = "iamabornprogrammer@gmail.com";
+        orderDetailObj.email = "iamabornprogrammer@gmail.com";
+        if (orderDetail[0].field_id === SmartphoneComplainFieldIdEnum.INVOICE_REPORT) {
+            orderDetailObj.invoice_url = UtilsHelper.getBaseURLForAssetFile() + orderDetail[0].field_val;
+            orderDetailObj.report_url = UtilsHelper.getBaseURLForAssetFile() + orderDetail[1].field_val;
+        } else {
+            orderDetailObj.invoice_url = UtilsHelper.getBaseURLForAssetFile() + orderDetail[1].field_val;
+            orderDetailObj.report_url = UtilsHelper.getBaseURLForAssetFile() + orderDetail[0].field_val;
+        }
         orderDetailObj = await this.addBaseurl(orderDetailObj);
         nodeMailerServiceIns.sendHtml(config.get("mail.from"), orderDetailObj.email, "Order email", UtilsHelper.replaceAllStr(orderDetailObj, data));
     }
