@@ -112,7 +112,7 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
     public sendOrderEmail = async (orderDetail, error, data) => {
         let orderDetailObj = orderDetail[0];
         orderDetailObj.is_download_report_to_be_shown = await this.isDownloadReportToBeShown(orderDetailObj) ? "inline-block" : "none";
-        orderDetailObj.email = "iamabornprogrammer@gmail.com";
+        // orderDetailObj.email = "iamabornprogrammer@gmail.com";
         if (orderDetail[0].field_id === SmartphoneComplainFieldIdEnum.INVOICE_REPORT) {
             orderDetailObj.invoice_url = UtilsHelper.getBaseURLForAssetFile() + orderDetail[0].field_val;
             orderDetailObj.report_url = UtilsHelper.getBaseURLForAssetFile() + orderDetail[1].field_val;
