@@ -4,6 +4,7 @@ import { SellerCompensationEmailEntity } from "@app/entities/SellerCompensationE
 import { SmartphoneComplainFieldsEnum } from "@app/enums/SmartphoneComplainFieldsEnum";
 import { ComplaintDetails } from "@app/models/ComplaintDetails";
 import ArrayHelper from "@app/helpers/ArrayHelper";
+import { DateHelper } from "@app/helpers/DateHelper";
 
 export class ComplaintService extends BaseService {
 
@@ -77,7 +78,9 @@ export class ComplaintService extends BaseService {
             result['sub_total'] = complaint.userPlan.userPayments[0].sub_total + complaint.userPlan.userPayments[0].gateway_charge;
             result['tax'] = complaint.userPlan.userPayments[0].tax;
             result['updatedAt'] = complaint.userPlan.userPayments[0]['updatedAt'];
+            result['ordered_date'] = DateHelper.getReadableDateFormat(complaint.userPlan.userPayments[0]['updatedAt']);
         }
+        return result;
     }
 
 }

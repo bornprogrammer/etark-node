@@ -81,6 +81,22 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         return newOrderListResponse;
     }
 
+    // private getOrderStatusByActivityType = async (activityType: string) => {
+    //     let status = "User to Confirm";
+    //     switch (activityType) {
+    //         case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT:
+    //             status = "";
+    //             break;
+    //         case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED:
+    //             status = "";
+    //             break;
+    //         case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED:
+    //             status = "";
+    //             break;
+    //     }
+    //     return status;
+    // }
+
     public processServiceCenterOrderDetails = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
         let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.addServiceCenterOrderDetails, callableFunctionParams: params }).setMethod({ callableFunction: this.addUserToConfirmServiceCenterActivity }).coordinate();

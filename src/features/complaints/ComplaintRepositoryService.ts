@@ -16,6 +16,7 @@ import { SellerCompensationEmailEntity } from "@app/entities/SellerCompensationE
 import { ObjectHelper } from "@app/helpers/ObjectHelper";
 import { SmartphoneComplainFieldIdEnum } from "@app/enums/SmartphoneComplainFieldIdEnum";
 import { complaintServiceIns1 } from "./ComplaintService";
+import { userRepositoryIns } from "../users/UserRepository";
 
 export class ComplaintRepositoryService extends BaseService {
     /**
@@ -270,6 +271,8 @@ export class ComplaintRepositoryService extends BaseService {
 
     public getComplaintDetailsForComplaintInvoiceReport = async (orderNo: number) => {
         let result = await complaintRepositoryIns1.getComplaintDetailsForComplaintInvoiceReport(orderNo);
+        let userAddress = await userRepositoryIns.getUserAddressByOrderId(orderNo);
+        return { userAddress, complainDetails: result };
     }
 
 }

@@ -25,6 +25,11 @@ export class DateHelper {
         return agoFormat;
     }
 
+    public static getReadableDateFormat(dateStr: string): string {
+        let dateObject = new Date(dateStr);
+        return dateObject.getDate() + "/" + (dateObject.getMonth() + 1) + "/" + dateObject.getFullYear();
+    }
+
     public static getCurrentDateAsMysqlStr(): string {
         return moment(new Date()).format('YYYY-MM-DD');
     }

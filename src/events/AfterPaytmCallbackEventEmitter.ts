@@ -19,6 +19,7 @@ import { complaintServiceIns1 } from "@app/features/complaints/ComplaintService"
 import { complaintDetailsRepositoryIns } from "@app/repositories/ComplaintDetailsRepository";
 import { ComplaintDetails } from "@app/models/ComplaintDetails";
 import { SmartphoneComplainFieldIdEnum } from "@app/enums/SmartphoneComplainFieldIdEnum";
+import { AppConstants } from "@app/constants/AppConstants";
 
 export class AfterPaytmCallbackEventEmitter extends BaseQueue {
     /**
@@ -40,7 +41,7 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
 
     public generateReport = async (params: MethodParamEntity) => {
         await this.generateComplainReport(params);
-        // await this.generateInvoiceReport(params);
+        await this.generateInvoiceReport(params);
     }
 
     public generateComplainReport = async (params: MethodParamEntity) => {
@@ -61,7 +62,14 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
     }
 
     public generateInvoiceReport = async (params: MethodParamEntity) => {
-        let result = complaintServiceIns.getComplaintDetailsForComplaintInvoiceReport
+        let paytmResp = params.topMethodParam;
+        let orderID = userPlanServiceIns.removeOrderPrefixFromOrderNo(paytmResp.ORDERID);
+        let result = await complaintServiceIns.getComplaintDetailsForComplaintInvoiceReport(parseInt(orderID));
+        let paymentDetails = await complaintServiceIns1.extractOutPaymentDetails(result.complainDetails);
+        let userDetails = result.complainDetails.user;
+        let companyDetails = { company_name: AppConstants.COMPANY_NAME, gstin: config.get("company.gstin"), pan: config.get("company.pan"), city_name: result.userAddress[0]['name'], base_url: UtilsHelper.getBaseURL(), customer_name: userDetails.name };
+        Object.assign(companyDetails, paymentDetails);
+        await htmlToPDFConverterIns.convertInvoiceReport(companyDetails, this.addReportNameToComplainDetails.bind(null, result.complainDetails.id, SmartphoneComplainFieldIdEnum.INVOICE_REPORT));
     }
 
     public sendOrdeEmailToCustomer = async (methodParamEntity: MethodParamEntity) => {

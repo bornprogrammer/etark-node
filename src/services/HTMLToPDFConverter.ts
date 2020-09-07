@@ -21,9 +21,9 @@ export class HTMLToPDFConverter {
 
     }
 
-    public convertInvoiceReport() {
-        let d = fileReaderServiceIns.readEmailTemplate('invoice.html', this.callback);
-    }
+    // public convertInvoiceReport() {
+    //     let d = fileReaderServiceIns.readEmailTemplate('invoice.html', this.callback);
+    // }
 
     public convertComplainAnalysisReport = async (htmlReplacementData: any, callback: CallableFunction) => {
         fileReaderServiceIns.readEmailTemplate('compaint-report.html', (error, htmlString: string) => {
@@ -32,6 +32,20 @@ export class HTMLToPDFConverter {
                 htmlString = UtilsHelper.replaceAllStr(htmlReplacementData, htmlString);
             }
             let fileName = AppConstants.COMPLAINT_ANALYSIS_FILE_PREFIX_NAME + Date.now() + ".pdf";
+            htmlpdf.create(htmlString, this.options).toFile(AppConstants.PUBLIC_FILE_PATH + fileName, function (err, res) {
+                if (err) return console.log(err);
+                callback(fileName);
+            });
+        });
+    }
+
+    public convertInvoiceReport = async (htmlReplacementData: any, callback: CallableFunction) => {
+        fileReaderServiceIns.readEmailTemplate('invoice.html', (error, htmlString: string) => {
+            if (htmlReplacementData) {
+                htmlReplacementData.base_url = UtilsHelper.getBaseURL();
+                htmlString = UtilsHelper.replaceAllStr(htmlReplacementData, htmlString);
+            }
+            let fileName = AppConstants.INVOICE_FILE_PREFIX_NAME + Date.now() + ".pdf";
             htmlpdf.create(htmlString, this.options).toFile(AppConstants.PUBLIC_FILE_PATH + fileName, function (err, res) {
                 if (err) return console.log(err);
                 callback(fileName);
