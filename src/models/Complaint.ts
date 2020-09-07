@@ -142,7 +142,6 @@ Complaint.init({
                                 model: UserPayment,
                                 required: true,
                                 as: "userPayments",
-                                attributes: ['order_no'],
                                 where: where
                             },
                             {
@@ -195,6 +194,19 @@ Complaint.init({
                     }
                 ]
             }
+        },
+        getUserDetail: {
+            include: [
+                {
+                    model: User,
+                    as: "user",
+                    // required: true,
+                    attributes: [
+                        'id',
+                        'name'
+                    ]
+                }
+            ]
         },
         // getSuccessUserPlanWithServiceDeniedPickupDelivery(pickupDeliveryId: number) {
         //     return {

@@ -4,6 +4,11 @@ import { MasterRepository, masterRepositoryIns } from "./MasterRepository";
 import { GoogleDistanceMapApiEntity } from "@app/entities/GoogleDistanceMapApiEntity";
 import BadHttpRequestError from "@app/errors/BadHttpRequestError";
 import { userRepositoryServiceIns } from "../users/UserRepositoryService";
+import { complaintRepositoryIns } from "@app/repositories/ComplaintRepository";
+import { FieldDetails } from "@app/models/FieldDetails";
+import { SmartphoneComplainFieldsEnum } from "@app/enums/SmartphoneComplainFieldsEnum";
+import { fileReaderServiceIns } from "@app/services/FileReaderService";
+import { htmlToPDFConverterIns } from "@app/services/HTMLToPDFConverter";
 
 export class MasterService extends BaseService {
 
@@ -41,9 +46,14 @@ export class MasterService extends BaseService {
     public testApi = async (methodParamEntity: MethodParamEntity) => {
         // let origins: GoogleDistanceMapApiEntity[] = [{ lat: "28.412932", long: "77.033878" }];
         // let dests: GoogleDistanceMapApiEntity[] = [{ lat: "28.453729", long: "77.039494" }, { lat: "28.510637", long: "77.048866" }, { lat: "28.471032", long: "77.049519" }];
-        return await userRepositoryServiceIns.assignNewServiceCenter(125);
+        return await complaintRepositoryIns.getComplaintDetailsForComplaintInvoiceReport(485);
         // let result = await googleDistanceMapApiServiceIns.getMinDistance(origins, dests);
-        // return true;
+        // fileReaderServiceIns.readEmailTemplate("complaint-report.html", this.convertToPDF.bind(null, result));
+        // return objectDetails;
+    }
+
+    public convertToPDF = async (objectDetails, error, data) => {
+
     }
 }
 

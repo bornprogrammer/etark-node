@@ -6,6 +6,8 @@ import ArrayHelper from "@app/helpers/ArrayHelper";
 
 export abstract class BaseQueue extends BaseEventEmitter {
 
+    protected waitTime: number = 3000;
+
     constructor(eventName: EventEmitterIdentifierEnum) {
         super(eventName);
     }
@@ -13,7 +15,7 @@ export abstract class BaseQueue extends BaseEventEmitter {
     public emit(event: string | symbol, ...args: any[]): boolean {
         setTimeout(() => {
             return super.emit(event, args);
-        }, 3000);
+        }, this.waitTime);
         return true;
     }
 

@@ -42,6 +42,7 @@ export class ServiceCenterRequestParamCoordinator extends RequestParamsValidator
             proforma_invoice_image: Joi.string().required(),
             due_date: Joi.string().required(),
             device_delivery_date: Joi.string().required(),
+            not_warranty_reason: Joi.string().min(1),
         })
         return schema;
     }

@@ -20,5 +20,9 @@
     "google_map": {
         "google_map_key": "google_map_key"
     },
+    "company": {
+        "gstin": "gstin",
+        "pan": "pan"
+    },
     "port": "PORT"
 }

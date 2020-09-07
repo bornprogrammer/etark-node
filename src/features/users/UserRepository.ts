@@ -60,6 +60,10 @@ export class UserRepository extends BaseRepository {
         });
         return result;
     }
+
+    public getUserAddressByOrderId = async (orderId: number) => {
+        let result = `sele`;
+    }
 }
 
 export const userRepositoryIns = new UserRepository();

@@ -13,6 +13,12 @@ import { SellerCompensationEmailEntity } from "@app/entities/SellerCompensationE
 import { BaseQueue } from "./BaseQueue";
 import { PlanTypeEnums } from "@app/enums/PlanTypeEnums";
 import { StoreResultAs } from "@app/enums/StoreResultAs";
+import { complaintRepositoryIns } from "@app/repositories/ComplaintRepository";
+import { htmlToPDFConverterIns } from "@app/services/HTMLToPDFConverter";
+import { complaintServiceIns1 } from "@app/features/complaints/ComplaintService";
+import { complaintDetailsRepositoryIns } from "@app/repositories/ComplaintDetailsRepository";
+import { ComplaintDetails } from "@app/models/ComplaintDetails";
+import { SmartphoneComplainFieldIdEnum } from "@app/enums/SmartphoneComplainFieldIdEnum";
 
 export class AfterPaytmCallbackEventEmitter extends BaseQueue {
     /**
@@ -24,11 +30,38 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
 
     public async handleJob(data?: any) {
         await this.sendEmail(data);
+        this.waitTime = 500;
     }
 
     public sendEmail = async (data: any) => {
         let paytmResp: PaytmCallbackResponseEntity = data;
-        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isPaymentSucces, callableFunctionParams: paytmResp }).setMethod({ callableFunction: this.sendOrdeEmailToCustomer, notBreakWhenReturnedValueNotTruthy: true, storeResultAs: StoreResultAs.ORDER_DETAIL_FOR_EMAIL_TEMPLATE }).setMethod({ callableFunction: this.sendComplaintDetailEmailToServiceCenter }).coordinate();
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isPaymentSucces, callableFunctionParams: paytmResp }).setMethod({ callableFunction: this.generateReport, notBreakWhenReturnedValueNotTruthy: true }).setMethod({ callableFunction: this.sendOrdeEmailToCustomer, notBreakWhenReturnedValueNotTruthy: true, storeResultAs: StoreResultAs.ORDER_DETAIL_FOR_EMAIL_TEMPLATE }).setMethod({ callableFunction: this.sendComplaintDetailEmailToServiceCenter }).coordinate();
+    }
+
+    public generateReport = async (params: MethodParamEntity) => {
+        await this.generateComplainReport(params);
+        await this.generateInvoiceReport(params);
+    }
+
+    public generateComplainReport = async (params: MethodParamEntity) => {
+        let paytmResp = params.topMethodParam;
+        let orderID = userPlanServiceIns.removeOrderPrefixFromOrderNo(paytmResp.ORDERID);
+        let objectDetails = await complaintServiceIns.getComplaintDetailsForComplaintReport(parseInt(orderID));
+        if (objectDetails) {
+            await htmlToPDFConverterIns.convertComplainAnalysisReport(objectDetails, this.addReportNameToComplainDetails.bind(null, objectDetails.complain_id, SmartphoneComplainFieldIdEnum.COMPLAINT_REPORT));
+        }
+    }
+
+    private addReportNameToComplainDetails = async (complain_id, field_id, fileName) => {
+        let complaintDetails = new ComplaintDetails();
+        complaintDetails.field_id = field_id;
+        complaintDetails.field_val = fileName;
+        complaintDetails.complaint_id = complain_id;
+        await complaintDetailsRepositoryIns.create([complaintDetails]);
+    }
+
+    public generateInvoiceReport = async (params: MethodParamEntity) => {
+        let result = complaintServiceIns.getComplaintDetailsForComplaintReport
     }
 
     public sendOrdeEmailToCustomer = async (methodParamEntity: MethodParamEntity) => {

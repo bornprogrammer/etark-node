@@ -16,6 +16,8 @@ import { Maker } from "@app/models/Maker";
 import { GetInspectionFeeComponentParamsEntity } from "@app/repo-method-param-entities/GetInspectionFeeComponentParamsEntity";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { QueryTypes } from "sequelize";
+import { AsyncLocalStorage } from "async_hooks";
+import { Merchant } from "@app/models/Merchant";
 
 export class ComplaintRepository extends BaseRepository {
     /**
@@ -71,6 +73,37 @@ export class ComplaintRepository extends BaseRepository {
             })
         }
         return complainDetail;
+    }
+
+    public getComplaintDetailsForComplaintReport = async (orderId: number): Promise<Complaint> => {
+        let result = await Complaint.scope(['defaultScope', 'complainDetails', { method: ['getPlan', orderId] }]).findOne({
+            include: [
+                {
+                    model: MakerDetails,
+                    required: true,
+                    as: "makerDetail"
+                }
+            ]
+        });
+        return result;
+    }
+
+    public getComplaintDetailsForComplaintInvoiceReport = async (orderId: number): Promise<Complaint> => {
+        let where = { id: orderId, payment_status: 'completed' };
+        let result = await Complaint.scope(['defaultScope', { method: ['getSuccessUserPlan', where] }]).findOne({
+            include: [
+                {
+                    model: User,
+                    as: "user",
+                    required: true,
+                    attributes: [
+                        'id',
+                        'name'
+                    ]
+                }
+            ]
+        });
+        return result;
     }
 
     public getSuccessPageDetails = async (orderId: number, userId: number) => {
@@ -188,6 +221,17 @@ export class ComplaintRepository extends BaseRepository {
         let userPlanIdResult = await sequelizeConnection.connection.query(userPlanIdQuery, { type: QueryTypes.SELECT, replacements: { pickup_deliverie_id: pickupDeliveryId } });
         return userPlanIdResult[0]['user_plan_id'];
     }
+
+    public getMerchantDetails = async (merchantId: number): Promise<Merchant> => {
+        let result = await Merchant.findOne({
+            where: {
+                id: merchantId
+            }
+        })
+        return result;
+    }
+
+
 }
 
 

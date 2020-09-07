@@ -70,12 +70,12 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
                 if (ArrayHelper.isArrayValid(complain.userPlan.pickupDeliveryDetail.serviceCenterOrder)) {
                     complainDetails.serviceCenterOrderDetails = complain.userPlan.pickupDeliveryDetail.serviceCenterOrder[0];
                 }
-
                 if (ArrayHelper.isArrayValid(complain.userPlan.userPayments)) {
                     complainDetails.orderDetails = complain.userPlan.userPayments[0];
                 }
                 complainDetails.pickup_details['id'] = complain.userPlan.pickupDeliveryDetail.id;
                 complainDetails.serviceCenterActivityDetails.lastActivityType = complain.userPlan.pickupDeliveryDetail.serviceCenterActivity[0].activity_type;
+                complainDetails.serviceCenterActivityDetails['status'] = "Order Status";
             })
         }
         return newOrderListResponse;
@@ -89,7 +89,7 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
 
     public addServiceCenterOrderDetails = async (methodParamEntity: MethodParamEntity) => {
         let topParams = methodParamEntity.topMethodParam;
-        let addServiceCenterOrderDetailsParams: ServiceCenterOrderAttributes = { pickup_delivery_id: topParams.pickup_delivery_id, imei_number: topParams.imei_number, device_front_image: topParams.device_front_image, device_back_image: topParams.device_back_image, phone_warranty: topParams.phone_warranty, service_to_be_done: topParams.service_to_be_done, invoice_total_amount: topParams.invoice_total_amount, proforma_invoice_image: topParams.proforma_invoice_image, due_date: topParams.due_date, device_delivery_date: topParams.device_delivery_date };
+        let addServiceCenterOrderDetailsParams: ServiceCenterOrderAttributes = { pickup_delivery_id: topParams.pickup_delivery_id, imei_number: topParams.imei_number, device_front_image: topParams.device_front_image, device_back_image: topParams.device_back_image, phone_warranty: topParams.phone_warranty, service_to_be_done: topParams.service_to_be_done, invoice_total_amount: topParams.invoice_total_amount, proforma_invoice_image: topParams.proforma_invoice_image, due_date: topParams.due_date, device_delivery_date: topParams.device_delivery_date, not_warranty_reason: topParams.not_warranty_reason };
         let result = await serviceCenterOrderRepositoryIns.create(addServiceCenterOrderDetailsParams);
         return result
     }

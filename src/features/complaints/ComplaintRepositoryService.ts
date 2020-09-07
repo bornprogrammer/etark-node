@@ -15,6 +15,7 @@ import { Complaint } from "@app/models/Complaint";
 import { SellerCompensationEmailEntity } from "@app/entities/SellerCompensationEmailEntity";
 import { ObjectHelper } from "@app/helpers/ObjectHelper";
 import { SmartphoneComplainFieldIdEnum } from "@app/enums/SmartphoneComplainFieldIdEnum";
+import { complaintServiceIns1 } from "./ComplaintService";
 
 export class ComplaintRepositoryService extends BaseService {
     /**
@@ -161,18 +162,6 @@ export class ComplaintRepositoryService extends BaseService {
         return complaintDetails;
     }
 
-    public getIMEIFieldValue = (complaintDetails: ComplaintDetails[]) => {
-        let imeiNumber = null;
-        if (ArrayHelper.isArrayValid(complaintDetails)) {
-            complaintDetails.forEach(complaintDetail => {
-                if (complaintDetail.field.field_name === SmartphoneComplainFieldsEnum.IMEI_NUMBER) {
-                    imeiNumber = complaintDetail.field_val;
-                }
-            });
-        }
-        return imeiNumber;
-    }
-
     public getComplainDetailsForServiceCenterEmail = async (orderId: number) => {
         let result = await complaintRepositoryIns1.getComplainDetailsForServiceCenterEmail(orderId);
         let sellerCompensationEmailEntity = this.extractInfo(result);
@@ -265,6 +254,25 @@ export class ComplaintRepositoryService extends BaseService {
         }
         return true;
     }
+
+    public getComplaintDetailsForComplaintReport = async (orderId: number) => {
+        let result = await complaintRepositoryIns1.getComplaintDetailsForComplaintReport(orderId);
+        let objectDetails: SellerCompensationEmailEntity = await complaintServiceIns1.extractOutComplainFieldDetails(result);
+        let merchantId = await complaintServiceIns1.getComplainDetailFieldValueByFieldName(result.complainDetails, SmartphoneComplainFieldsEnum.MERCHANT_ID);
+        if (merchantId === AppConstants.MERCHANT_FIELD_OTHER_VALUE) {
+            objectDetails.merchant_name = await complaintServiceIns1.getComplainDetailFieldValueByFieldName(result.complainDetails, SmartphoneComplainFieldsEnum.MERCHANT_NAME_OFFLINE);
+        } else {
+            let merchantDetails = await complaintRepositoryIns1.getMerchantDetails(merchantId);
+            objectDetails.merchant_name = merchantDetails.merchant_name;
+        }
+        return objectDetails;
+    }
+
+    public getComplaintDetailsForComplaintInvoiceReport = async (orderNo: number) => {
+        let result = await complaintRepositoryIns1.getComplaintDetailsForComplaintInvoiceReport(orderNo);
+        let extractedDetails = await complaintServiceIns1.extractOutPaymentDetails(result);
+    }
+
 }
 
 export const complaintServiceIns = new ComplaintRepositoryService();

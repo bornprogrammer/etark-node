@@ -10,6 +10,8 @@ export enum SmartphoneComplainFieldIdEnum {
     DEVICE_FRONT_IMAGE = getSmartphoneComplainFieldId(SmartphoneComplainFieldsEnum.DEVICE_FRONT_IMAGE),
     DEVICE_BACK_IMAGE = getSmartphoneComplainFieldId(SmartphoneComplainFieldsEnum.DEVICE_BACK_IMAGE),
     COMPENSATION_TYPE = getSmartphoneComplainFieldId(SmartphoneComplainFieldsEnum.COMPENSATION_TYPE),
+    INVOICE_REPORT = getSmartphoneComplainFieldId(SmartphoneComplainFieldsEnum.INVOICE_REPORT),
+    COMPLAINT_REPORT = getSmartphoneComplainFieldId(SmartphoneComplainFieldsEnum.COMPLAINT_REPORT),
 }
 
 function getSmartphoneComplainFieldId(smartphoneComplainField: SmartphoneComplainFieldsEnum) {
@@ -30,6 +32,12 @@ function getSmartphoneComplainFieldId(smartphoneComplainField: SmartphoneComplai
             break;
         case SmartphoneComplainFieldsEnum.COMPENSATION_TYPE:
             smartphoneComplainFieldId = 17;
+            break;
+        case SmartphoneComplainFieldsEnum.COMPLAINT_REPORT:
+            smartphoneComplainFieldId = 27;
+            break;
+        case SmartphoneComplainFieldsEnum.INVOICE_REPORT:
+            smartphoneComplainFieldId = 28;
             break;
     }
     return smartphoneComplainFieldId;

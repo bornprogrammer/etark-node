@@ -15,4 +15,8 @@ export class AppConstants {
     public static readonly ML_MODEL_COMPENSATION_URL = AppConstants.ML_MODEL_BASE_URL + "compensation";
     public static readonly PAYTM_URL = "https://securegw.paytm.in";
     public static readonly PAYTM_STAGE_URL = "https://securegw-stage.paytm.in/";
+    public static readonly COMPLAINT_ANALYSIS_FILE_PREFIX_NAME = "complaint_report_";
+    public static readonly PUBLIC_FILE_PATH = "./src/public/files/";
+    public static readonly MERCHANT_FIELD_OTHER_VALUE = "other";
+    public static readonly COMPANY_NAME = "ETark Tech.Pvt Ltd.";
 }

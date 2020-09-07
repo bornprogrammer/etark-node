@@ -104,7 +104,7 @@
                                     padding-right: 20px;
                                     padding-left: 0;
                                   ">
-                                <img src="./images/phone.png" alt="Phone icon" />
+                                <img src="{{base_url}}images/phone.png" alt="Phone icon" />
                               </td>
                               <td class="phone-details" style="
                                     padding-top: 25px;
@@ -112,9 +112,9 @@
                                     padding-right: 80px;
                                     padding-left: 0;
                                   ">
-                                <span>Iphone XS</span>
+                                <span>{{company_name}}</span>
                                 <br />
-                                <span class="phone-sub-detail" style="color: #b5b3c3;">64 GB</span>
+                                <span class="phone-sub-detail" style="color: #b5b3c3;">{{model_name}}</span>
                               </td>
                               <td class="imei-no" style="
                                     color: #b5b3c3;
@@ -123,9 +123,9 @@
                                     padding-right: 0;
                                     padding-left: 0;
                                   ">
-                                <span>IMEI: HGUNIUNINSIDJ123</span>
+                                <span>IMEI: {{imei_number}}</span>
                                 <br />
-                                <span class="phone-cost" style="color: #26252e;">INR 70,000</span>
+                                <span class="phone-cost" style="color: #26252e;">INR {{phone_price}}</span>
                               </td>
                             </tr>
                           </table>
@@ -137,23 +137,17 @@
                           <table border="0" cellpadding="0" cellspacing="0" width="100%">
                             <tr>
                               <td class="purchase" style="padding-bottom: 10%;">
-                                <span class="purchase-head" style="color: #b5b3c4;">Purchased on</span>
+                                <span class="purchase-head" style="color: #b5b3c4;">Warranty</span>
                                 <br />
-                                <span>12th January 2020</span>
+                                <span>{{under_warranty}}</span>
                               </td>
                               <td class="purchase" style="padding-bottom: 10%;">
                                 <span class="purchase-head" style="color: #b5b3c4;">Purchased from</span>
                                 <br />
-                                <span>Amazon India</span>
+                                <span>{{merchant_name}}</span>
                               </td>
                             </tr>
                           </table>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td class="purchase-head" style="color: #b5b3c4;">
-                          Smartphone under warranty till 31.02.2020
                         </td>
                       </tr>
 
@@ -179,30 +173,45 @@
                             ">
                           <table border="0" cellpadding="0" cellspacing="0" width="100%">
                             <tr>
-                              <td>
-                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                  <tr>
-                                    <td class="percent-text" style="
+                              <!-- <td>
+                                  <table
+                                    border="0"
+                                    cellpadding="0"
+                                    cellspacing="0"
+                                    width="100%"
+                                  >
+                                    <tr>
+                                      <td
+                                        class="percent-text"
+                                        style="
                                           font-size: 40px;
                                           line-height: 40px;
                                           padding-bottom: 8px;
                                           color: #245fd3;
-                                        ">
-                                      8<span class="actual-score" style="color: black;">/10</span>
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td class="complaint-strength" style="
+                                        "
+                                      >
+                                        8<span
+                                          class="actual-score"
+                                          style="color: black;"
+                                          >/10</span
+                                        >
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td
+                                        class="complaint-strength"
+                                        style="
                                           font-weight: 500;
                                           font-size: 16px;
                                           line-height: 20px;
                                           color: black;
-                                        ">
-                                      Complaint Strength
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
+                                        "
+                                      >
+                                        Complaint Strength
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </td> -->
                               <td>
                                 <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                   <tr>
@@ -212,7 +221,7 @@
                                           padding-bottom: 8px;
                                           color: #245fd3;
                                         ">
-                                      85 %
+                                      {{winning_chances}} %
                                     </td>
                                   </tr>
                                   <tr>
@@ -256,12 +265,17 @@
                                     padding-right: 5%;
                                     padding-left: 5%;
                                   ">
-                                <img src="./images/rs.png" alt="Ruppee icon" />
+                                <img src="{{base_url}}images/rs.png" alt="Ruppee icon" />
                               </td>
+                              <!-- <td>
+                                  Expected compensation that the user would have
+                                  otherwise obtained through customer court is
+                                  INR 24,000.
+                                </td> -->
                               <td>
-                                Expected compensation that the user would have
-                                otherwise obtained through customer court is
-                                INR 24,000.
+                                <!-- Product Replacement + INR *value from ML model* or Free servicing + INR *value from ML -->
+                                <!-- model* -->
+                                {{compensation_type}} + INR {{compensation_ml_response}}
                               </td>
                             </tr>
                           </table>
@@ -295,7 +309,7 @@
                   </td>
                 <tr>
                   <td style="padding:10px;font-size: 13px;text-align: right;">
-                    Please refer to our T&Cs for more information on our refund policy
+                    Please refer to our <a href="#">T&Cs</a> for more information on our refund policy
                   </td>
                 </tr>
           </tr>
@@ -355,15 +369,15 @@
           <tr>
             <td class="link-td" style="padding-bottom: 75px;">
               <a href="#" style="display: inline-block;">
-                <img src="./images/Facebook.svg" alt="Facebook logo" width="24" height="24" border="0" />
+                <img src="{{base_url}}images/Facebook.png" alt="Facebook logo" width="24" height="24" border="0" />
               </a>
               &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
               <a href="#" style="display: inline-block;">
-                <img src="./images/LinkedIn.svg" alt="LinkedIn logo" width="24" height="24" border="0" />
+                <img src="{{base_url}}images/LinkedIn.png" alt="LinkedIn logo" width="24" height="24" border="0" />
               </a>
               &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
               <a href="#" style="display: inline-block;">
-                <img src="./images/Twitter.svg" alt="Twitter logo" width="24" height="24" border="0" />
+                <img src="{{base_url}}images/Twitter.png" alt="Twitter logo" width="24" height="24" border="0" />
               </a>
             </td>
           </tr>

@@ -21,6 +21,8 @@ import { EventEmitterIdentifierEnum } from "@app/enums/EventEmitterIdentifierEnu
 import { UpdateComponentPriceForPickupNDeliveryEntity } from "@app/entities/UpdateComponentPriceForPickupNDeliveryEntity";
 import ArrayHelper from "@app/helpers/ArrayHelper";
 import { GetServiceCenterListParamsEntity } from "@app/repo-method-param-entities/GetClosestServiceCenterDetailsParamsEntity";
+import { complaintServiceIns1 } from "../complaints/ComplaintService";
+import { SmartphoneComplainFieldsEnum } from "@app/enums/SmartphoneComplainFieldsEnum";
 
 class UserRepositoryService extends BaseRepositoryService {
     /**
@@ -143,9 +145,10 @@ class UserRepositoryService extends BaseRepositoryService {
             successPageInfo = { created_at: "", imei_number: "", order_no: "", isDownloadReportToBeShown: false, report_link: "#" };
             successPageInfo.created_at = result.userPlan.userPayments[0]['createdAt'];
             successPageInfo.order_no = result.userPlan.userPayments[0]['order_no'];
-            successPageInfo.imei_number = complaintServiceIns.getIMEIFieldValue(result.complainDetails);
+            successPageInfo.imei_number = await complaintServiceIns1.getComplainDetailFieldValueByFieldName(result.complainDetails, SmartphoneComplainFieldsEnum.IMEI_NUMBER);
+            let complain_report = await complaintServiceIns1.getComplainDetailFieldValueByFieldName(result.complainDetails, SmartphoneComplainFieldsEnum.COMPLAINT_REPORT);
             successPageInfo.isDownloadReportToBeShown = result.userPlan.plan.plan_type !== PlanComponents.PICKUP_DELIVERY;
-            successPageInfo.report_link = "http://13.235.67.24:5000/files/businesscard.pdf";
+            successPageInfo.report_link = UtilsHelper.getBaseURLForAssetFile() + complain_report;
         }
         return successPageInfo;
     }

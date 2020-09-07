@@ -13,6 +13,7 @@ export interface ServiceCenterOrderAttributes {
     proforma_invoice_image: string;
     device_delivery_date: string
     due_date: string;
+    not_warranty_reason?: string;
 }
 
 export class ServiceCenterOrder extends Model implements ServiceCenterOrderAttributes {
@@ -28,6 +29,7 @@ export class ServiceCenterOrder extends Model implements ServiceCenterOrderAttri
     due_date: string;
     proforma_invoice_image: string;
     device_delivery_date: string;
+    not_warranty_reason?: string;
 }
 
 ServiceCenterOrder.init({
@@ -75,6 +77,9 @@ ServiceCenterOrder.init({
     due_date: {
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    not_warranty_reason: {
+        type: DataTypes.STRING,
     }
 }, {
     sequelize: sequelizeConnection.connection,

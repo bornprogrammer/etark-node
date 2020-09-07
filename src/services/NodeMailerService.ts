@@ -16,7 +16,7 @@ export class NodeMailerService {
             auth: {
                 // user: "iamabornprogrammer@gmail.com", // generated ethereal user
                 // pass: "Divyani_1990", // generated ethereal password
-                user: "service@etark.in",
+                user: "service@etark.in",   
                 pass: "etarklegal2020"
             },
         })
@@ -24,14 +24,12 @@ export class NodeMailerService {
 
     public sendHtml = async (from: string, to: string, subject: string, htmlTemplate: string) => {
         try {
-            console.log("recipient", to);
             let response = await this.transporter.sendMail({
                 from: from, // sender address
                 to: to, // list of receivers
                 subject: subject, // Subject line
                 html: htmlTemplate, // html body
             });
-            console.log("email sent", response);
         } catch (error) {
             console.log(error);
         }
