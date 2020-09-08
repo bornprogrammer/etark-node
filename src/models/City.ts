@@ -32,6 +32,6 @@ City.init({
     timestamps: false
 })
 
-City.hasMany(ServiceCenters);
+City.hasMany(ServiceCenters, { foreignKey: "city_id" });
 
-ServiceCenters.belongsTo(City, { as: "cityDetail" });
+ServiceCenters.belongsTo(City, { as: "cityDetail", foreignKey: "city_id" });
