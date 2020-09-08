@@ -192,7 +192,7 @@ Complaint.init({
                                 as: UserPlan.pickupDeliveryDetailAs,
                                 required: true,
                                 where: {
-                                    status: ['success'],
+                                    status: ['success', 'service_denied'],
                                     service_center_id: serviceCenterId
                                 },
                                 include: [
