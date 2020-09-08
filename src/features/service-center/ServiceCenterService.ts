@@ -4,8 +4,6 @@ import { ServiceCenterActivityTypeEnum } from "@app/enums/ServiceCenterActivityT
 import { ServiceCenterActivity } from "@app/models/ServiceCenterActivity";
 import ArrayHelper from "@app/helpers/ArrayHelper";
 
-
-
 export class ServiceCenterService extends BaseService {
     /**
      *
