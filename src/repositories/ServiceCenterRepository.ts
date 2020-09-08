@@ -149,6 +149,7 @@ export class ServiceCenterRepository extends BaseRepository {
                 {
                     model: City,
                     required: true,
+                    as: "cityDetail",
                     where: {
                         status: "active"
                     }
