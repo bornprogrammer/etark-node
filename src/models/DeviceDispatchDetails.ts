@@ -39,11 +39,13 @@ DeviceDispatchDetails.init({
     },
     final_invoice_image: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true,
+        defaultValue: ""
     },
     final_invoice_amount: {
         type: DataTypes.NUMBER,
-        allowNull: false
+        allowNull: true,
+        defaultValue: 0
     }
 }, {
     tableName: "device_dispatch_details",
