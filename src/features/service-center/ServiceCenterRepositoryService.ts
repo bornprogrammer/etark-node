@@ -150,7 +150,8 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
     public addDispatchDetail = async (params: MethodParamEntity) => {
         let topParams = params.topMethodParam;
         topParams.activity_type = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH;
-        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isLastDBActivityValid, callableFunctionParams: topParams }).setMethod({ callableFunction: this.createDispatchDetails }).setMethod({ callableFunction: this.addReadyToDispatchActivity }).coordinate();
+        // setMethod({ callableFunction: this.isLastDBActivityValid, callableFunctionParams: topParams })
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.createDispatchDetails, callableFunctionParams: topParams }).setMethod({ callableFunction: this.addReadyToDispatchActivity }).coordinate();
         return result;
     }
 
