@@ -52,10 +52,10 @@ export class ServiceCenterService extends BaseService {
                 lastActivityType = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM;
                 break;
             case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_INSPECTION_FEE_CLAIMED:
-                lastActivityType = [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED_AFTER_INSPECTION, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT];
+                lastActivityType = [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED_AFTER_INSPECTION, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_FAILURE];
                 break;
             case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_INSPECTION_FEE_DENIED:
-                lastActivityType = [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED_AFTER_INSPECTION, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT];
+                lastActivityType = [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED_AFTER_INSPECTION, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_FAILURE];
                 break;
             case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH:
                 lastActivityType = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT;
