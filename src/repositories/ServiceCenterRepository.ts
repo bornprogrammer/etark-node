@@ -10,6 +10,7 @@ import { ServiceCenterDetail } from "@app/models/ServiceCenterDetail";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { QueryTypes } from "sequelize";
 import { ServiceCenterActivityTypeEnum } from "@app/enums/ServiceCenterActivityTypeEnum";
+import ArrayHelper from "@app/helpers/ArrayHelper";
 
 export class ServiceCenterRepository extends BaseRepository {
     /**
@@ -61,13 +62,29 @@ export class ServiceCenterRepository extends BaseRepository {
     }
 
     public getCompletedOrderCount = async (scId: number) => {
-        let result = await this.getOrderCountByType(scId, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_DISPATCHED);
+        let result = await this.getOrderCountByType(scId, [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_DISPATCHED]);
         return result[0]['order_count'];
     }
 
-    public getOrderCountByType = async (scId: number, lastActivityType: ServiceCenterActivityTypeEnum) => {
-        let query = `select count(activities.activity_id) as order_count from pickup_deliveries inner join (select max(id) as activity_id,pickup_delivery_id from service_center_activities group by pickup_delivery_id) as activities on pickup_deliveries.id = activities.pickup_delivery_id inner join service_center_activities on activities.activity_id=service_center_activities.id and service_center_activities.activity_type='${lastActivityType}'
-        where service_center_id =:service_center_id`;
+    public getDeclinedOrderCount = async (scId: number) => {
+        let result = await this.getOrderCountByType(scId, [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_INSPECTION_FEE_CLAIMED, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_INSPECTION_FEE_DENIED, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED]);
+        return result[0]['order_count'];
+    }
+
+    public getOrderRequestOrderCount = async (scId: number) => {
+        let result = await this.getOrderCountByType(scId, [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_ALLOCATED]);
+        return result[0]['order_count'];
+    }
+
+    public getInProcessOrderCount = async (scId: number) => {
+        let result = await this.getOrderCountByType(scId, [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_FAILURE, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED]);
+        return result[0]['order_count'];
+    }
+
+    public getOrderCountByType = async (scId: number, lastActivityType: ServiceCenterActivityTypeEnum[]) => {
+        let activityTypes = ArrayHelper.convertArrayToMysqlInOpStr(lastActivityType);
+        let query = `select count(activities.activity_id) as order_count from pickup_deliveries inner join (select max(id) as activity_id,pickup_delivery_id from service_center_activities group by pickup_delivery_id) as activities on pickup_deliveries.id = activities.pickup_delivery_id inner join service_center_activities on activities.activity_id=service_center_activities.id and service_center_activities.activity_type in ${activityTypes}
+        where service_center_id =:service_center_id and status in ('success','service_denied')`;
         let result = await sequelizeConnection.connection.query(query, { type: QueryTypes.SELECT, replacements: { service_center_id: scId } });
         return result;
     }

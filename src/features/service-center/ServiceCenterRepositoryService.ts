@@ -191,6 +191,9 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         }
         result.order_type_count_details.all = await serviceCenterRepositoryIns.getAllOrderCount(topParams.sc_id);
         result.order_type_count_details.completed = await serviceCenterRepositoryIns.getCompletedOrderCount(topParams.sc_id);
+        result.order_type_count_details.order_request = await serviceCenterRepositoryIns.getOrderRequestOrderCount(topParams.sc_id);
+        result.order_type_count_details.in_process = await serviceCenterRepositoryIns.getInProcessOrderCount(topParams.sc_id);
+        result.order_type_count_details.decline = await serviceCenterRepositoryIns.getDeclinedOrderCount(topParams.sc_id);
         return result;
     }
 
