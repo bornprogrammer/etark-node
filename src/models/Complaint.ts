@@ -17,6 +17,7 @@ import { Where } from "sequelize/types/lib/utils";
 import { City } from "./City";
 import { UserPlanComponent } from "./UserPlanComponent";
 import { PlanComponent } from "./PlanComponents";
+import { UserAddress } from "./UserAddress";
 
 export interface ComplaintAttributes {
     id: number,
@@ -206,6 +207,11 @@ Complaint.init({
                                         },
                                     },
                                     {
+                                        model: UserAddress,
+                                        as: PickupDelivery.userAddressAs,
+                                        required: true
+                                    },
+                                    {
                                         model: ServiceCenterOrder,
                                         as: PickupDelivery.serviceCenterOrderAs,
                                     },
@@ -225,7 +231,7 @@ Complaint.init({
                 {
                     model: User,
                     as: "user",
-                    // required: true,
+                    required: true,
                     attributes: [
                         'id',
                         'name'

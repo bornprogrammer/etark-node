@@ -61,7 +61,7 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         if (ArrayHelper.isArrayValid(orderListResponse)) {
             newOrderListResponse = [];
             orderListResponse.forEach((complain) => {
-                let complainDetails = { complainId: complain.id, maker_detail_id: complain.maker_detail_id, complainDetail: {}, serviceCenterOrderDetails: {}, deviceDispatchDetail: {}, userPaymentDetails: {}, orderDetails: {}, pickup_details: {}, serviceCenterActivityDetails: { lastActivityType: null } };
+                let complainDetails = { complainId: complain.id, maker_detail_id: complain.maker_detail_id, complainDetail: {}, serviceCenterOrderDetails: {}, deviceDispatchDetail: {}, userPaymentDetails: {}, orderDetails: {}, pickup_details: {}, serviceCenterActivityDetails: { lastActivityType: null }, userDetails: {}, userAddress: {}, bankDetails: { key1: "Value 1", key2: "Value 2", key3: "Value 3" } };
                 newOrderListResponse.push(complainDetails);
                 complain.complainDetails.forEach((complainDet) => {
                     complainDetails.complainDetail[complainDet.field.field_name] = complainDet['field_val'];
@@ -75,6 +75,8 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
                 complainDetails.pickup_details['id'] = complain.userPlan.pickupDeliveryDetail.id;
                 complainDetails.serviceCenterActivityDetails.lastActivityType = complain.userPlan.pickupDeliveryDetail.serviceCenterActivity[0].activity_type;
                 complainDetails.serviceCenterActivityDetails['status'] = "Order Status";
+                complainDetails.userDetails = complain.user;
+                complainDetails.userAddress = complain.userPlan.pickupDeliveryDetail.userAddress;
             })
         }
         return newOrderListResponse;

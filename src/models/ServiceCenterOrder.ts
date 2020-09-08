@@ -64,11 +64,13 @@ ServiceCenterOrder.init({
     },
     invoice_total_amount: {
         type: DataTypes.FLOAT(10, 2),
-        allowNull: false,
+        allowNull: true,
+        defaultValue: 0
     },
     proforma_invoice_image: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
+        defaultValue: ""
     },
     device_delivery_date: {
         type: DataTypes.STRING,

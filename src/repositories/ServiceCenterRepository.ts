@@ -12,6 +12,7 @@ import { QueryTypes } from "sequelize";
 import { ServiceCenterActivityTypeEnum } from "@app/enums/ServiceCenterActivityTypeEnum";
 import ArrayHelper from "@app/helpers/ArrayHelper";
 import { City } from "@app/models/City";
+import { User } from "@app/models/User";
 
 export class ServiceCenterRepository extends BaseRepository {
     /**
@@ -34,6 +35,19 @@ export class ServiceCenterRepository extends BaseRepository {
             attributes: [
                 'id',
                 'maker_detail_id'
+            ],
+            include: [
+                {
+                    model: User,
+                    as: "user",
+                    required: true,
+                    attributes: [
+                        'id',
+                        'name',
+                        'email',
+                        'mobile_number'
+                    ]
+                }
             ],
             limit: params.pagination.limit,
             offset: params.pagination.offset,

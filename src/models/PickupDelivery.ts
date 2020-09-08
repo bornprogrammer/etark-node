@@ -4,6 +4,7 @@ import { sequelizeConnection } from "@app/SequelizeConnection";
 import { ServiceCenterActivity } from "./ServiceCenterActivity";
 import { ServiceCenterOrder } from "./ServiceCenterOrder";
 import { DeviceDispatchDetails } from "./DeviceDispatchDetails";
+import { UserAddress } from "./UserAddress";
 
 export interface PickupDeliveryAttirbutes {
     id?: number;
@@ -24,10 +25,12 @@ export class PickupDelivery extends Model implements PickupDeliveryAttirbutes {
     user_address_id?: number;
     public readonly serviceCenterActivity?: ServiceCenterActivity[];
     public readonly serviceCenterOrder?: ServiceCenterOrder[];
-    public readonly deviceDispatchDetails?: DeviceDispatchDetails
+    public readonly deviceDispatchDetails?: DeviceDispatchDetails;
+    public readonly userAddress?: UserAddress[];
     public static readonly serviceCenterActivityAs: string = "serviceCenterActivity";
     public static readonly serviceCenterOrderAs: string = "serviceCenterOrder";
     public static readonly deviceDispatchDetailsAs: string = "deviceDispatchDetails";
+    public static readonly userAddressAs?: string = "userAddress";
 }
 
 PickupDelivery.init({

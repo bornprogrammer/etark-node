@@ -2,6 +2,7 @@
 import { Model, DataTypes } from "sequelize";
 
 import { sequelizeConnection } from "@app/SequelizeConnection";
+import { PickupDelivery } from "./PickupDelivery";
 export class UserAddress extends Model {
 }
 
@@ -42,3 +43,7 @@ UserAddress.init({
     underscored: true,
     sequelize: sequelizeConnection.connection
 })
+
+UserAddress.hasMany(PickupDelivery, { foreignKey: "user_address_id" });
+
+PickupDelivery.belongsTo(UserAddress, { foreignKey: "user_address_id", as: PickupDelivery.userAddressAs });
