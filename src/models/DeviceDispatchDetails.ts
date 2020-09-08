@@ -7,6 +7,7 @@ export interface DeviceDispatchDetailsAttributes {
     device_front_image: number;
     device_back_image: number;
     final_invoice_image: number;
+    final_invoice_amount: number;
 }
 
 export class DeviceDispatchDetails extends Model implements DeviceDispatchDetailsAttributes {
@@ -15,6 +16,7 @@ export class DeviceDispatchDetails extends Model implements DeviceDispatchDetail
     device_front_image: number;
     device_back_image: number;
     final_invoice_image: number;
+    final_invoice_amount: number;
 }
 
 DeviceDispatchDetails.init({
@@ -37,6 +39,10 @@ DeviceDispatchDetails.init({
     },
     final_invoice_image: {
         type: DataTypes.STRING,
+        allowNull: false
+    },
+    final_invoice_amount: {
+        type: DataTypes.NUMBER,
         allowNull: false
     }
 }, {

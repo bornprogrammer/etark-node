@@ -31,6 +31,7 @@ import { UserRefundRepository, userRefundRepositoryIns } from "@app/repositories
 import ArrayHelper from "@app/helpers/ArrayHelper";
 import { FieldDetails } from "@app/models/FieldDetails";
 import { SmartphoneComplainFieldIdEnum } from "@app/enums/SmartphoneComplainFieldIdEnum";
+import { number } from "joi";
 
 export class UserPlanRepositoryService extends BaseRepositoryService {
     /**
@@ -217,17 +218,20 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
 
     private extractOutInspectionFeeDetails = async (userPlanInspectionFeeDetailsForRefund: UserPlan) => {
         let details: PaytmRefundParamsEntity = { orderId: null, amount: null, txnId: null, refundId: null };
-        details.orderId = userPlanInspectionFeeDetailsForRefund.userPayments[0].order_no;
-        let gatewayResponse = JSON.parse(userPlanInspectionFeeDetailsForRefund.userPayments[0].userPaymentDetails[0].gateway_response);
-        details.txnId = gatewayResponse.TXNID;
-        details.refundId = details.orderId;
-        let inspectionFeePlanTypeId = userPlanInspectionFeeDetailsForRefund.plan['PlanComponents'][0]['id'];
-        userPlanInspectionFeeDetailsForRefund['userPlanComponentAs'].forEach((item) => {
-            if (item.plan_components_id === inspectionFeePlanTypeId) {
-                details.amount = item.component_price;
-            }
-        });
-        return details;
+        if (userPlanInspectionFeeDetailsForRefund) {
+            details.orderId = userPlanInspectionFeeDetailsForRefund.userPayments[0].order_no;
+            let gatewayResponse = JSON.parse(userPlanInspectionFeeDetailsForRefund.userPayments[0].userPaymentDetails[0].gateway_response);
+            details.txnId = gatewayResponse.TXNID;
+            details.refundId = details.orderId;
+            let inspectionFeePlanTypeId = userPlanInspectionFeeDetailsForRefund.plan['PlanComponents'][0]['id'];
+            userPlanInspectionFeeDetailsForRefund['userPlanComponentAs'].forEach((item) => {
+                if (item.plan_components_id === inspectionFeePlanTypeId) {
+                    details.amount = item.component_price;
+                }
+            });
+            return details;
+        }
+        return null;
     }
 
     public requestRefundFromPaytm = async (params: MethodParamEntity) => {

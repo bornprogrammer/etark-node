@@ -86,6 +86,13 @@ describe("service center service", () => {
             expect(result).toBeInstanceOf(Array);
         })
 
+        it("should return the user denied payment,service deined after inspection activity type when sc denied inspecion fee", async () => {
+            let result = await serviceCenterServiceIns.getServiceCenterLastActivityType(ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_INSPECTION_FEE_DENIED);
+            expect(result.sort()).toEqual([ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED_AFTER_INSPECTION].sort());
+            expect(result).toContain(ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED_AFTER_INSPECTION);
+            expect(result).toBeInstanceOf(Array);
+        })
+
         it("should return the user made payment when ready to dispatch devices", async () => {
             let result = await serviceCenterServiceIns.getServiceCenterLastActivityType(ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH);
             expect(result).toBe(ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT);
@@ -108,10 +115,13 @@ describe("service center service", () => {
         let userToConfirm = new ServiceCenterActivity();
         userToConfirm.activity_type = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM;
 
-        let serviceCenterActivties: ServiceCenterActivity[] = [allocatedActivity, orderAcceptedActivity, userToConfirm];
+        let userToDecline = new ServiceCenterActivity();
+        userToDecline.activity_type = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT;
+
+        let serviceCenterActivties: ServiceCenterActivity[] = [allocatedActivity, orderAcceptedActivity, userToConfirm, userToDecline];
 
         it("should return true", async () => {
-            let result = await serviceCenterServiceIns.isLastDBActivityValid(serviceCenterActivties, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM);
+            let result = await serviceCenterServiceIns.isLastDBActivityValid(serviceCenterActivties, [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_INSPECTION_FEE_CLAIMED]);
             expect(result).toBeTruthy();
         })
 

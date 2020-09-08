@@ -73,6 +73,7 @@ export class ServiceCenterRequestParamCoordinator extends RequestParamsValidator
             device_front_image: Joi.string().min(3).required(),
             device_back_image: Joi.string().min(3).required(),
             final_invoice_image: Joi.string().min(3).required(),
+            final_invoice_amount: Joi.number().min(1).required(),
         })
         return schema;
     }

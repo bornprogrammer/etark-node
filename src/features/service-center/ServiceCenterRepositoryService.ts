@@ -16,7 +16,6 @@ import UnAuthorized from "@app/errors/UnAuthorized";
 import { ServiceCenterOrderTypeEnum } from "@app/enums/ServiceCenterOrderTypeEnum";
 import ArrayHelper from "@app/helpers/ArrayHelper";
 import { Complaint } from "@app/models/Complaint";
-import { userPlanRepositoryServiceIns } from "../user-plan/UserPlanRepositoryService";
 import { pickupDeliveyRepositoryIns } from "@app/repositories/PickupDeliveyRepository";
 
 export class ServiceCenterRepositoryService extends BaseRepositoryService {
@@ -80,22 +79,6 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         }
         return newOrderListResponse;
     }
-
-    // private getOrderStatusByActivityType = async (activityType: string) => {
-    //     let status = "User to Confirm";
-    //     switch (activityType) {
-    //         case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT:
-    //             status = "";
-    //             break;
-    //         case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED:
-    //             status = "";
-    //             break;
-    //         case ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED:
-    //             status = "";
-    //             break;
-    //     }
-    //     return status;
-    // }
 
     public processServiceCenterOrderDetails = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
@@ -165,14 +148,15 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
     }
 
     public addDispatchDetail = async (params: MethodParamEntity) => {
-        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.createDispatchDetails, callableFunctionParams: params.topMethodParam }).setMethod({ callableFunction: this.addReadyToDispatchActivity }).coordinate();
+        let topParams = params.topMethodParam;
+        topParams.activity_type = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH;
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isLastDBActivityValid, callableFunctionParams: topParams }).setMethod({ callableFunction: this.createDispatchDetails }).setMethod({ callableFunction: this.addReadyToDispatchActivity }).coordinate();
         return result;
     }
 
     public createDispatchDetails = async (params: MethodParamEntity) => {
         let topParams = params.topMethodParam;
-        let result = await deviceDispatchDetailsRepositoryIns.create({ pick_delivery_id: topParams.pickup_delivery_id, device_back_image: topParams.device_back_image, device_front_image: topParams.device_front_image, final_invoice_image: topParams.final_invoice_image });
-        console.log("result", result);
+        let result = await deviceDispatchDetailsRepositoryIns.create({ pick_delivery_id: topParams.pickup_delivery_id, device_back_image: topParams.device_back_image, device_front_image: topParams.device_front_image, final_invoice_image: topParams.final_invoice_image, final_invoice_amount: topParams.final_invoice_amount });
         return result;
     }
 
