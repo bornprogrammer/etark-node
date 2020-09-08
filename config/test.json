@@ -9,6 +9,10 @@
     "google_map": {
         "google_map_key": "google_map_key"
     },
+    "paytm": {
+        "merchant_id": "sss",
+        "merchant_key": "sss"
+    },
     "port": 5099,
     "pickup_delivery_id": 94
 }

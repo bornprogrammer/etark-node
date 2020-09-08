@@ -36,6 +36,13 @@ export abstract class BaseRestAPIIntegration extends BaseTest {
         return result;
     }
 
+    public callNCompareStatusNMessageContained = async (statusCode: HttpResponseCode, containedMessage: string, urlPath?: string) => {
+        let result = await this.callAPI(urlPath);
+        expect(result.status).toBe(statusCode);
+        expect(result.body.message).toContain(containedMessage);
+        return result;
+    }
+
     protected async beforeCallingAPI(): Promise<any> {
 
     }

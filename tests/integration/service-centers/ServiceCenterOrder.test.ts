@@ -9,7 +9,7 @@ require('mysql2/node_modules/iconv-lite').encodingExists('foo');
 describe("service center order details post api", () => {
 
     let appIns;
-    
+
     beforeEach(() => { appIns = appInstance.server });
 
     afterEach(async () => { await appIns.close() });
@@ -120,5 +120,5 @@ describe("service center order details post api", () => {
             expect(result.status).toBe(HttpResponseCode.RESOURCES_CREATED);
         })
     })
-}) 
+})
 
