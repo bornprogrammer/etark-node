@@ -13,8 +13,12 @@ export abstract class BaseQueue extends BaseEventEmitter {
     public emit(event: string | symbol, ...args: any[]): boolean {
         setTimeout(() => {
             return super.emit(event, args);
-        }, 3000);
+        }, this.getQueueTime());
         return true;
+    }
+
+    protected getQueueTime() {
+        return 3000;
     }
 
     public async handle(data?: any) {

@@ -17,6 +17,7 @@ import { ObjectHelper } from "@app/helpers/ObjectHelper";
 import { SmartphoneComplainFieldIdEnum } from "@app/enums/SmartphoneComplainFieldIdEnum";
 import { complaintServiceIns1 } from "./ComplaintService";
 import { userRepositoryIns } from "../users/UserRepository";
+import { PlanTypeEnums } from "@app/enums/PlanTypeEnums";
 
 export class ComplaintRepositoryService extends BaseService {
     /**
@@ -258,15 +259,18 @@ export class ComplaintRepositoryService extends BaseService {
 
     public getComplaintDetailsForComplaintReport = async (orderId: number) => {
         let result = await complaintRepositoryIns1.getComplaintDetailsForComplaintReport(orderId);
-        let objectDetails: SellerCompensationEmailEntity = await complaintServiceIns1.extractOutComplainFieldDetails(result);
-        let merchantId = await complaintServiceIns1.getComplainDetailFieldValueByFieldName(result.complainDetails, SmartphoneComplainFieldsEnum.MERCHANT_ID);
-        if (merchantId === AppConstants.MERCHANT_FIELD_OTHER_VALUE) {
-            objectDetails.merchant_name = await complaintServiceIns1.getComplainDetailFieldValueByFieldName(result.complainDetails, SmartphoneComplainFieldsEnum.MERCHANT_NAME_OFFLINE);
-        } else {
-            let merchantDetails = await complaintRepositoryIns1.getMerchantDetails(merchantId);
-            objectDetails.merchant_name = merchantDetails.merchant_name;
+        if (result.userPlan.plan.plan_type !== PlanTypeEnums.PLAN_TYPE_PICKUP_DELIVERY) {
+            let objectDetails: SellerCompensationEmailEntity = await complaintServiceIns1.extractOutComplainFieldDetails(result);
+            let merchantId = await complaintServiceIns1.getComplainDetailFieldValueByFieldName(result.complainDetails, SmartphoneComplainFieldsEnum.MERCHANT_ID);
+            if (merchantId === AppConstants.MERCHANT_FIELD_OTHER_VALUE) {
+                objectDetails.merchant_name = await complaintServiceIns1.getComplainDetailFieldValueByFieldName(result.complainDetails, SmartphoneComplainFieldsEnum.MERCHANT_NAME_OFFLINE);
+            } else {
+                let merchantDetails = await complaintRepositoryIns1.getMerchantDetails(merchantId);
+                objectDetails.merchant_name = merchantDetails.merchant_name;
+            }
+            return objectDetails;
         }
-        return objectDetails;
+        return null;
     }
 
     public getComplaintDetailsForComplaintInvoiceReport = async (orderNo: number) => {

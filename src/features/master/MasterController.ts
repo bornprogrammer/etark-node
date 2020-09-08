@@ -1,11 +1,7 @@
 import { BaseController } from "@app/controllers/BaseController";
 import { MasterRequestParamCoordinator } from "./MasterRequestParamCoordinator";
 import { MasterService, masterServiceIns } from "./MasterService";
-import { Request, Response, NextFunction } from "express";
-import { paytmServiceIns } from "@app/services/PaytmService";
-import { fileReaderServiceIns } from "@app/services/FileReaderService";
-import { complaintRepositoryIns } from "@app/repositories/ComplaintRepository";
-import { htmlToPDFConverterIns } from "@app/services/HTMLToPDFConverter";
+import { Request, Response } from "express";
 
 export class MasterController extends BaseController {
 

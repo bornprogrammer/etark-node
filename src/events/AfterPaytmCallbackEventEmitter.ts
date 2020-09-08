@@ -29,6 +29,10 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
         super(EventEmitterIdentifierEnum.AFTER_PAYTM_CALLBACK_EVENTEMITTER);
     }
 
+    protected getQueueTime() {
+        return 500;
+    }
+
     public async handleJob(data?: any) {
         await this.sendEmail(data);
     }
