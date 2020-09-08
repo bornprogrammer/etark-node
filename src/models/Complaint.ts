@@ -117,7 +117,6 @@ Complaint.init({
                                     as: "planComponent"
                                 }
                             ]
-
                         }
                     ]
                 }
@@ -226,44 +225,6 @@ Complaint.init({
                 ]
             }
         },
-        getUserDetail: {
-            include: [
-                {
-                    model: User,
-                    as: "user",
-                    required: true,
-                    attributes: [
-                        'id',
-                        'name'
-                    ]
-                }
-            ]
-        },
-        // getSuccessUserPlanWithServiceDeniedPickupDelivery(pickupDeliveryId: number) {
-        //     return {
-        //         include: [
-        //             {
-        //                 model: UserPlan,
-        //                 required: true,
-        //                 as: "userPlan",
-        //                 where: {
-        //                     status: ['success']
-        //                 },
-        //                 include: [
-        //                     {
-        //                         model: PickupDelivery,
-        //                         as: UserPlan.pickupDeliveryDetailAs,
-        //                         required: true,
-        //                         where: {
-        //                             status: ['service_denied'],
-        //                             id: pickupDeliveryId
-        //                         }
-        //                     }
-        //                 ]
-        //             }
-        //         ]
-        //     }
-        // },
         byComplainId(complainId: number) {
             return {
                 where: {
