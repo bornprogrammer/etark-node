@@ -25,11 +25,17 @@ export class AfterSetActivityEventEmitter extends BaseQueue {
             await userPlanRepositoryServiceIns.refundInspectionFee(params.pickup_delivery_id);
         } else if (params.activity_type === ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED) {
             await this.assignAnotherServiceCenter(params);
+        } else if (params.activity_type === ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH) {
+            this.sendFinalInvoiceEmail(params);
         }
     }
 
     public assignAnotherServiceCenter = async (params: any) => {
         await userRepositoryServiceIns.assignNewServiceCenter(params.pickup_delivery_id);
+    }
+
+    public sendFinalInvoiceEmail = async (params: any) => {
+        // let result = 
     }
 }
 
