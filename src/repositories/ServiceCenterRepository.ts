@@ -11,6 +11,7 @@ import { sequelizeConnection } from "@app/SequelizeConnection";
 import { QueryTypes } from "sequelize";
 import { ServiceCenterActivityTypeEnum } from "@app/enums/ServiceCenterActivityTypeEnum";
 import ArrayHelper from "@app/helpers/ArrayHelper";
+import { City } from "@app/models/City";
 
 export class ServiceCenterRepository extends BaseRepository {
     /**
@@ -127,12 +128,21 @@ export class ServiceCenterRepository extends BaseRepository {
                     required: true,
                     as: "serviceCenterDetails",
                     where: {
-                        maker_id: params.makerId
+                        maker_id: params.makerId,
+                        status: 'active'
                     }
                 },
+                {
+                    model: City,
+                    required: true,
+                    where: {
+                        status: "active"
+                    }
+                }
             ],
             where: {
-                city_id: params.cityId
+                city_id: params.cityId,
+                status: 'active'
             }
         })
         return result;
