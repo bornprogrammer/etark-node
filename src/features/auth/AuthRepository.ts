@@ -57,6 +57,7 @@ export class AuthRepository extends BaseRepository {
                 ]
             }
         });
+        throw new UserAlreadyExists();
         if (count > 0) {
             throw new UserAlreadyExists();
         }

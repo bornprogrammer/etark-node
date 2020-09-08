@@ -18,7 +18,6 @@ import { sequelizeConnection } from "@app/SequelizeConnection";
 import { QueryTypes } from "sequelize";
 import { AsyncLocalStorage } from "async_hooks";
 import { Merchant } from "@app/models/Merchant";
-import { Where } from "sequelize/types/lib/utils";
 
 export class ComplaintRepository extends BaseRepository {
     /**
@@ -92,24 +91,6 @@ export class ComplaintRepository extends BaseRepository {
     public getComplaintDetailsForComplaintInvoiceReport = async (orderId: number): Promise<Complaint> => {
         let where = { id: orderId, payment_status: 'completed' };
         let result = await Complaint.scope(['defaultScope', 'getUserPlanComponentDetails', { method: ['getSuccessUserPlan', where] }]).findOne({
-            include: [
-                {
-                    model: User,
-                    as: "user",
-                    required: true,
-                    attributes: [
-                        'id',
-                        'name'
-                    ]
-                }
-            ]
-        });
-        return result;
-    }
-
-    public getComplainDetailForFinalInvoice = async (pickupDeliveryId: number): Promise<Complaint> => {
-        let where = { payment_status: 'completed' };
-        let result = await Complaint.scope(['defaultScope', { method: ['getSuccessUserPlan', where] }]).findOne({
             include: [
                 {
                     model: User,
