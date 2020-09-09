@@ -4,22 +4,22 @@
     "esModuleInterop": true,
     "target": "es6",
     "noImplicitAny": false,
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "outDir": "./dist",
+    "outDir": "dist",
     "baseUrl": "./",
     "paths": {
       "*": [
-        "./node_modules/*"
+        "node_modules/*"
       ],
       "@app/*": [
-        "./src/*"
+        "src/*"
       ],
       "tests/*": [
-        "./tests/*"
+        "tests/*"
       ]
     },
     "lib": [

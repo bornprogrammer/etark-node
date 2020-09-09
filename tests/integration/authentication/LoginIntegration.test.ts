@@ -13,6 +13,10 @@ export class LoginIntegration extends BasePostRestAPIIntegration {
         this.testSuiteName = "test login";
     }
 
+    protected getPostData() {
+        // throw new Error("Method not implemented.");
+    }
+
     public getLoginParams = () => {
         return {
             mobile_number: "8250778560",

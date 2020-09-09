@@ -28,7 +28,7 @@ class App {
         const port = config.get("port");
 
         this.server = this.app.listen(port, () => {
-            console.log(`node app started at ${port}`);
+            console.log(`node app started again at ${port}`);
         });
 
         this.dbSetup();
