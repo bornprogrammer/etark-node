@@ -228,7 +228,7 @@ export class ComplaintRepository extends BaseRepository {
 
     public getComplainDetailForFinalInvoice = async (pickupDeliveryId: number) => {
         let where = { payment_status: "completed" };
-        let result = await Complaint.scope(['defaultScope', { method: ['getSuccessUserPlan', where] }]).findOne({
+        let result = await Complaint.scope(['defaultScope', { method: ['getSuccessUserPlan', where] }, { method: ['userPlanWithPickupDelivery', pickupDeliveryId] }]).findOne({
             include: [
                 {
                     model: User,
@@ -237,7 +237,6 @@ export class ComplaintRepository extends BaseRepository {
                 }
             ]
         });
-
         return result;
     }
 }

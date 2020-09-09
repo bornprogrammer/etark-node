@@ -193,10 +193,21 @@ Complaint.init({
                             {
                                 model: PickupDelivery,
                                 required: true,
+                                as: UserPlan.pickupDeliveryDetailAs,
                                 where: {
                                     id: pickupDeliveryId,
                                     status: "success"
-                                }
+                                },
+                                include: [
+                                    {
+                                        model: ServiceCenterOrder,
+                                        as: PickupDelivery.serviceCenterOrderAs
+                                    },
+                                    {
+                                        model: DeviceDispatchDetails,
+                                        as: PickupDelivery.deviceDispatchDetailsAs
+                                    }
+                                ]
                             }
                         ]
                     }
