@@ -62,6 +62,11 @@ export class UtilsHelper {
         return url;
     }
 
+    public static getBaseURLForUploadedImage(imageName: string): string {
+        let url = UtilsHelper.getBaseURL() + "uploads/" + imageName;
+        return url;
+    }
+
     public static convertAmountInWords(num): string {
         if ((num = num.toString()).length > 9) return 'overflow';
         var a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];

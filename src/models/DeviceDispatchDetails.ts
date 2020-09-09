@@ -6,7 +6,7 @@ export interface DeviceDispatchDetailsAttributes {
     pick_delivery_id: number;
     device_front_image: number;
     device_back_image: number;
-    final_invoice_image: number;
+    final_invoice_image: string;
     final_invoice_amount: number;
 }
 
@@ -15,7 +15,7 @@ export class DeviceDispatchDetails extends Model implements DeviceDispatchDetail
     pick_delivery_id: number;
     device_front_image: number;
     device_back_image: number;
-    final_invoice_image: number;
+    final_invoice_image: string;
     final_invoice_amount: number;
 }
 

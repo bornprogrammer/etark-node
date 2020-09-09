@@ -20,7 +20,8 @@ export class ServiceCenterOrderRepository extends BaseRepository {
             invoice_total_amount: params.invoice_total_amount,
             proforma_invoice_image: params.proforma_invoice_image,
             device_delivery_date: params.device_delivery_date,
-            due_date: params.due_date
+            due_date: params.due_date,
+            not_warranty_reason: params.not_warranty_reason
         });
         return result;
     }

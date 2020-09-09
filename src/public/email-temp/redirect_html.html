@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700&display=swap&subset=devanagari"
+      rel="stylesheet"
+    />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="keywords"
+      content="E-Tark,compalint,automated,automated complaint,smartphone,"
+    />
+    <meta
+      name="description"
+      content="Your one-stop solution for all your smartphone complaints even if it is out of warranty, without having to go to any service centre, call at any customer support or even google about it, , all this instantly, at your convenience, at your own time."
+    />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ETark" />
+    <meta
+      property="og:description"
+      content="Your one-stop solution for all your smartphone complaints even if it is out of warranty, without having to go to any service centre, call at any customer support or even google about it, , all this instantly, at your convenience, at your own time."
+    />
+    <meta property="og:url" content="http://www.etark.in" />
+    <meta property="og:site_name" content="ETark" />
+    <meta property="og:image" content=" " />
+    <link rel="canonical" href="http://www.etark.in/" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="./images/etark-logo2.png"
+      sizes="16x16"
+    />
+
+    <link rel="stylesheet" href="form.css" />
+    <title>Etark | Service partner</title>
+  </head>
+
+  <body>
+    <!-- navbar -->
+    <header>
+      <div class="top_header">
+        <div class="inner">
+          <div class="logo">
+            <img src="{{base_url}}images/logo.png" alt="etark logo" />
+          </div>
+        </div>
+      </div>
+    </header>
+    <div style="align-content: center; text-align: center">
+      <h1>Service Center Payment Page</h1>
+      <a
+        ><button
+          href="{{payment_link}}"
+          class="payButton"
+          style="
+            display: inline-block;
+            background: green;
+            color: #ffffff;
+            padding: 5px;
+          "
+        >
+          Click here to make payment
+        </button>
+      </a>
+      <a>
+        <button
+          href="{{decline_link}}"
+          class="decButton"
+          style="
+            display: inline-block;
+            background: red;
+            color: #ffffff;
+            padding: 5px;
+          "
+        >
+          Click here to decline payment
+        </button>
+      </a>
+    </div>
+    <footer>
+      <div
+        class="footer"
+        style="
+          position: fixed;
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          height: 300px;
+          background-color: #245fd3;
+          color: white;
+          align-content: center;
+          text-align: center;
+          padding: 0;
+          font-family: Poppins;
+        "
+      >
+        <img
+          style="padding-bottom: 16px"
+          src="{{base_url}}images/logo.png"
+          alt=""
+        />
+        <p style="padding-bottom: 8px">ETARK TECHNOLOGY PVT. LTD.</p>
+
+        <p
+          style="
+            margin-right: auto;
+            margin-left: auto;
+            width: 500px;
+            opacity: 0.8;
+          "
+        >
+          ETark is the world’s first automated complaint resolution platform for
+          all smartphone complaints. Our reports help smartphone manufacturers,
+          E-commerce firms and offline retailers save their precious time and
+          money on analyzing complaints.
+        </p>
+        <p style="padding-top: 36px; padding-bottom: 56px">
+          VISIT AT:
+          <a
+            href=""
+            style="color: white; text-decoration: none; font-weight: 500"
+            >WWW.ETARK.IN</a
+          >
+        </p>
+      </div>
+    </footer>
+  </body>
+  <script>
+    btnenable = () => {
+      var checkBox = document.getElementById("tnc");
+      var button = document.getElementById("nextbtn");
+
+      if (checkBox.checked == true) {
+        nextbtn.disabled = false;
+      } else {
+        nextbtn.disabled = true;
+      }
+    };
+  </script>
+</html>

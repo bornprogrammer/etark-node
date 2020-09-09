@@ -17,6 +17,7 @@ import { ServiceCenterOrderTypeEnum } from "@app/enums/ServiceCenterOrderTypeEnu
 import ArrayHelper from "@app/helpers/ArrayHelper";
 import { Complaint } from "@app/models/Complaint";
 import { pickupDeliveyRepositoryIns } from "@app/repositories/PickupDeliveyRepository";
+import { PhoneWarrantyTypeEnum } from "@app/enums/PhoneWarrantyTypeEnum";
 
 export class ServiceCenterRepositoryService extends BaseRepositoryService {
     /**
@@ -84,7 +85,7 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
 
     public processServiceCenterOrderDetails = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.addServiceCenterOrderDetails, callableFunctionParams: params }).setMethod({ callableFunction: this.addUserToConfirmServiceCenterActivity }).coordinate();
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.addServiceCenterOrderDetails, callableFunctionParams: params }).setMethod({ callableFunction: this.addUserToConfirmServiceCenterActivity, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.afterProcessingServiceCenterOrderDetails }).coordinate();
         return result;
     }
 
@@ -98,7 +99,16 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
     public addUserToConfirmServiceCenterActivity = async (methodParamEntity: MethodParamEntity) => {
         let addServiceCenterOrderDetails = methodParamEntity.topMethodParam;
         let result = await this.addServiceCenterActivity({ activityType: ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM, pickupDeliveryId: addServiceCenterOrderDetails.pickup_delivery_id });
+        if (methodParamEntity.topMethodParam.phone_warranty === PhoneWarrantyTypeEnum.IN_WARRANTY) {
+            await this.addServiceCenterActivity({ activityType: ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT, pickupDeliveryId: addServiceCenterOrderDetails.pickup_delivery_id });
+        }
         return result;
+    }
+
+    public afterProcessingServiceCenterOrderDetails = async (params: MethodParamEntity) => {
+        let topParams = params.topMethodParam;
+        topParams.activity_type = ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM;
+        afterSetActivityEventEmitterIns.emit(EventEmitterIdentifierEnum.AFTER_SET_ACTIVITY_EVENTEMITTER, topParams);
     }
 
     public addAllocatedServiceCenterActivity = async (pickupDeliveryId: number) => {
