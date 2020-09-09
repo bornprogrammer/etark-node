@@ -114,7 +114,7 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
     public setActivity = async (params: MethodParamEntity) => {
         let topMethodParam = params.topMethodParam;
         let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isLastDBActivityValid, callableFunctionParams: topMethodParam }).setMethod({ callableFunction: this.setCurrentActivity, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.afterSetActivity }).coordinate();
-        return result
+        return result;
     }
 
     public isLastDBActivityValid = async (params: MethodParamEntity) => {

@@ -34,6 +34,7 @@ export class ComplaintController extends BaseController {
     public uploadInvoice = async (req: Request, res: Response) => {
         // await this.getCtrlMethodCoordinator().setMethod({ callableFunction: complaintServiceIns.uploadInvoice, callableFunctionParams: req['file'] }).send(req, res);
         // nodeMailerServiceIns.sendHtml("service@etark.in", "iamabornprogrammer@gmail.com", "support email", "<h1>this is header file</h1>");
+        console.log(req['file']);
         return await req['file'];
         // await this.getCtrlMethodCoordinator().sendData(req, res, req['file']);
     }
