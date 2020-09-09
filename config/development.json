@@ -1,4 +1,5 @@
 {
     "name": "E-Tark Development",
-    "port": 5000
+    "port": 5000,
+    "upload_path": "src/public/uploads/"
 }

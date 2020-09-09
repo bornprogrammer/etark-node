@@ -1,3 +1,4 @@
 {
-    "name": "E-Tark Production"
+    "name": "E-Tark Production",
+    "upload_path": "public/uploads/"
 }

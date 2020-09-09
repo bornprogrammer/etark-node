@@ -1,11 +1,13 @@
 
 import multer from 'multer';
+import config from 'config';
 
 export class MulterUploadFileMiddleware {
 
-    private multer: any
+    private multer: any;
 
-    private path = "src/public/uploads/";
+    // private path = "./src/public/uploads/";
+    private path = config.get("upload_path");
 
     constructor() {
         var storage = multer.diskStorage({
