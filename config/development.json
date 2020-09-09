@@ -1,5 +1,6 @@
 {
     "name": "E-Tark Development",
     "port": 5000,
-    "upload_path": "src/public/uploads/"
+    "upload_path": "src/public/uploads/",
+    "client_url_after_paytm_response": "http://etark-beta.s3-website.ap-south-1.amazonaws.com/"
 }

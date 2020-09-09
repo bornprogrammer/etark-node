@@ -4,6 +4,7 @@ import { userPlanRepositoryServiceIns } from "./UserPlanRepositoryService";
 import { UserPlanRequestParamCoordinator } from "./UserPlanRequestParamCoordinator";
 import { ObjectHelper } from "@app/helpers/ObjectHelper";
 import { AppConstants } from "@app/constants/AppConstants";
+import config from "config";
 
 export class UserPlanController extends BaseController {
     /**
@@ -33,7 +34,7 @@ export class UserPlanController extends BaseController {
         let result = await this.getCtrlMethodCoordinator().setMethod({ callableFunction: userPlanRepositoryServiceIns.paytmCallback, callableFunctionParams: params }).returnResp(req, res);
         const status = result ? params.paytm_resp.STATUS : "TXN_FAILURE";
         const queryStr = ObjectHelper.buildStrFromKeyNValueOfObject({ status, orderId: params.paytm_resp.ORDERID }, "=", "&");
-        const urlToRedirect = AppConstants.CLIENT_URL_AFTER_PAYTM_RESPONSE + "confirm?" + queryStr;
+        const urlToRedirect = config.get("client_url_after_paytm_response") + "?" + queryStr;
         console.log("queryStr", urlToRedirect);
         res.redirect(urlToRedirect);
     }

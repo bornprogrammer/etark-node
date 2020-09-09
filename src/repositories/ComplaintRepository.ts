@@ -6,17 +6,12 @@ import { ComplaintDetails } from "@app/models/ComplaintDetails";
 import { Field } from "@app/models/Field";
 import { MakerDetails } from "@app/models/MakerDetails";
 import { ObjectHelper } from "@app/helpers/ObjectHelper";
-import { UserPlan } from "@app/models/UserPlan";
-import { UserPaymentDetailsRepository } from "./UserPaymentDetailsRepository";
-import { UserPayment } from "@app/models/UserPayment";
-import { Plan } from "@app/models/Plan";
 import { ComplaintDetailByFieldNameParamsEntity } from "@app/repo-method-param-entities/ComplaintDetailByFieldNameParamsEntity";
 import { User } from "@app/models/User";
 import { Maker } from "@app/models/Maker";
 import { GetInspectionFeeComponentParamsEntity } from "@app/repo-method-param-entities/GetInspectionFeeComponentParamsEntity";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { QueryTypes } from "sequelize";
-import { AsyncLocalStorage } from "async_hooks";
 import { Merchant } from "@app/models/Merchant";
 
 export class ComplaintRepository extends BaseRepository {
@@ -231,7 +226,20 @@ export class ComplaintRepository extends BaseRepository {
         return result;
     }
 
+    public getComplainDetailForFinalInvoice = async (pickupDeliveryId: number) => {
+        let where = { payment_status: "completed" };
+        let result = await Complaint.scope(['defaultScope', { method: ['getSuccessUserPlan', where] }]).findOne({
+            include: [
+                {
+                    model: User,
+                    as: "user",
+                    required: true
+                }
+            ]
+        });
 
+        return result;
+    }
 }
 
 

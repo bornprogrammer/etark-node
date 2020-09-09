@@ -179,6 +179,30 @@ Complaint.init({
                 ],
             }
         },
+        userPlanWithPickupDelivery(pickupDeliveryId: number) {
+            return {
+                include: [
+                    {
+                        model: UserPlan,
+                        required: true,
+                        as: "userPlan",
+                        where: {
+                            status: ['success']
+                        },
+                        include: [
+                            {
+                                model: PickupDelivery,
+                                required: true,
+                                where: {
+                                    id: pickupDeliveryId,
+                                    status: "success"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
         getDeliveryDetails(serviceCenterId: number, activityTypes: string[], activityIds: number[]) {
             return {
                 include: [
