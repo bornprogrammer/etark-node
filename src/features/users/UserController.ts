@@ -26,6 +26,11 @@ export class UserController extends BaseController {
 
     }
 
+    public scPayment = async (req: Request, res: Response) => {
+        let params = UserRequestParamsCoordinator.getInstance(req).getSCPaymentParams();
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunctionParams: params, callableFunction: userRepositoryServiceIns.getSuccessPageDetail }).send(req, res);
+    }
+
 }
 
 export const userControllerIns = new UserController();

@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import { userPlanRepositoryServiceIns } from "./UserPlanRepositoryService";
 import { UserPlanRequestParamCoordinator } from "./UserPlanRequestParamCoordinator";
 import { ObjectHelper } from "@app/helpers/ObjectHelper";
-import { AppConstants } from "@app/constants/AppConstants";
 import config from "config";
 
 export class UserPlanController extends BaseController {

@@ -1,5 +1,6 @@
 import RequestParamsCoordinator from "@app/coordinators/request-params-cordinators/RequestParamsCoordinator";
 import { Request } from "express";
+import { EEXIST } from "constants";
 
 
 export class UserRequestParamsCoordinator extends RequestParamsCoordinator {
@@ -24,6 +25,11 @@ export class UserRequestParamsCoordinator extends RequestParamsCoordinator {
 
     public getSuccessPageDetailParams = () => {
         return this.setParamFromParamsAs("id", "user_id").setParamFromParams("order_id").coordinate();
+    }
+
+    public getSCPaymentParams = () => {
+        let params = this.setParamFromParamsAs("id", "user_id").setParamFromParams("sc_id").coordinate();
+        return params;
     }
 
 

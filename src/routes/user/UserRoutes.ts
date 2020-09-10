@@ -17,6 +17,8 @@ export class UserRoutes extends BaseRoutes {
 
         this.router.get("/:id/payment/:order_id", this.setCtrlMethod(userControllerIns.getSuccessPageDetail));
 
+        this.router.get("/:id/sc/:sc_id/payment", this.setCtrlMethod(userControllerIns.scPayment));
+
         return this.router;
     }
 

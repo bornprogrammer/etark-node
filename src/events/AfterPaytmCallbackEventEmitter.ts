@@ -30,7 +30,7 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
     }
 
     protected getQueueTime() {
-        return 500;
+        return 0;
     }
 
     public async handleJob(data?: any) {
