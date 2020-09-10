@@ -1,10 +1,16 @@
 import BaseService from "@app/services/BaseService";
 import { AuthRepository, authRepositoryIns } from "./AuthRepository";
 import MethodParamEntity from "@app/entities/MethodParamEntity";
-import BadHttpRequestError from "@app/errors/BadHttpRequestError";
 import { forgotPasswordRepositoryIns } from "@app/repositories/ForgotPasswordRepository";
 import UnAuthorized from "@app/errors/UnAuthorized";
 import { EmailNotFoundError } from "@app/errors/EmailNotFoundError";
+import { mailSenderEventEmitterIns } from "@app/events/MailSenderEventEmitter";
+import { EventEmitterIdentifierEnum } from "@app/enums/EventEmitterIdentifierEnum";
+import { MailSenderEventEmitterEntity } from "@app/entities/MailSenderEventEmitterEntity";
+import { MailTypeEnum } from "@app/enums/MailTypeEnum";
+import { ForgotPasswordMailEntity } from "@app/entities/ForgotPasswordMailEntity";
+import { StoreResultAs } from "@app/enums/StoreResultAs";
+import config from "config";
 
 export class AuthRepositoryService extends BaseService {
 
@@ -29,7 +35,7 @@ export class AuthRepositoryService extends BaseService {
     }
 
     public forgotPassword = async (methodParamEntity: MethodParamEntity) => {
-        const result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isEmailValid, callableFunctionParams: methodParamEntity.topMethodParam }).setMethod({ callableFunction: this.addForgotPasswordRequest }).coordinate();
+        const result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isEmailValid, callableFunctionParams: methodParamEntity.topMethodParam, storeResultAs: StoreResultAs.FORGOT_PASSWORD }).setMethod({ callableFunction: this.addForgotPasswordRequest, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.sendForgotPasswordEmail }).coordinate();
         return result;
     }
 
@@ -46,6 +52,15 @@ export class AuthRepositoryService extends BaseService {
         let topParams = params.topMethodParam;
         let result = await forgotPasswordRepositoryIns.create({ email: topParams.email });
         return result;
+    }
+
+    public sendForgotPasswordEmail = async (params: MethodParamEntity) => {
+        let topParams = params.topMethodParam;
+        let userDetails = params.methodReturnedValContainer[StoreResultAs.FORGOT_PASSWORD];
+        let resetLink = config.get("client_base_url") + "reset_pwd?email=" + topParams.email;
+        let forgotPasswordParams: ForgotPasswordMailEntity = { email: topParams.email, name: userDetails.name, reset_link: resetLink };
+        let mailSenderParams: MailSenderEventEmitterEntity = { mailType: MailTypeEnum.MAIL_TYPE_FORGOT_PASSWORD, mailData: forgotPasswordParams };
+        mailSenderEventEmitterIns.emit(EventEmitterIdentifierEnum.MAIL_SENDER_EVENTEMITTER, mailSenderParams);
     }
 
     public resetPassword = async (params: MethodParamEntity) => {

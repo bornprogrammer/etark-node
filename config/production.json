@@ -1,5 +1,6 @@
 {
     "name": "E-Tark Production",
     "upload_path": "public/uploads/",
+    "client_base_url": "http://www.etark.in/",
     "client_url_after_paytm_response": "http://www.etark.in/confirm/"
 }

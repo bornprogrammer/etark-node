@@ -10,4 +10,5 @@ export enum StoreResultAs {
     GET_USER_PLAN_DETAILS_BY_USER_PAYMENT_ID = "get_user_plan_details_by_user_payment_id",
     INSPECTION_FEE_DETAILS = "inspection_fee_details",
     DENIED_SERVICE_CENTER_LIST = "denied_service_center_list",
+    FORGOT_PASSWORD = "forgot_password",
 }
