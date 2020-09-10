@@ -29,8 +29,6 @@ export class MailSenderEventEmitter extends BaseQueue {
     public sendForgotPasswordEmail = async (data: ForgotPasswordMailEntity) => {
         fileReaderServiceIns.readEmailTemplate("forgotPassword.html", (error, htmlStr) => {
             data.base_url = UtilsHelper.getBaseURL();
-            console.log("data", data);
-            console.log("html", htmlStr);
             nodeMailerServiceIns.sendHtml(config.get("mail.from"), data.email, "Forgot Password", UtilsHelper.replaceAllStr(data, htmlStr));
         })
     }
