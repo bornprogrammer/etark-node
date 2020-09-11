@@ -13,7 +13,6 @@ import { SellerCompensationEmailEntity } from "@app/entities/SellerCompensationE
 import { BaseQueue } from "./BaseQueue";
 import { PlanTypeEnums } from "@app/enums/PlanTypeEnums";
 import { StoreResultAs } from "@app/enums/StoreResultAs";
-import { complaintRepositoryIns } from "@app/repositories/ComplaintRepository";
 import { htmlToPDFConverterIns } from "@app/services/HTMLToPDFConverter";
 import { complaintServiceIns1 } from "@app/features/complaints/ComplaintService";
 import { complaintDetailsRepositoryIns } from "@app/repositories/ComplaintDetailsRepository";
@@ -40,8 +39,6 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
     public sendEmail = async (data: any) => {
         let paytmResp: PaytmCallbackResponseEntity = data;
         let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isPaymentSucces, callableFunctionParams: paytmResp }).setMethod({ callableFunction: this.generateReport, notBreakWhenReturnedValueNotTruthy: true, storeResultAs: StoreResultAs.ORDER_DETAIL_FOR_EMAIL_TEMPLATE }).coordinate();
-        // .setMethod({ callableFunction: this.sendOrdeEmailToCustomer, notBreakWhenReturnedValueNotTruthy: true, storeResultAs: StoreResultAs.ORDER_DETAIL_FOR_EMAIL_TEMPLATE })
-        // .setMethod({ callableFunction: this.sendComplaintDetailEmailToServiceCenter })
     }
 
     public generateReport = async (params: MethodParamEntity) => {
