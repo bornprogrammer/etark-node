@@ -4,8 +4,8 @@ import { sequelizeConnection } from "@app/SequelizeConnection";
 export interface DeviceDispatchDetailsAttributes {
     id?: number;
     pick_delivery_id: number;
-    device_front_image: number;
-    device_back_image: number;
+    device_front_image: string;
+    device_back_image: string;
     final_invoice_image: string;
     final_invoice_amount: number;
 }
@@ -13,8 +13,8 @@ export interface DeviceDispatchDetailsAttributes {
 export class DeviceDispatchDetails extends Model implements DeviceDispatchDetailsAttributes {
     id: number;
     pick_delivery_id: number;
-    device_front_image: number;
-    device_back_image: number;
+    device_front_image: string;
+    device_back_image: string;
     final_invoice_image: string;
     final_invoice_amount: number;
 }

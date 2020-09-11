@@ -13,6 +13,16 @@ import { GetInspectionFeeComponentParamsEntity } from "@app/repo-method-param-en
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { QueryTypes } from "sequelize";
 import { Merchant } from "@app/models/Merchant";
+import { UserPlan } from "@app/models/UserPlan";
+import { Plan } from "@app/models/Plan";
+import { UserPlanComponent } from "@app/models/UserPlanComponent";
+import { PickupDelivery } from "@app/models/PickupDelivery";
+import { ServiceCenterActivity } from "@app/models/ServiceCenterActivity";
+import { UserAddress } from "@app/models/UserAddress";
+import { ServiceCenterOrder } from "@app/models/ServiceCenterOrder";
+import { DeviceDispatchDetails } from "@app/models/DeviceDispatchDetails";
+import { PlanComponent } from "@app/models/PlanComponents";
+import { UserPayment } from "@app/models/UserPayment";
 
 export class ComplaintRepository extends BaseRepository {
     /**
@@ -24,6 +34,90 @@ export class ComplaintRepository extends BaseRepository {
 
     public create(params: any) {
 
+    }
+
+    public getAllComplainList = async () => {
+        let result = Complaint.scope(['complainDetails']).findAll({
+            include: [
+                {
+                    model: User,
+                    as: "user",
+                    required: true
+                },
+                {
+                    model: UserPlan,
+                    as: "userPlan",
+                    required: true,
+                    where: {
+                        status: "success",
+                    },
+                    include: [
+                        {
+                            model: UserPayment,
+                            required: true,
+                            as: UserPlan.userPaymentsAs,
+                            where: {
+                                payment_status: "completed"
+                            }
+                        },
+                        {
+                            model: Plan,
+                            required: true,
+                            as: UserPlan.planAs
+                        },
+                        {
+                            model: UserPlanComponent,
+                            required: true,
+                            as: UserPlan.userPlanComponentAs,
+                            include: [
+                                {
+                                    model: PlanComponent,
+                                    required: true,
+                                    as: "planComponent"
+                                }
+                            ]
+                        },
+                        {
+                            model: PickupDelivery,
+                            as: UserPlan.pickupDeliveryDetailAs,
+                            required: true,
+                            where: {
+                                status: ['success', 'service_denied'],
+                            },
+                            include: [
+                                {
+                                    model: ServiceCenterActivity,
+                                    as: PickupDelivery.serviceCenterActivityAs,
+                                    required: true,
+                                },
+                                {
+                                    model: UserAddress,
+                                    as: PickupDelivery.userAddressAs,
+                                    required: true
+                                },
+                                {
+                                    model: ServiceCenterOrder,
+                                    as: PickupDelivery.serviceCenterOrderAs,
+                                },
+                                {
+                                    model: DeviceDispatchDetails,
+                                    as: PickupDelivery.deviceDispatchDetailsAs,
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            where: {
+                status: ["pending", "resolved", 'unresolved']
+            },
+            order: [
+                [
+                    'id', 'desc'
+                ]
+            ]
+        })
+        return result;
     }
 
     public getComplaintDetails = async (params: GetComplaintDetailsParamsEntity) => {

@@ -36,6 +36,8 @@ export class ComplaintRoutes extends BaseRoutes {
         this.router.post("/upload-invoice", multerUploadFileMiddlewareIns.uploadSingle("invoice"), this.setCtrlMethod(complaintControllerIns.uploadInvoice));
 
         this.router.post("/upload-device-image", multerUploadFileMiddlewareIns.uploadSingle("device-image"), this.setCtrlMethod(complaintControllerIns.uploadInvoice));
+
+        this.router.get("/", this.setCtrlMethod(complaintControllerIns.getAllComplainList));
         return this.router;
     }
 

@@ -63,6 +63,11 @@ export class ComplaintController extends BaseController {
         let params = await ComplainRequestParamsCoordinator.getInstance(req).getaddComplainStrengthParams();
         return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: complaintServiceIns.updateComplainStrength, callableFunctionParams: params }).send(req, res);
     }
+
+    public getAllComplainList = async (req: Request, res: Response) => {
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: complaintServiceIns.getAllComplainList }).send(req, res);
+    }
+
 }
 
 export const complaintControllerIns = new ComplaintController();

@@ -7,6 +7,7 @@ export class PlanComponent extends Model {
     component_price: number;
     component_type: string;
     is_taxable: number;
+    component_display_name?: string;
     // public readonly userPlanComponents: UserPlanComponent[];
 }
 

@@ -68,6 +68,7 @@ export class UtilsHelper {
     }
 
     public static convertAmountInWords(num): string {
+        if (!num) return '0';
         if ((num = num.toString()).length > 9) return 'overflow';
         var a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
         var b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];

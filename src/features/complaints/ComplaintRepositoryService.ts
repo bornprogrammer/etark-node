@@ -279,6 +279,11 @@ export class ComplaintRepositoryService extends BaseService {
         return { userAddress, complainDetails: result };
     }
 
+    public getAllComplainList = async () => {
+        let result = await complaintRepositoryIns1.getAllComplainList();
+        let result1 = complaintServiceIns1.extractOutAllComplaintDetails(result);
+        return result1;
+    }
 }
 
 export const complaintServiceIns = new ComplaintRepositoryService();

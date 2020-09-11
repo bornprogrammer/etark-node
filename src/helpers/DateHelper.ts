@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { isStrictNullChecksEnabled } from 'tslint';
 export class DateHelper {
 
     /**
@@ -26,8 +27,11 @@ export class DateHelper {
     }
 
     public static getReadableDateFormat(dateStr: string): string {
-        let dateObject = new Date(dateStr);
-        return dateObject.getDate() + "/" + (dateObject.getMonth() + 1) + "/" + dateObject.getFullYear();
+        if (dateStr) {
+            let dateObject = new Date(dateStr);
+            return dateObject.getDate() + "/" + (dateObject.getMonth() + 1) + "/" + dateObject.getFullYear();
+        }
+        return null;
     }
 
     public static getCurrentDateAsMysqlStr(): string {
