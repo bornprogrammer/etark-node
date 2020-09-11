@@ -20,6 +20,12 @@ class AuthController extends BaseController {
         return result;
     }
 
+    public adminLogin = async (req: Request, res: Response) => {
+        let params = await AuthRequestParamsCoordinator.getInstance(req).getAdminLoginParams();
+        let result = await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mService.adminLogin, callableFunctionParams: params }).send(req, res);
+        return result;
+    }
+
     public createUser = async (req: Request, res: Response) => {
         let params = await AuthRequestParamsCoordinator.getInstance(req).getCreateUserParams();
         return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: this.mService.createUser, callableFunctionParams: params }).send(req, res);

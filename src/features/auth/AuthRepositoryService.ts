@@ -11,6 +11,7 @@ import { MailTypeEnum } from "@app/enums/MailTypeEnum";
 import { ForgotPasswordMailEntity } from "@app/entities/ForgotPasswordMailEntity";
 import { StoreResultAs } from "@app/enums/StoreResultAs";
 import config from "config";
+import ArrayHelper from "@app/helpers/ArrayHelper";
 
 export class AuthRepositoryService extends BaseService {
 
@@ -26,6 +27,20 @@ export class AuthRepositoryService extends BaseService {
 
     public login = async (methodParamEntity: MethodParamEntity) => {
         let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.mAuthRepository.loginUser, callableFunctionParams: methodParamEntity.topMethodParam }).coordinate();
+        return result;
+    }
+
+    public adminLogin = async (methodParamEntity: MethodParamEntity) => {
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.validateAdminLoginCredential, callableFunctionParams: methodParamEntity.topMethodParam }).coordinate();
+        return result;
+    }
+
+    public validateAdminLoginCredential = async (params: MethodParamEntity) => {
+        let topParams = params.topMethodParam;
+        let result = await this.mAuthRepository.adminLogin({ email: topParams.email, password: topParams.password });
+        if (!ArrayHelper.isArrayValid(result)) {
+            throw new UnAuthorized();
+        }
         return result;
     }
 

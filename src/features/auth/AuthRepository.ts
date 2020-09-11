@@ -1,13 +1,14 @@
 import BaseRepository from "@app/repositories/BaseRepository";
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import { User } from "@app/models/User";
-import { Op } from "sequelize";
+import { Op, QueryTypes } from "sequelize";
 import { UserAlreadyExists } from "@app/errors/UserAlreadyExists";
 import { UserStatusEnum } from "@app/enums/UserStatusEnum";
 import { UserSuspended } from "@app/errors/UserSuspended";
 import UnAuthorized from "@app/errors/UnAuthorized";
 import { SrvRecord } from "dns";
 import { ResetPasswordByEmailParamsEntity } from "@app/repo-method-param-entities/ResetPasswordByEmailParamsEntity";
+import { sequelizeConnection } from "@app/SequelizeConnection";
 
 export class AuthRepository extends BaseRepository {
 
@@ -36,6 +37,13 @@ export class AuthRepository extends BaseRepository {
                 throw new UserSuspended();
             }
         }
+        return result;
+    }
+
+    public adminLogin = async (params: any) => {
+        let query = `select name,email,password,status
+        from admin where email=:email and password=:password and status='active'`;
+        let result = await sequelizeConnection.connection.query(query, { type: QueryTypes.SELECT, replacements: { email: params.email, password: params.password } });
         return result;
     }
 

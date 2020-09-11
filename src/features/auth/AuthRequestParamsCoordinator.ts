@@ -66,4 +66,19 @@ export class AuthRequestParamsCoordinator extends RequestParamsValidatorCoordina
             confirm_password: Joi.string().valid(Joi.ref('password')).required(),
         });
     }
+
+    public async getAdminLoginParams(): Promise<any> {
+        // let values =  this.setParamFromBody("mobile_number").setParamFromBody("password").coordinate();
+        let schema = await this.getAdminLoginParamsSchema();
+        let values = await this.validateRequestBody(schema);
+        return values;
+    }
+
+    private getAdminLoginParamsSchema = async () => {
+        let schema = Joi.object({
+            email: Joi.string().email().required(),
+            password: Joi.string().min(6).max(16).required()
+        });
+        return schema;
+    }
 }

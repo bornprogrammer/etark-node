@@ -15,6 +15,8 @@ export class AuthRoutes extends BaseRoutes {
 
         this.router.post("/login", this.setCtrlMethod(authControllerIns.login));
 
+        this.router.post("/admin-login", this.setCtrlMethod(authControllerIns.adminLogin));
+
         this.router.post("/", this.setCtrlMethod(authControllerIns.createUser));
 
         this.router.post("/forgot-password", this.setCtrlMethod(authControllerIns.forgotPassword));
