@@ -25,13 +25,14 @@ import { GetUserPlanStatusByUserPaymentIdParamsEntity } from "@app/repo-method-p
 import { UserPlan } from "@app/models/UserPlan";
 import { pickupDeliveyRepositoryIns } from "@app/repositories/PickupDeliveyRepository";
 import { PaytmRefundParamsEntity } from "@app/entities/PaytmRefundParamsEntity";
-import { UtilsHelper } from "@app/helpers/UtilsHelper";
-import { UserRefund } from "@app/models/UserRefund";
-import { UserRefundRepository, userRefundRepositoryIns } from "@app/repositories/UserRefundRepository";
+import { userRefundRepositoryIns } from "@app/repositories/UserRefundRepository";
 import ArrayHelper from "@app/helpers/ArrayHelper";
-import { FieldDetails } from "@app/models/FieldDetails";
 import { SmartphoneComplainFieldIdEnum } from "@app/enums/SmartphoneComplainFieldIdEnum";
-import { number } from "joi";
+import { complaintServiceIns } from "../complaints/ComplaintRepositoryService";
+import { htmlToPDFConverterIns } from "@app/services/HTMLToPDFConverter";
+import { ComplaintDetails } from "@app/models/ComplaintDetails";
+import { complaintDetailsRepositoryIns } from "@app/repositories/ComplaintDetailsRepository";
+import { threadId } from "worker_threads";
 
 export class UserPlanRepositoryService extends BaseRepositoryService {
     /**
@@ -42,8 +43,36 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
     }
 
     public paytmCallback = async (methodParamEntity: MethodParamEntity) => {
-        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.updatePayment, callableFunctionParams: methodParamEntity.topMethodParam, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.updateUserPlanStatus }).setMethod({ callableFunction: this.afterPayment }).coordinate();
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.updatePayment, callableFunctionParams: methodParamEntity.topMethodParam, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.isPaymentSucces }).setMethod({ callableFunction: this.updateUserPlanStatus }).setMethod({ callableFunction: this.generateComplainReport, notBreakWhenReturnedValueNotTruthy: true }).setMethod({ callableFunction: this.afterPayment }).coordinate();
         return result;
+    }
+
+    public isPaymentSucces = async (methodParamEntity: MethodParamEntity) => {
+        let params: PaytmCallbackResponseEntity = methodParamEntity.topMethodParam.paytm_resp;
+        return params.STATUS === "TXN_SUCCESS";
+    }
+
+    public generateComplainReport = async (params: MethodParamEntity) => {
+        let topParams = params.topMethodParam;
+        let paytmResp = topParams.paytm_resp;
+        let orderID = userPlanServiceIns.removeOrderPrefixFromOrderNo(paytmResp.ORDERID);
+        let objectDetails = await complaintServiceIns.getComplaintDetailsForComplaintReport(parseInt(orderID));
+        if (objectDetails) {
+            await htmlToPDFConverterIns.convertComplainAnalysisReport(objectDetails, await this.afterConvertingComplaintReportToPDF.bind(null, params, objectDetails.complain_id, SmartphoneComplainFieldIdEnum.COMPLAINT_REPORT));
+        }
+    }
+
+    public afterConvertingComplaintReportToPDF = async (params, complain_id, field_id, fileName) => {
+        await this.addReportNameToComplainDetails(complain_id, field_id, fileName);
+        // await this.afterPayment(params);
+    }
+
+    public addReportNameToComplainDetails = async (complain_id, field_id, fileName) => {
+        let complaintDetails = new ComplaintDetails();
+        complaintDetails.field_id = field_id;
+        complaintDetails.field_val = fileName;
+        complaintDetails.complaint_id = complain_id;
+        await complaintDetailsRepositoryIns.create([complaintDetails]);
     }
 
     public updatePayment = async (methodParamEntity: MethodParamEntity) => {
@@ -79,11 +108,11 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
     public updateUserPlanStatus = async (methodParamEntity: MethodParamEntity) => {
         let params: PaytmCallbackResponseEntity = methodParamEntity.topMethodParam.paytm_resp;
         let result = false
-        if (params.STATUS === "TXN_SUCCESS") {
-            result = await this.getMethodCoordinator().setMethod({ callableFunction: this.getUserPlanDetailsByUserPaymentId, callableFunctionParams: params, storeResultAs: StoreResultAs.GET_USER_PLAN_DETAILS_BY_USER_PAYMENT_ID }).setMethod({ callableFunction: this.markUserPlanStatusSuccess }).setMethod({ callableFunction: this.markPickupDeliverySuccess }).coordinate();
-            return result;
-        }
-        return false;
+        // if (params.STATUS === "TXN_SUCCESS") {
+        result = await this.getMethodCoordinator().setMethod({ callableFunction: this.getUserPlanDetailsByUserPaymentId, callableFunctionParams: params, storeResultAs: StoreResultAs.GET_USER_PLAN_DETAILS_BY_USER_PAYMENT_ID }).setMethod({ callableFunction: this.markUserPlanStatusSuccess }).setMethod({ callableFunction: this.markPickupDeliverySuccess }).coordinate();
+        return result;
+        // }
+        // return false;
     }
 
     public markUserPlanStatusSuccess = async (methodParamEntity: MethodParamEntity) => {
@@ -110,8 +139,7 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
         afterPaytmCallbackEventEmitterIns.emit(EventEmitterIdentifierEnum.AFTER_PAYTM_CALLBACK_EVENTEMITTER, paytmResp);
     }
 
-    public getDetailsForOrderEmailTemp = async (orderId: string) => {
-        let fieldIds = ArrayHelper.convertArrayToMysqlInOpStr([SmartphoneComplainFieldIdEnum.INVOICE_REPORT, SmartphoneComplainFieldIdEnum.COMPLAINT_REPORT]);
+    public getDetailsForOrderEmailTemp = async (orderId: string, fieldIds: string) => {
         let result = await userPlanRepositoryIns.getDetailsForOrderEmailTemp(orderId, fieldIds);
         return result;
     }

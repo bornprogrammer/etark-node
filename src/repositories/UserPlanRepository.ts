@@ -103,9 +103,10 @@ export class UserPlanRepository extends BaseRepository {
         let result = await sequelizeConnection.connection.query(`select complaint_details.field_id,complaint_details.field_val,plans.plan_type,user_payment.order_no,users.name,users.email,plans.plan_name
         from user_payment inner join user_plan on user_payment.user_plan_id = user_plan.id  inner join plans on user_plan.plan_id = plans.id
         inner join complaints on user_plan.complain_id = complaints.id inner join complaint_details on complaints.id = complaint_details.complaint_id inner join users on complaints.user_id = users.id
-        where user_payment.id=${orderId} and user_plan.status='success' and complaint_details.field_id in ${fieldIds}`, {
+        where user_payment.id=${orderId} and user_plan.status='success'`, {
             type: QueryTypes.SELECT
         })
+        // and complaint_details.field_id in ${fieldIds}
         return result;
     }
 

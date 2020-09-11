@@ -6,7 +6,6 @@ import { PlanComponents } from "@app/enums/PlanComponents";
 import { AppConstants } from "@app/constants/AppConstants";
 import { complaintRepositoryIns } from "@app/repositories/ComplaintRepository";
 import { userPlanServiceIns } from "../user-plan/UserPlanService";
-import { complaintServiceIns } from "../complaints/ComplaintRepositoryService";
 import { GoogleDistanceMapApiEntity } from "@app/entities/GoogleDistanceMapApiEntity";
 import { ServiceCenterNotFound } from "@app/errors/ServiceCenterNotFound";
 import { googleDistanceMapApiServiceIns } from "@app/services/GoogleDistanceMapApiService";
@@ -20,7 +19,6 @@ import { afterAddingAddressEventEmitterIns } from "@app/events/AfterAddingAddres
 import { EventEmitterIdentifierEnum } from "@app/enums/EventEmitterIdentifierEnum";
 import { UpdateComponentPriceForPickupNDeliveryEntity } from "@app/entities/UpdateComponentPriceForPickupNDeliveryEntity";
 import ArrayHelper from "@app/helpers/ArrayHelper";
-import { GetServiceCenterListParamsEntity } from "@app/repo-method-param-entities/GetClosestServiceCenterDetailsParamsEntity";
 import { complaintServiceIns1 } from "../complaints/ComplaintService";
 import { SmartphoneComplainFieldsEnum } from "@app/enums/SmartphoneComplainFieldsEnum";
 
@@ -142,7 +140,7 @@ class UserRepositoryService extends BaseRepositoryService {
         let result = await complaintRepositoryIns.getSuccessPageDetails(orderId, params.user_id);
         let successPageInfo = null;
         if (result) {
-            successPageInfo = { created_at: "", imei_number: "", order_no: "", isDownloadReportToBeShown: false, report_link: "#" };
+            successPageInfo = { created_at: "", imei_number: "", order_no: "", isDownloadReportToBeShown: false, report_link: "#", plan_type: result.userPlan.plan.plan_type };
             successPageInfo.created_at = result.userPlan.userPayments[0]['createdAt'];
             successPageInfo.order_no = result.userPlan.userPayments[0]['order_no'];
             successPageInfo.imei_number = await complaintServiceIns1.getComplainDetailFieldValueByFieldName(result.complainDetails, SmartphoneComplainFieldsEnum.IMEI_NUMBER);

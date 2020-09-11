@@ -197,44 +197,6 @@ export class ComplaintRepository extends BaseRepository {
 
     public getSuccessPageDetails = async (orderId: number, userId: number) => {
         let result = await Complaint.scope(['defaultScope', 'complainDetails', { method: ['getPlan', orderId] }]).findOne({
-            // include: [
-            //     {
-            //         model: UserPlan,
-            //         required: true,
-            //         as: "userPlan",
-            //         where: {
-            //             status: ['pending', 'success']
-            //         },
-            //         include: [
-            //             {
-            //                 model: UserPayment,
-            //                 required: true,
-            //                 as: "userPayments",
-            //                 where: {
-            //                     id: orderId,
-            //                     payment_status: "completed"
-            //                 }
-            //             },
-            //             {
-            //                 model: Plan,
-            //                 required: true,
-            //                 as: "plan"
-            //             }
-            //         ]
-            //     },
-            // {
-            //     model: ComplaintDetails,
-            //     required: true,
-            //     as: "complainDetails",
-            //     include: [
-            //         {
-            //             model: Field,
-            //             as: "field",
-            //             // required: true
-            //         }
-            //     ]
-            // }
-            // ],
             where: {
                 user_id: userId
             },

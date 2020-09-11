@@ -1,4 +1,5 @@
 
+import config from "config";
 import fs from "fs";
 
 export class FileReaderService {
@@ -11,7 +12,8 @@ export class FileReaderService {
 
     public readEmailTemplate = (fileName: string, callback: CallableFunction) => {
         try {
-            this.fileSystem.readFile("public/email-temp/" + fileName, "utf-8", callback);
+            let emailPath = config.get('email_temp_path') + fileName;
+            this.fileSystem.readFile(emailPath, "utf-8", callback);
         } catch (error) {
             console.log("error sss", error);
         }
