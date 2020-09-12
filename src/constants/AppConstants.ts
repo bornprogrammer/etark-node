@@ -5,7 +5,7 @@ export class AppConstants {
     public static readonly ENVIRONMENTS_PROD = "production";
     public static readonly DELIVERY_PRICE_MARGIN = 50;
     public static readonly CGST = 18;
-    public static readonly PAYTM_GATEWAY_CHARGES = 2.3482;
+    public static readonly PAYTM_GATEWAY_CHARGES = 2.41;
     public static readonly ORDER_ID_PREFIX = "E-Tark";
     public static readonly ML_MODEL_BASE_URL = "http://3.7.68.33/";
     public static readonly SERVER_BASE_URL = "http://api.etark.in";
