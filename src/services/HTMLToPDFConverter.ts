@@ -6,10 +6,16 @@ import config from "config";
 
 export class HTMLToPDFConverter {
     private options = {
-        // height: "29.7cm",
-        // width: "21cm",
-        // border: 0,
-        format: "A5"
+        // "height": "11.25in",
+        // "width": "8.5in",
+        // "header": {
+        //     "height": "20mm"
+        // },
+        // "footer": {
+        //     "height": "20mm",
+        // },
+        // "format": "Letter",        // allowed units: A3, A4, A5, Legal, Letter, Tabloid
+        // "orientation": "portrait",
     }
     /**
      *
