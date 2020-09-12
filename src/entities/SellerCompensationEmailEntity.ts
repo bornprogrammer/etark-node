@@ -16,4 +16,5 @@ export interface SellerCompensationEmailEntity {
     compensation_ml_response?: any;
     complain_id?: any;
     merchant_name?: string;
+    problem_description?: string;
 }

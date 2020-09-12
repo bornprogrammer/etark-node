@@ -205,7 +205,7 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
                 order_completed: 22,
                 order_completed_percentage: -5.48
             },
-            order_type_count_details: { all: 0, completed: 2, order_request: 2, in_process: 2, decline: 1 }
+            order_type_count_details: { all: 0, completed: 0, order_request: 0, in_process: 0, decline: 0 }
         }
         result.order_type_count_details.all = await serviceCenterRepositoryIns.getAllOrderCount(topParams.sc_id);
         result.order_type_count_details.completed = await serviceCenterRepositoryIns.getCompletedOrderCount(topParams.sc_id);

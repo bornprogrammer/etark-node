@@ -37,6 +37,9 @@ export class ComplaintService extends BaseService {
                 if (fieldDetail.field.field_name === SmartphoneComplainFieldsEnum.MODEL_NAME) {
                     objectDetails.model_name = fieldDetail.field_val;
                 }
+                else if (fieldDetail.field.field_name === SmartphoneComplainFieldsEnum.PROBLEM_DESCRIPTION) {
+                    objectDetails.problem_description = fieldDetail.field_val;
+                }
                 else if (fieldDetail.field.field_name === SmartphoneComplainFieldsEnum.IMEI_NUMBER) {
                     objectDetails.imei_number = fieldDetail.field_val;
                 }

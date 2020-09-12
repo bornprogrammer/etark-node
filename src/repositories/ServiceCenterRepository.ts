@@ -92,7 +92,7 @@ export class ServiceCenterRepository extends BaseRepository {
     }
 
     public getInProcessOrderCount = async (scId: number) => {
-        let result = await this.getOrderCountByType(scId, [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_FAILURE, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED]);
+        let result = await this.getOrderCountByType(scId, [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_FAILURE]);
         return result[0]['order_count'];
     }
 
