@@ -18,6 +18,7 @@ import { complaintServiceIns1 } from "@app/features/complaints/ComplaintService"
 import { SmartphoneComplainFieldIdEnum } from "@app/enums/SmartphoneComplainFieldIdEnum";
 import { AppConstants } from "@app/constants/AppConstants";
 import ArrayHelper from "@app/helpers/ArrayHelper";
+import { Complaint } from "@app/models/Complaint";
 
 export class AfterPaytmCallbackEventEmitter extends BaseQueue {
     /**
@@ -33,17 +34,8 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
 
     public sendEmail = async (data: any) => {
         let paytmResp: PaytmCallbackResponseEntity = data;
-        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.isPaymentSucces, callableFunctionParams: paytmResp }).setMethod({ callableFunction: this.generateInvoiceReport, notBreakWhenReturnedValueNotTruthy: true, storeResultAs: StoreResultAs.ORDER_DETAIL_FOR_EMAIL_TEMPLATE }).coordinate();
+        await this.getMethodCoordinator().setMethod({ callableFunction: this.isPaymentSucces, callableFunctionParams: paytmResp }).setMethod({ callableFunction: this.generateInvoiceReport, notBreakWhenReturnedValueNotTruthy: true, storeResultAs: StoreResultAs.ORDER_DETAIL_FOR_EMAIL_TEMPLATE }).coordinate();
     }
-
-    // public generateComplainReport = async (params: MethodParamEntity) => {
-    //     let paytmResp = params.topMethodParam;
-    //     let orderID = userPlanServiceIns.removeOrderPrefixFromOrderNo(paytmResp.ORDERID);
-    //     let objectDetails = await complaintServiceIns.getComplaintDetailsForComplaintReport(parseInt(orderID));
-    //     if (objectDetails) {
-    //         await htmlToPDFConverterIns.convertComplainAnalysisReport(objectDetails, await userPlanRepositoryServiceIns.addReportNameToComplainDetails.bind(null, objectDetails.complain_id, SmartphoneComplainFieldIdEnum.COMPLAINT_REPORT));
-    //     }
-    // }
 
     public generateInvoiceReport = async (params: MethodParamEntity) => {
         let paytmResp = params.topMethodParam;
@@ -51,12 +43,63 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
         let result = await complaintServiceIns.getComplaintDetailsForComplaintInvoiceReport(parseInt(orderID));
         let paymentDetails = await complaintServiceIns1.extractOutPaymentDetails(result.complainDetails);
         let userDetails = result.complainDetails.user;
-        let companyDetails = { company_name: AppConstants.COMPANY_NAME, gstin: config.get("company.gstin"), pan: config.get("company.pan"), city_name: "", base_url: UtilsHelper.getBaseURL(), customer_name: userDetails.name };
+        let companyDetails = { company_name: AppConstants.COMPANY_NAME, gstin: config.get("company.gstin"), pan: config.get("company.pan"), city_name: "", base_url: UtilsHelper.getBaseURL(), customer_name: userDetails.name, price_table: "", support_email: config.get("support_email") };
+        companyDetails.price_table = "";//await this.buildComponentHTML(result.complainDetails);
         if (ArrayHelper.isArrayValid(result.userAddress)) {
             companyDetails.city_name = result.userAddress[0]['name'];
         }
         Object.assign(companyDetails, paymentDetails);
         await htmlToPDFConverterIns.convertInvoiceReport(companyDetails, this.generateInvoiceReportCallback.bind(null, params, result.complainDetails.id, SmartphoneComplainFieldIdEnum.INVOICE_REPORT));
+    }
+
+    public buildComponentHTML = async (complaint: Complaint) => {
+        let componentDetails = complaint.userPlan['userPlanComponentAs'];
+        let billTable = await this.getComponentHTML();
+        componentDetails.forEach((item) => {
+            let object = { comp_name: "", quantity: "", rate: "", tax: "", gst: "", total_cost: "" };
+            object.comp_name = this.getRowHTML(item.planComponent.component_display_name, "comp_name");
+            object.quantity = this.getRowHTML("1", "quantity");
+            object.rate = this.getRowHTML(item.component_price, "rate");
+            object.tax = this.getRowHTML("18%", "tax");
+            object.gst = this.getRowHTML("18%", "gst");
+            object.total_cost = this.getRowHTML(item.component_price, "total_cost");
+            billTable = UtilsHelper.replaceAllStr(object, billTable);
+        })
+        return billTable;
+    }
+
+    public getRowHTML = (val, val1 = "") => {
+        return `<p style="font-size: 10px;">${val}</p>${val1}`;
+    }
+    public getComponentHTML = async () => {
+        return `
+        <div style="display: flex; justify-content: space-between;">
+      <div>
+        <h1 style="font-size: 12px;">Item</h1>
+        {{comp_name}}
+        <!-- <p style="font-size: 10px;">{{comp_name}}</p> -->
+      </div>
+      <div style="text-align: center;">
+        <h1 style="font-size: 12px;">Quantity</h1>
+        {{quantity}}
+      </div>
+      <div style="text-align: center;">
+        <h1 style="font-size: 12px;">Rate / Item (₹)</h1>
+        {{rate}}
+      </div>
+      <div style="text-align: center;">
+        <h1 style="font-size: 12px;">Taxable Value</h1>
+        {{tax}}
+      </div>
+      <div style="text-align: center;">
+        <h1 style="font-size: 12px;">IGST @18%(₹)</h1>
+        {{gst}}
+      </div>
+      <div style="text-align: center;">
+        <h1 style="font-size: 12px;">Total (₹)</h1>
+        {{total_cost}}
+      </div>
+    </div>`;
     }
 
     public generateInvoiceReportCallback = async (params, complain_id, field_id, fileName) => {

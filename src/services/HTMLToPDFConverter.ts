@@ -2,17 +2,14 @@ import { fileReaderServiceIns } from "./FileReaderService";
 import htmlpdf from "html-pdf";
 import { UtilsHelper } from "@app/helpers/UtilsHelper";
 import { AppConstants } from "@app/constants/AppConstants";
+import config from "config";
 
 export class HTMLToPDFConverter {
     private options = {
-        "height": "11.25in",
-        "width": "8.5in",
-        "header": {
-            "height": "20mm"
-        },
-        "footer": {
-            "height": "20mm",
-        },
+        // height: "29.7cm",
+        // width: "21cm",
+        // border: 0,
+        format: "A5"
     }
     /**
      *
@@ -32,7 +29,8 @@ export class HTMLToPDFConverter {
                 htmlString = UtilsHelper.replaceAllStr(htmlReplacementData, htmlString);
             }
             let fileName = AppConstants.COMPLAINT_ANALYSIS_FILE_PREFIX_NAME + Date.now() + ".pdf";
-            htmlpdf.create(htmlString, this.options).toFile(AppConstants.PUBLIC_FILE_PATH + fileName, function (err, res) {
+            let filePath = config.get("file_path") + fileName;
+            htmlpdf.create(htmlString, this.options).toFile(filePath, function (err, res) {
                 if (err) return console.log(err);
                 callback(fileName);
             });
@@ -46,7 +44,8 @@ export class HTMLToPDFConverter {
                 htmlString = UtilsHelper.replaceAllStr(htmlReplacementData, htmlString);
             }
             let fileName = AppConstants.INVOICE_FILE_PREFIX_NAME + Date.now() + ".pdf";
-            htmlpdf.create(htmlString, this.options).toFile(AppConstants.PUBLIC_FILE_PATH + fileName, function (err, res) {
+            let filePath = config.get("file_path") + fileName;
+            htmlpdf.create(htmlString, this.options).toFile(filePath, function (err, res) {
                 if (err) return console.log(err);
                 callback(fileName);
             });

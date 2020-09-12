@@ -72,6 +72,7 @@ export class ComplaintService extends BaseService {
             result['order_no'] = complaint.userPlan.userPayments[0].order_no;
             result['order_id'] = complaint.userPlan.userPayments[0].id;
             result['grand_total'] = complaint.userPlan.userPayments[0].grand_total;
+            result['grand_total_words'] = UtilsHelper.convertAmountInWords(complaint.userPlan.userPayments[0].grand_total);
             result['sub_total'] = complaint.userPlan.userPayments[0].sub_total + complaint.userPlan.userPayments[0].gateway_charge;
             result['tax'] = complaint.userPlan.userPayments[0].tax;
             result['updatedAt'] = complaint.userPlan.userPayments[0]['updatedAt'];

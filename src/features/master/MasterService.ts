@@ -12,6 +12,7 @@ import { htmlToPDFConverterIns } from "@app/services/HTMLToPDFConverter";
 import { Utils } from "sequelize";
 import { UtilsHelper } from "@app/helpers/UtilsHelper";
 import { complaintServiceIns } from "../complaints/ComplaintRepositoryService";
+import { afterPaytmCallbackEventEmitterIns } from "@app/events/AfterPaytmCallbackEventEmitter";
 
 export class MasterService extends BaseService {
 
@@ -49,7 +50,7 @@ export class MasterService extends BaseService {
     public testApi = async (methodParamEntity: MethodParamEntity) => {
         // let origins: GoogleDistanceMapApiEntity[] = [{ lat: "28.412932", long: "77.033878" }];
         // let dests: GoogleDistanceMapApiEntity[] = [{ lat: "28.453729", long: "77.039494" }, { lat: "28.510637", long: "77.048866" }, { lat: "28.471032", long: "77.049519" }];
-        return await complaintRepositoryIns.getComplainDetailForFinalInvoice(224);
+        return await afterPaytmCallbackEventEmitterIns.generateInvoiceReport({ topMethodParam: { ORDERID: "E-Tark661" } });
         // let result = await googleDistanceMapApiServiceIns.getMinDistance(origins, dests);
         // fileReaderServiceIns.readEmailTemplate("complaint-report.html", this.convertToPDF.bind(null, result));
         // return objectDetails;

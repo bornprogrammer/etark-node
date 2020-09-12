@@ -83,92 +83,25 @@
       <p>{{city_name}}</p>
     </div>
     <div style="display: flex; align-items: center;">
-      <h1 style="font-size: 1em;">N/A</h1>
-      <p>*date*</p>
+      <h1 style="font-size: 1em;">Date</h1>
+      <p>{{date}}</p>
     </div>
   </div>
 
   <hr style=" height: 2px;
         background-color: red;
         border: none;" />
-
   <!-- bill table -->
-  <div>
-    <div style="display: flex; justify-content: space-between;">
-      <div>
-        <h1 style="font-size: 12px;">Item</h1>
-        <p style="font-size: 10px;">Consumer complaint analysis</p>
-        <p style="font-size: 10px;">Complaint analysis and negotiation</p>
-        <p style="font-size: 10px;">Pickup and delivery of phone(s)</p>
-      </div>
-      <div style="text-align: center;">
-        <h1 style="font-size: 12px;">SAC</h1>
-        <p style="font-size: 10px;">998216</p>
-        <p style="font-size: 10px;">998216</p>
-        <p style="font-size: 10px;">998213</p>
-      </div>
-      <div style="text-align: center;">
-        <h1 style="font-size: 12px;">Quantity</h1>
-        <p style="font-size: 10px;">1</p>
-        <p style="font-size: 10px;">1</p>
-        <p style="font-size: 10px;">2</p>
-      </div>
-      <div style="text-align: center;">
-        <h1 style="font-size: 12px;">Rate / Item (₹)</h1>
-        <p style="font-size: 10px;">200</p>
-        <p style="font-size: 10px;">700</p>
-        <p style="font-size: 10px;">*delivery cost*</p>
-      </div>
-      <div style="text-align: center;">
-        <h1 style="font-size: 12px;">Taxable Value</h1>
-        <p style="font-size: 10px;">200</p>
-        <p style="font-size: 10px;">200</p>
-        <p style="font-size: 10px;">200</p>
-      </div>
-      <div style="text-align: center;">
-        <h1 style="font-size: 12px;">IGST @18%(₹)</h1>
-        <p style="font-size: 10px;">*cost</p>
-        <p style="font-size: 10px;">*cost</p>
-        <p style="font-size: 10px;">*cost</p>
-      </div>
-      <div style="text-align: center;">
-        <h1 style="font-size: 12px;">CGST@9%(₹)</h1>
-        <p style="font-size: 10px;">*cost</p>
-        <p style="font-size: 10px;">*cost</p>
-        <p style="font-size: 10px;">*cost</p>
-      </div>
-      <div style="text-align: center;">
-        <h1 style="font-size: 12px;">SGST@9% (₹)</h1>
-        <p style="font-size: 10px;">*cost</p>
-        <p style="font-size: 10px;">*cost</p>
-        <p style="font-size: 10px;">*cost</p>
-      </div>
-      <div style="text-align: center;">
-        <h1 style="font-size: 12px;">Total (₹)</h1>
-        <p style="font-size: 10px;">*cost</p>
-        <p style="font-size: 10px;">*cost</p>
-        <p style="font-size: 10px;">*cost</p>
-      </div>
-    </div>
-
-    <hr />
-
-    <!-- total -->
-    <div style="display: flex; justify-content: flex-end;">
-      <p style="font-weight: 600;">Total : &nbsp;</p>
-      <p>*total cost*</p>
-    </div>
-  </div>
-
+  {{price_table}}
   <hr />
 
   <!-- final costs -->
 
   <div style="text-align: right;">
-    <p>Taxable Amount : ₹ *tax*</p>
-    <p>Total Tax : ₹ *total tax*</p>
-    <p style="font-weight: 600;">Total Value (₹) : *total val*</p>
-    <p>Total amount (in words)₹ : *total in words* Only</p>
+    <p>Taxable Amount : ₹ {{sub_total}}</p>
+    <p>Total Tax : ₹ {{tax}}</p>
+    <p style="font-weight: 600;">Total Value (₹) : {{grand_total}}</p>
+    <p>Total amount (in words)₹ : {{grand_total_words}} Only</p>
   </div>
 
   <div style="text-align: right;">
