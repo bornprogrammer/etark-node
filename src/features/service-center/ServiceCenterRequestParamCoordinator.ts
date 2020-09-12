@@ -42,7 +42,7 @@ export class ServiceCenterRequestParamCoordinator extends RequestParamsValidator
             proforma_invoice_image: Joi.string().when('phone_warranty', { is: PhoneWarrantyTypeEnum.IN_WARRANTY, then: Joi.string().equal("") }).concat(Joi.string().required().min(3)),
             due_date: Joi.string().required(),
             device_delivery_date: Joi.string().required(),
-            not_warranty_reason: Joi.string().min(1),
+            not_warranty_reason: Joi.optional(),
         })
         return schema;
     }

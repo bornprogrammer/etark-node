@@ -52,6 +52,12 @@ export class UtilsHelper {
         return url + "/";
     }
 
+    public static getAPIURL(): string {
+        let url = UtilsHelper.getBaseURL();
+        url += "api/";
+        return url;
+    }
+
     public static getBaseURLForAssetImage(): string {
         let url = UtilsHelper.getBaseURL() + "images/";
         return url;

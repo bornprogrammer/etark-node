@@ -92,9 +92,12 @@ export class AfterSetActivityEventEmitter extends BaseQueue {
             let object: any = await this.getServiceCenterDetails(result);
             object.imei_number = result.userPlan.pickupDeliveryDetail.serviceCenterOrder[0].imei_number;
             object.estimated_due_date = DateHelper.getReadableDateFormat(result.userPlan.pickupDeliveryDetail.serviceCenterOrder[0].due_date);
+            let url = UtilsHelper.getAPIURL() + "sc/activities/" + params.pickup_delivery_id + "/";
+            object.payment_link = url + ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT;
+            object.decline_link = url + ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT;
             object.services = result.userPlan.pickupDeliveryDetail.serviceCenterOrder[0].service_to_be_done;
             object.warranty = await this.getWarrantyValue(result.userPlan.pickupDeliveryDetail.serviceCenterOrder[0].phone_warranty);
-            object.reason_for_non_warranty = result.userPlan.pickupDeliveryDetail.serviceCenterOrder[0].not_warranty_reason;
+            object.reason_for_non_warranty = result.userPlan.pickupDeliveryDetail.serviceCenterOrder[0].not_warranty_reason ?? "N/A";
             let htmlFileName = "service-centre-cost - nowarranty.html";
             if (object.phoneWarranty === PhoneWarrantyTypeEnum.IN_WARRANTY) {
                 htmlFileName = "service-centre-cost-inwarranty.html";

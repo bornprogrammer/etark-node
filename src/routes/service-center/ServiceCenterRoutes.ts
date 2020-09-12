@@ -12,6 +12,8 @@ export class ServiceCenterRoutes extends BaseRoutes {
 
         this.router.patch("/activity/:pickup_delivery_id/:activity_type", this.setCtrlMethod(serviceCenterControllerIns.setActivity));
 
+        this.router.get("/activities/:pickup_delivery_id/:activity_type", this.setCtrlMethod(serviceCenterControllerIns.setActivity));
+
         this.router.post("/dispatch-details/:pickup_delivery_id", this.setCtrlMethod(serviceCenterControllerIns.addDispatchDetail));
 
         this.router.post("/auth/login", this.setCtrlMethod(serviceCenterControllerIns.login));
