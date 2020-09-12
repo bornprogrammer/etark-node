@@ -119,6 +119,7 @@ export class ComplaintRepositoryService extends BaseService {
         if (callApi > fieldVal.fieldVal) {
             let percentageVal = UtilsHelper.generateRandomNumberBetweenRange(10, 15);
             callApi = (fieldVal.fieldVal / 100) * percentageVal;
+            callApi = Math.ceil(callApi);
         }
         return callApi;
     }
