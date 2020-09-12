@@ -18,6 +18,7 @@ import { SmartphoneComplainFieldIdEnum } from "@app/enums/SmartphoneComplainFiel
 import { complaintServiceIns1 } from "./ComplaintService";
 import { userRepositoryIns } from "../users/UserRepository";
 import { PlanTypeEnums } from "@app/enums/PlanTypeEnums";
+import { UtilsHelper } from "@app/helpers/UtilsHelper";
 
 export class ComplaintRepositoryService extends BaseService {
     /**
@@ -115,13 +116,17 @@ export class ComplaintRepositoryService extends BaseService {
     public callCompensationAmountMLApi = async (methodParamEntity: MethodParamEntity) => {
         let fieldVal = methodParamEntity.lastInvokedMethodParam;
         let callApi = await httpPostServiceIns(AppConstants.ML_MODEL_COMPENSATION_URL).setFormUrlEncodedPayload({ amount: fieldVal.fieldVal }).setExpectedResponseAsJson().call();
+        if (callApi > fieldVal.fieldVal) {
+            let percentageVal = UtilsHelper.generateRandomNumberBetweenRange(10, 15);
+            callApi = (fieldVal.fieldVal / 100) * percentageVal;
+        }
         return callApi;
     }
 
     public createCompensationMLResponse = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
         let compensationMLResponse = methodParamEntity.lastInvokedMethodParam;
-        params.ml_resp = compensationMLResponse
+        params.ml_resp = compensationMLResponse;
         let result = await complaintDetailsRepositoryIns.create([this.buildComplainDetailsInsForMLCompensationResp(params)]);
         return methodParamEntity.methodReturnedValContainer[StoreResultAs.ADD_COMPENSATION];
     }
