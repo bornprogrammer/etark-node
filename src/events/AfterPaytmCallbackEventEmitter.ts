@@ -103,8 +103,8 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
     }
 
     public generateInvoiceReportCallback = async (params, complain_id, field_id, fileName) => {
-        // await userPlanRepositoryServiceIns.addReportNameToComplainDetails(complain_id, field_id, fileName);
-        // return await this.sendOrdeEmailToCustomer(params);
+        await userPlanRepositoryServiceIns.addReportNameToComplainDetails(complain_id, field_id, fileName);
+        return await this.sendOrdeEmailToCustomer(params);
     }
 
     public sendOrdeEmailToCustomer = async (methodParamEntity: MethodParamEntity) => {
