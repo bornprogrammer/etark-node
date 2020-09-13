@@ -198,12 +198,12 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         let topParams = params.topMethodParam;
         let result = {
             trends_detais: {
-                total_order: 45,
-                total_order_percentage: 2.98,
-                order_ongoing: 14,
-                order_ongoing_percentage: -1.09,
-                order_completed: 22,
-                order_completed_percentage: -5.48
+                total_order: 0,
+                total_order_percentage: 0,
+                order_ongoing: 0,
+                order_ongoing_percentage: 0,
+                order_completed: 0,
+                order_completed_percentage: 0
             },
             order_type_count_details: { all: 0, completed: 0, order_request: 0, in_process: 0, decline: 0 }
         }

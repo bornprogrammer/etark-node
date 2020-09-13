@@ -1,9 +1,8 @@
-<!DOCTYPE html>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
   <title>E-tark | Invoice</title>
 </head>
@@ -19,117 +18,169 @@
       padding-left: 0;
       font-family: 'Poppins', sans-serif;
     ">
-  <table border="0" align="center" cellpadding="0" cellspacing="0" width="800px">
+  <table style="border-collapse: collapse" align="center" cellpadding="0" cellspacing="0" width="800px">
     <tr>
       <td>
-        <div style="display: flex; justify-content: space-between; align-items:center;">
-          <div>
-            <img src="{{base_url}}images/logo.png" />
-          </div>
-          <h1 style="color: red; font-size: 1.5em;">ORDER INVOICE</h1>
-          <div style="text-align: center; border: dashed 1px black; padding: 0 10px;">
-            <h1 style="font-size: 1.1em;">ORIGINAL</h1>
-            <hr style=" height: 2px;
-        background-color: red;
-        border: none;" />
-            <p>For Recipient</p>
-          </div>
-        </div>
-        <!-- details -->
-        <div style="
-        display: flex;
-        justify-content: space-between;
-        padding: 5% 5%;
-        padding-bottom: 0;
-      ">
-          <!-- address -->
-          <div style="width: 20%;">
-            <h1 style="font-size: 1em;">{{company_name}}</h1>
-            <p>13 K.B. Sarani, Dum Dum, Kolkata - 700080</p>
-          </div>
-          <!-- info -->
-          <div>
-            <p style="font-weight: 600;">GSTIN</p>
-            <p style="font-weight: 600;">PAN</p>
-          </div>
-          <div>
-            <p>{{gstin}}</p>
-            <p>{{pan}}</p>
-          </div>
-          <div>
-            <p style="font-weight: 600;">Invoice Date</p>
-            <p style="font-weight: 600;">Invoice No.</p>
-          </div>
-          <div>
-            <p>{{ordered_date}}</p>
-            <p>{{order_no}}</p>
-          </div>
-        </div>
+        <table>
+          <tr>
+            <td>
+              <table cellpadding="0" cellspacing="0" width="800px">
+                <tr>
+                  <td style="width: 100px; align-content: flex-end">
+                    <img src="{{base_url}}images/logo.png" />
+                  </td>
+                  <td style="width: 600px">
+                    <h1 style="color: red; font-size: 1.5em; text-align: center">
+                      ORDER INVOICE
+                    </h1>
+                  </td>
+                  <td style="
+                        text-align: center;
+                        align-content: right;
+                        border: dashed 1px black;
+                        padding: 0 10px;
+                      ">
+                    <h1 style="font-size: 1.1em">ORIGINAL</h1>
+                    <hr style="height: 2px; background-color: red; border: none" />
+                    <p>For Recipient</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- details -->
+          <tr style="
+                display: flex;
+                justify-content: space-between;
+                padding: 5% 5%;
+                padding-bottom: 0;
+              ">
+            <td>
+              <table cellpadding="0" cellspacing="0" width="800px">
+                <tr>
+                  <td style="width: 200px; align-content: flex-end">
+                    <h1 style="font-size: 1em">{{company_name}}</h1>
+                    <p>13 K.B. Sarani, Dum Dum, Kolkata - 700080</p>
+                  </td>
+                  <td>
+                    <p style="font-weight: 600">GSTIN</p>
+                    <p style="font-weight: 600">PAN</p>
+                  </td>
+                  <td>
+                    <p>{{gstin}}</p>
+                    <p>{{pan}}</p>
+                  </td>
+                  <td>
+                    <p style="font-weight: 600">Invoice Date</p>
+                    <p style="font-weight: 600">Invoice No.</p>
+                  </td>
+                  <td>
+                    <p>{{ordered_date}}</p>
+                    <p>{{order_no}}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
-        <hr style=" height: 2px;
-        background-color: red;
-        border: none;" />
-        <!-- Customer address -->
-        <div style="display: flex; justify-content: space-between; min-height: 130px;">
-          <div>
-            <h1 style="font-size: 1em;">Customer Name</h1>
-            <p>{{customer_name}}</p>
-          </div>
-          <div>
-            <h1 style="font-size: 1em;">Billing Address</h1>
-            <p>{{city_name}}</p>
-          </div>
-          <div>
-            <h1 style="font-size: 1em;">Shipping Address</h1>
-            <p>{{city_name}}</p>
-          </div>
-        </div>
+          <tr>
+            <td colspan="100%">
+              <hr style="height: 2px; background-color: red; border: none" />
+            </td>
+          </tr>
+          <tr style="
+                display: flex;
+                justify-content: space-between;
+                padding: 5% 5%;
+                padding-bottom: 0;
+              ">
+            <td>
+              <table cellpadding="0" cellspacing="0" width="800px">
+                <tr>
+                  <td style="align-content: flex-start">
+                    <h1 style="font-size: 1em">Customer Name</h1>
+                    <p>{{customer_name}}</p>
+                  </td>
+                  <td>
+                    <h1 style="font-size: 1em">Billing Address</h1>
+                    <p>{{city_name}}</p>
+                  </td>
 
-        <hr style=" height: 2px;
-        background-color: red;
-        border: none;" />
-        <!-- billing -->
-        <div style="display: flex;">
-          <div style="display: flex; align-items: center; margin-right: 20%;">
-            <h1 style="font-size: 1em;">Place of Supply :</h1>
-            <p>{{city_name}}</p>
-          </div>
-          <div style="display: flex; align-items: center;">
-            <h1 style="font-size: 1em;">Date</h1>
-            <p>{{date}}</p>
-          </div>
-        </div>
-
-        <hr style=" height: 2px;
-        background-color: red;
-        border: none;" />
-        <!-- bill table -->
-        {{price_table}}
-        <hr />
-
-        <!-- final costs -->
-
-        <div style="text-align: right;">
-          <p>Taxable Amount : ₹ {{sub_total}}</p>
-          <p>Total Tax : ₹ {{tax}}</p>
-          <p style="font-weight: 600;">Total Value (₹) : {{grand_total}}</p>
-          <p>Total amount (in words)₹ : {{grand_total_words}} Only</p>
-        </div>
-
-        <div style="text-align: right;">
-          <p style="font-size: 9px;">Terms & Conditions Applied</p>
-          <p style="font-size: 9px;">
-            for any queries, please write to us at {{support_email}}
-          </p>
-        </div>
+                  <td style="align-content: flex-end">
+                    <h1 style="font-size: 1em">Shipping Address</h1>
+                    <p>{{city_name}}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="100%">
+              <hr style="height: 2px; background-color: red; border: none" />
+            </td>
+          </tr>
+          <tr style="
+                display: flex;
+                justify-content: space-between;
+                padding-bottom: 0;
+              ">
+            <td>
+              <table cellpadding="0" cellspacing="0" width="800px">
+                <tr style="display: flex">
+                  <td style="
+                        display: flex;
+                        align-items: center;
+                        margin-right: 20%;
+                      ">
+                    <h1 style="font-size: 1em">
+                      Place of Supply :<span style="font-weight: 100">{{city_name}}</span>
+                    </h1>
+                  </td>
+                  <td style="display: flex; align-items: center">
+                    <h1 style="font-size: 1em">
+                      Date<span style="font-weight: 100">{{date}}</span>
+                    </h1>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="100%">
+              <hr style="height: 2px; background-color: red; border: none" />
+            </td>
+          </tr>
+          <tr>
+            <td>{{price_table}}</td>
+          </tr>
+          <tr>
+            <td colspan="100%">
+              <hr />
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right">
+              <p>Taxable Amount : ₹ {{sub_total}}</p>
+              <p>Total Tax : ₹ {{tax}}</p>
+              <p style="font-weight: 600">
+                Total Value (₹) : {{grand_total}}
+              </p>
+              <p>Total amount (in words)₹ : {{grand_total_words}} Only</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right">
+              <p style="font-size: 9px">Terms & Conditions Applied</p>
+              <p style="font-size: 9px">
+                for any queries, please write to us at {{support_email}}
+              </p>
+            </td>
+          </tr>
+        </table>
       </td>
-
     </tr>
-
-
   </table>
   <!-- heading -->
-
 </body>
 
 </html>

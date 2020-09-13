@@ -13,6 +13,8 @@ import { ServiceCenterActivityTypeEnum } from "@app/enums/ServiceCenterActivityT
 import ArrayHelper from "@app/helpers/ArrayHelper";
 import { City } from "@app/models/City";
 import { User } from "@app/models/User";
+import { serviceCenterServiceIns } from "@app/features/service-center/ServiceCenterService";
+import { ServiceCenterOrderTypeEnum } from "@app/enums/ServiceCenterOrderTypeEnum";
 
 export class ServiceCenterRepository extends BaseRepository {
     /**
@@ -92,11 +94,13 @@ export class ServiceCenterRepository extends BaseRepository {
     }
 
     public getInProcessOrderCount = async (scId: number) => {
-        let result = await this.getOrderCountByType(scId, [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH]);
+        let scActivities = await serviceCenterServiceIns.getServiceCenterActivityTypeByOrderType(ServiceCenterOrderTypeEnum.ORDER_TYPE_IN_PROCESS);
+        // [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT, ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_READY_TO_DISPATCH]
+        let result = await this.getOrderCountByType(scId, scActivities);
         return result[0]['order_count'];
     }
 
-    public getOrderCountByType = async (scId: number, lastActivityType: ServiceCenterActivityTypeEnum[]) => {
+    public getOrderCountByType = async (scId: number, lastActivityType: any) => {
         let activityTypes = ArrayHelper.convertArrayToMysqlInOpStr(lastActivityType);
         let query = `select count(activities.activity_id) as order_count from pickup_deliveries inner join (select max(id) as activity_id,pickup_delivery_id from service_center_activities group by pickup_delivery_id) as activities on pickup_deliveries.id = activities.pickup_delivery_id inner join service_center_activities on activities.activity_id=service_center_activities.id and service_center_activities.activity_type in ${activityTypes}
         where service_center_id =:service_center_id and status in ('success','service_denied')`;

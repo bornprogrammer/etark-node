@@ -24,10 +24,6 @@ export class HTMLToPDFConverter {
 
     }
 
-    // public convertInvoiceReport() {
-    //     let d = fileReaderServiceIns.readEmailTemplate('invoice.html', this.callback);
-    // }
-
     public convertComplainAnalysisReport = async (htmlReplacementData: any, callback: CallableFunction) => {
         await fileReaderServiceIns.readEmailTemplate('compaint-report.html', (error, htmlString: string) => {
             if (htmlReplacementData) {
@@ -36,6 +32,7 @@ export class HTMLToPDFConverter {
             }
             let fileName = AppConstants.COMPLAINT_ANALYSIS_FILE_PREFIX_NAME + Date.now() + ".pdf";
             let filePath = config.get("file_path") + fileName;
+            console.log(this.options);
             htmlpdf.create(htmlString, this.options).toFile(filePath, function (err, res) {
                 if (err) return console.log(err);
                 callback(fileName);
