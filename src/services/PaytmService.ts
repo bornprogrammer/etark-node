@@ -5,6 +5,7 @@ import { httpPostServiceIns } from '@app/http-services/HttpPostService';
 import config from 'config';
 import { AppConstants } from '@app/constants/AppConstants';
 import { PaytmRefundParamsEntity } from '@app/entities/PaytmRefundParamsEntity';
+import { UtilsHelper } from '@app/helpers/UtilsHelper';
 
 class PaytmService {
 
@@ -50,7 +51,7 @@ class PaytmService {
     }
 
     private getCallbackURL = () => {
-        let url = AppConstants.SERVER_BASE_URL + ":" + process.env.PORT + "/api/user-plan/paytm-callback";
+        let url = UtilsHelper.getBaseURL() + "api/user-plan/paytm-callback";
         return url;
     }
 
