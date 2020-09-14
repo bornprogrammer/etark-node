@@ -51,7 +51,7 @@ export class AfterSetActivityEventEmitter extends BaseQueue {
             } else {
                 object.invoice_url = UtilsHelper.getBaseURLForUploadedImage(result.userPlan.pickupDeliveryDetail.deviceDispatchDetails.final_invoice_image);
             }
-            object.emailTitle = "Final Invoice Copy";
+            object.emailTitle = "Final Invoice";
             fileReaderServiceIns.readEmailTemplate(htmlFileName, this.sendEmail.bind(null, object));
         }
     }

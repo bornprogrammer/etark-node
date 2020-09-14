@@ -139,7 +139,7 @@
                   </td>
                   <td style="display: flex; align-items: center">
                     <h1 style="font-size: 1em">
-                      Date<span style="font-weight: 100">{{date}}</span>
+                      Date<span style="font-weight: 100">{{ordered_date}}</span>
                     </h1>
                   </td>
                 </tr>
@@ -163,10 +163,11 @@
             <td style="text-align: right">
               <p>Taxable Amount : ₹ {{sub_total}}</p>
               <p>Total Tax : ₹ {{tax}}</p>
+              <p>Gateway Charges : ₹ {{gateway_charge}}</p>
               <p style="font-weight: 600">
                 Total Value (₹) : {{grand_total}}
               </p>
-              <p>Total amount (in words)₹ : {{grand_total_words}} Only</p>
+              <p>Total amount (in words)₹ : {{grand_total_words}}</p>
             </td>
           </tr>
           <tr>

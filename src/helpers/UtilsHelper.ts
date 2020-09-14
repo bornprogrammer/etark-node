@@ -48,7 +48,7 @@ export class UtilsHelper {
     }
 
     public static getBaseURL(): string {
-        let url = AppConstants.SERVER_BASE_URL + ":" + config.get('port');
+        let url = AppConstants.SERVER_BASE_URL;
         return url + "/";
     }
 

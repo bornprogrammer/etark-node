@@ -55,20 +55,31 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
     public buildComponentHTML = async (complaint: Complaint) => {
         let componentDetails = complaint.userPlan['userPlanComponentAs'];
         let billTable = await this.getComponentHTML();
-        componentDetails.forEach((item) => {
+        let itemLength = componentDetails.length - 1;
+        componentDetails.forEach((item, index) => {
+            let isNext = index < itemLength;
             let object = { comp_name: "", quantity: "", rate: "", tax: "", gst: "", total_cost: "" };
-            object.comp_name = this.getRowHTML(item.planComponent.component_display_name, "comp_name");
-            object.quantity = this.getRowHTML("1", "quantity");
-            object.rate = this.getRowHTML(item.component_price, "rate");
-            object.tax = this.getRowHTML("18%", "tax");
-            object.gst = this.getRowHTML("18%", "gst");
-            object.total_cost = this.getRowHTML(item.component_price, "total_cost");
+            object.comp_name = this.getRowHTML(item.planComponent.component_display_name, isNext ? "comp_name" : "");
+            object.quantity = this.getRowHTML("1", isNext ? "quantity" : "");
+            let taxAmount: any = "-";
+            let gst: any = "-";
+            let componentPrice = item.component_price;
+            if (item.planComponent.is_taxable) {
+                gst = AppConstants.CGST;
+                taxAmount = Math.ceil((gst / 100) * componentPrice);
+                componentPrice -= taxAmount;
+            }
+            object.rate = this.getRowHTML(componentPrice, isNext ? "rate" : "");
+            object.tax = this.getRowHTML(taxAmount, isNext ? "tax" : "");
+            object.gst = this.getRowHTML(gst, isNext ? "gst" : "");
+            object.total_cost = this.getRowHTML(item.component_price, isNext ? "total_cost" : "");
             billTable = UtilsHelper.replaceAllStr(object, billTable);
         })
         return billTable;
     }
 
     public getRowHTML = (val, val1 = "") => {
+        val1 = val1.length > 0 ? `{{${val1}}}` : val1;
         return `<p style="font-size: 10px;">${val}</p>${val1}`;
     }
     public getComponentHTML = async () => {

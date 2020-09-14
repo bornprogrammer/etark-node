@@ -8,7 +8,7 @@ export class AppConstants {
     public static readonly PAYTM_GATEWAY_CHARGES = 2.41;
     public static readonly ORDER_ID_PREFIX = "E-Tark";
     public static readonly ML_MODEL_BASE_URL = "http://3.7.68.33/";
-    public static readonly SERVER_BASE_URL = "http://api.etark.in";
+    public static readonly SERVER_BASE_URL = "https://api.etark.in";
     // public static readonly PAYTM_CALLBACK_URL = AppConstants.SERVER_BASE_URL + ":" + process.env.PORT + "";
     public static readonly ML_MODEL_CHANCES_OF_WINNING_URL = AppConstants.ML_MODEL_BASE_URL + "home";
     public static readonly ML_MODEL_COMPENSATION_URL = AppConstants.ML_MODEL_BASE_URL + "compensation";
