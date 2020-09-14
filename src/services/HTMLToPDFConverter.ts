@@ -7,7 +7,7 @@ import config from "config";
 export class HTMLToPDFConverter {
     private options = {
         // "height": "11.25in",
-        // "width": "8.5in",
+        // "width": "1200px",
         // "header": {
         //     "height": "20mm"
         // },
@@ -32,7 +32,6 @@ export class HTMLToPDFConverter {
             }
             let fileName = AppConstants.COMPLAINT_ANALYSIS_FILE_PREFIX_NAME + Date.now() + ".pdf";
             let filePath = config.get("file_path") + fileName;
-            console.log(this.options);
             htmlpdf.create(htmlString, this.options).toFile(filePath, function (err, res) {
                 if (err) return console.log(err);
                 callback(fileName);

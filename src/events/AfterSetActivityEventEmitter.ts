@@ -12,10 +12,7 @@ import config from "config";
 import { Complaint } from "@app/models/Complaint";
 import { DateHelper } from "@app/helpers/DateHelper";
 
-
 export class AfterSetActivityEventEmitter extends BaseQueue {
-
-
     /**
      *
      */
@@ -54,6 +51,7 @@ export class AfterSetActivityEventEmitter extends BaseQueue {
             } else {
                 object.invoice_url = UtilsHelper.getBaseURLForUploadedImage(result.userPlan.pickupDeliveryDetail.deviceDispatchDetails.final_invoice_image);
             }
+            object.emailTitle = "Final Invoice Copy";
             fileReaderServiceIns.readEmailTemplate(htmlFileName, this.sendEmail.bind(null, object));
         }
     }
@@ -83,7 +81,7 @@ export class AfterSetActivityEventEmitter extends BaseQueue {
     }
 
     public sendEmail = async (orderDetailObj, err, htmlStr: string) => {
-        nodeMailerServiceIns.sendHtml(config.get("mail.from"), orderDetailObj.email, "Final Invoice Copy", UtilsHelper.replaceAllStr(orderDetailObj, htmlStr));
+        nodeMailerServiceIns.sendHtml(config.get("mail.from"), orderDetailObj.email, orderDetailObj.emailTitle, UtilsHelper.replaceAllStr(orderDetailObj, htmlStr));
     }
 
     public sendEstimateInvoiceEmail = async (params: any) => {
@@ -104,10 +102,10 @@ export class AfterSetActivityEventEmitter extends BaseQueue {
             } else {
                 object.invoice_url = UtilsHelper.getBaseURLForUploadedImage(result.userPlan.pickupDeliveryDetail.serviceCenterOrder[0].proforma_invoice_image);
             }
+            object.emailTitle = "Service Centre Estimate Invoice";
             fileReaderServiceIns.readEmailTemplate(htmlFileName, this.sendEmail.bind(null, object));
         }
     }
-
 }
 
 export const afterSetActivityEventEmitterIns = new AfterSetActivityEventEmitter();

@@ -44,7 +44,7 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
         let paymentDetails = await complaintServiceIns1.extractOutPaymentDetails(result.complainDetails);
         let userDetails = result.complainDetails.user;
         let companyDetails = { company_name: AppConstants.COMPANY_NAME, gstin: config.get("company.gstin"), pan: config.get("company.pan"), city_name: "", base_url: UtilsHelper.getBaseURL(), customer_name: userDetails.name, price_table: "", support_email: config.get("support_email") };
-        companyDetails.price_table = "";//await this.buildComponentHTML(result.complainDetails);
+        companyDetails.price_table = await this.buildComponentHTML(result.complainDetails);
         if (ArrayHelper.isArrayValid(result.userAddress)) {
             companyDetails.city_name = result.userAddress[0]['name'];
         }
