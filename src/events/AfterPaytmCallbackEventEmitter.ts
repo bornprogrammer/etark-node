@@ -84,33 +84,33 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
     }
     public getComponentHTML = async () => {
         return `
-        <div style="display: flex; justify-content: space-between;">
-      <div>
-        <h1 style="font-size: 12px;">Item</h1>
-        {{comp_name}}
-        <!-- <p style="font-size: 10px;">{{comp_name}}</p> -->
-      </div>
-      <div style="text-align: center;">
-        <h1 style="font-size: 12px;">Quantity</h1>
-        {{quantity}}
-      </div>
-      <div style="text-align: center;">
-        <h1 style="font-size: 12px;">Rate / Item (₹)</h1>
-        {{rate}}
-      </div>
-      <div style="text-align: center;">
-        <h1 style="font-size: 12px;">Taxable Value</h1>
-        {{tax}}
-      </div>
-      <div style="text-align: center;">
-        <h1 style="font-size: 12px;">IGST @18%(₹)</h1>
-        {{gst}}
-      </div>
-      <div style="text-align: center;">
-        <h1 style="font-size: 12px;">Total (₹)</h1>
-        {{total_cost}}
-      </div>
-    </div>`;
+        <tr style="display: flex; justify-content: space-between">
+                    <td>
+                      <h1 style="font-size: 12px">Item</h1>
+                      {{comp_name}}
+                      <!-- <p style="font-size: 10px;">{{comp_name}}</p> -->
+                    </td>
+                    <td style="text-align: center">
+                      <h1 style="font-size: 12px">Quantity</h1>
+                      {{quantity}}
+                    </td>
+                    <td style="text-align: center">
+                      <h1 style="font-size: 12px">Rate / Item (₹)</h1>
+                      {{rate}}
+                    </td>
+                    <td style="text-align: center">
+                      <h1 style="font-size: 12px">Taxable Value</h1>
+                      {{tax}}
+                    </td>
+                    <td style="text-align: center">
+                      <h1 style="font-size: 12px">IGST @18%(₹)</h1>
+                      {{gst}}
+                    </td>
+                    <td style="text-align: center">
+                      <h1 style="font-size: 12px">Total (₹)</h1>
+                      {{total_cost}}
+                    </td>
+                  </tr>`;
     }
 
     public generateInvoiceReportCallback = async (params, complain_id, field_id, fileName) => {
