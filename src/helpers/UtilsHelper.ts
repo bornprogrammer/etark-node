@@ -58,6 +58,19 @@ export class UtilsHelper {
         return url;
     }
 
+    public static buildOrderPrefix(orderId: number): string {
+        let prefix = "ETARK-";
+        let curYear = new Date().getFullYear();
+        let curMonth = new Date().getMonth();
+        curYear -= 2000;
+        if (curMonth >= 0 && curMonth <= 2) {
+            curYear -= 1;
+        }
+        let nextYear = curYear + 1;
+        prefix += curYear + "-" + nextYear + "-" + orderId;
+        return prefix;
+    }
+
     public static getBaseURLForAssetImage(): string {
         let url = UtilsHelper.getBaseURL() + "images/";
         return url;

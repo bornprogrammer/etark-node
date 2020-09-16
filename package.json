@@ -41,7 +41,7 @@
   },
   "scripts": {
     "start": "node -r tsconfig-paths/register -r ts-node/register -r dotenv/config ./src/app.ts",
-    "start:watch": "nodemon",
+    "start:watch": "nodemon --delay 3",
     "test": "jest --watch --maxWorkers=1",
     "build": "tsc",
     "prod": "cd dist/src && node -r tsconfig-paths/register -r dotenv/config app.js",

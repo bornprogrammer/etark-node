@@ -23,6 +23,9 @@ import { ServiceCenterOrder } from "@app/models/ServiceCenterOrder";
 import { DeviceDispatchDetails } from "@app/models/DeviceDispatchDetails";
 import { PlanComponent } from "@app/models/PlanComponents";
 import { UserPayment } from "@app/models/UserPayment";
+import { ServiceCenters } from "@app/models/ServiceCenters";
+import { City } from "@app/models/City";
+import { ServiceCenterDetail } from "@app/models/ServiceCenterDetail";
 
 export class ComplaintRepository extends BaseRepository {
     /**
@@ -102,10 +105,27 @@ export class ComplaintRepository extends BaseRepository {
                                 {
                                     model: DeviceDispatchDetails,
                                     as: PickupDelivery.deviceDispatchDetailsAs,
+                                },
+                                {
+                                    model: ServiceCenters,
+                                    required: true,
+                                    as: PickupDelivery.serviceCenterAs,
+                                    include: [
+                                        {
+                                            model: City,
+                                            as: "cityDetail",
+                                            required: true
+                                        }
+                                    ]
                                 }
                             ]
                         }
                     ]
+                },
+                {
+                    model: MakerDetails,
+                    required: true,
+                    as: "makerDetail"
                 }
             ],
             where: {

@@ -33,6 +33,7 @@ import { htmlToPDFConverterIns } from "@app/services/HTMLToPDFConverter";
 import { ComplaintDetails } from "@app/models/ComplaintDetails";
 import { complaintDetailsRepositoryIns } from "@app/repositories/ComplaintDetailsRepository";
 import { threadId } from "worker_threads";
+import { UtilsHelper } from "@app/helpers/UtilsHelper";
 
 export class UserPlanRepositoryService extends BaseRepositoryService {
     /**
@@ -182,7 +183,7 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
         let params = methodParamEntity.topMethodParam;
         let getUserPlanComponentDetailsParams: GetUserPlanComponentDetailsParamsEntity = new GetUserPlanComponentDetailsParamsEntity(params.user_plan_id);
         let result = await userPlanRepositoryIns.getUserPlanComponentPriceDetails(getUserPlanComponentDetailsParams);
-        return result
+        return result;
     }
 
     public createUserPayment = async (methodParamEntity: MethodParamEntity) => {
@@ -195,7 +196,8 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
 
     public generatePaytmTxnToken = async (methodParamEntity: MethodParamEntity) => {
         let userPaymentObject: UserPayment = methodParamEntity.lastInvokedMethodParam;
-        let orderId = AppConstants.ORDER_ID_PREFIX + userPaymentObject.id;
+        // let orderId = AppConstants.ORDER_ID_PREFIX + userPaymentObject.id;
+        let orderId = UtilsHelper.buildOrderPrefix(userPaymentObject.id);
         let paytmTxnTokenParams = { amount: userPaymentObject.grand_total, orderId, userId: userPaymentObject.id };
         let paytmVal = await paytmServiceIns.generatePaytmTxnToken(paytmTxnTokenParams);
         paytmVal['user_payment'] = userPaymentObject;
@@ -206,7 +208,8 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
         let params = methodParamEntity.lastInvokedMethodParam;
         let userPaymentObject: UserPayment = params.user_payment;
         userPaymentObject.paytm_checksum = params.head.signature;
-        userPaymentObject.order_no = AppConstants.ORDER_ID_PREFIX + userPaymentObject.id;
+        // userPaymentObject.order_no = AppConstants.ORDER_ID_PREFIX + userPaymentObject.id;
+        userPaymentObject.order_no = UtilsHelper.buildOrderPrefix(userPaymentObject.id);
         userPaymentRepositoryIns.update(userPaymentObject);
         return params;
     }

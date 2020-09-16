@@ -1,6 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
 import { ServiceCenterDetail } from "./ServiceCenterDetail";
+import { PickupDelivery } from "./PickupDelivery";
 
 
 export interface ServiceCentersAttributes {
@@ -99,3 +100,8 @@ ServiceCenters.init({
 ServiceCenters.hasMany(ServiceCenterDetail, { foreignKey: "service_center_id", as: "serviceCenterDetails" });
 
 ServiceCenterDetail.belongsTo(ServiceCenters, { as: "" });
+
+
+ServiceCenters.hasMany(PickupDelivery, { foreignKey: "service_center_id", as: "pickupDelivery" });
+
+PickupDelivery.belongsTo(ServiceCenters, { as: PickupDelivery.serviceCenterAs });

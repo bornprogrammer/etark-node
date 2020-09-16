@@ -91,12 +91,15 @@ export class ComplaintService extends BaseService {
             result = [];
             complaint.forEach((complaintItem) => {
                 // complaintInfo['tax'] = paymentDetails.tax;
-                let complaintInfo = { order_no: "", complainStatus: complaintItem.status, complaintCreatedAt: DateHelper.getReadableDateFormat(complaintItem['createdAt']), userName: complaintItem.user.name, userEmail: complaintItem.user.email, userMobileNumber: complaintItem.user.mobile_number, grand_total: 0, payment_status: "", sub_total: 0, tax: 0, gateway_charge: 0, plan_name: "", plan_components_details: "", delivery_amount: 0, distance_meters: 0, delivery_status: "", service_center_status: "", sc_imei_number: "", device_front_image: "", device_back_image: "", phone_warranty: "", service_to_be_done: "", invoice_total_amount: 0, proforma_invoice_image: "", device_delivery_date: "", due_date: "", not_warranty_reason: "", sc_order_created_at: "", device_front_image1: "", device_back_image1: "", final_invoice_image: "", final_invoice_amount: 0, ready_to_dispatch_created_at: "" };
+                let complaintInfo = { complain_id: complaintItem.id, order_no: "", complainStatus: complaintItem.status, complaintCreatedAt: DateHelper.getReadableDateFormat(complaintItem['createdAt']), userName: complaintItem.user.name, userEmail: complaintItem.user.email, userMobileNumber: complaintItem.user.mobile_number, grand_total: 0, payment_status: "", sub_total: 0, tax: 0, gateway_charge: 0, plan_name: "", plan_components_details: "", delivery_amount: 0, distance_meters: 0, delivery_status: "", service_center_status: "", sc_imei_number: "", device_front_image: "", device_back_image: "", phone_warranty: "", service_to_be_done: "", invoice_total_amount: 0, proforma_invoice_image: "", device_delivery_date: "", due_date: "", not_warranty_reason: "", sc_order_created_at: "", device_front_image1: "", device_back_image1: "", final_invoice_image: "", final_invoice_amount: 0, ready_to_dispatch_created_at: "" };
+                // complaintInfo.complainStatus += ` & `;
 
                 if (ArrayHelper.isArrayValid(complaintItem.complainDetails)) {
                     complaintItem.complainDetails.forEach((complaintDetails) => {
                         complaintInfo[complaintDetails.field.field_name] = complaintDetails.field_val;
                     })
+                    complaintInfo['uploaed_invoice_copy'] = `uploaded_invoice_copy :  ${UtilsHelper.getBaseURLForUploadedImage(complaintInfo['uploaed_invoice_copy'])}`;
+                    complaintInfo['uploaed_invoice_copy'] += ` device_front_image : ${UtilsHelper.getBaseURLForUploadedImage(complaintInfo.device_front_image)} device_back_image : ${UtilsHelper.getBaseURLForUploadedImage(complaintInfo.device_back_image)}`
                 }
                 if (ArrayHelper.isArrayValid(complaintItem.userPlan.userPayments)) {
                     let paymentDetails = complaintItem.userPlan.userPayments[0];
@@ -108,7 +111,7 @@ export class ComplaintService extends BaseService {
                     complaintInfo['gateway_charge'] = paymentDetails.gateway_charge;
 
                     complaintInfo['plan_name'] = complaintItem.userPlan.plan.plan_name;
-                    let userPlanComponents = complaintItem.userPlan.UserPlanComponents;
+                    let userPlanComponents = complaintItem.userPlan['userPlanComponentAs'];
                     complaintInfo['plan_components_details'] = "";
                     if (ArrayHelper.isArrayValid(userPlanComponents)) {
                         userPlanComponents.forEach((componentItem) => {
@@ -129,6 +132,10 @@ export class ComplaintService extends BaseService {
                     pickupDeliveryDetails.serviceCenterActivity.forEach((serviceCenterAct) => {
                         complaintInfo['service_center_status'] += " " + serviceCenterAct.activity_type + " on " + DateHelper.getReadableDateFormat(serviceCenterAct['createdAt']);
                     })
+
+                    if (ObjectHelper.isObjectNotEmpty(pickupDeliveryDetails.serviceCenter)) {
+                        complaintInfo['delivery_status'] += ` sc name : ${pickupDeliveryDetails.serviceCenter.name} , city : ${pickupDeliveryDetails.serviceCenter['cityDetail'].name} , brand : ${complaintItem.makerDetail.display_name}`;
+                    }
 
                     if (ArrayHelper.isArrayValid(pickupDeliveryDetails.serviceCenterOrder)) {
                         let serviceCenterOrders = pickupDeliveryDetails.serviceCenterOrder[0];

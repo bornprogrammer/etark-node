@@ -1,4 +1,5 @@
 
+import config from 'config';
 import nodemailer from 'nodemailer';
 export class NodeMailerService {
 
@@ -9,27 +10,27 @@ export class NodeMailerService {
     constructor() {
         this.transporter = nodemailer.createTransport({
             // host: "smtp.gmail.com",
-            host: "smtp.zoho.in",
-            port: 465,
+            host: config.get("mail.host"),
+            port: config.get("mail.port"),
             // port: 587,
             secure: true, // true for 465, false for other ports
             auth: {
-                // user: "iamabornprogrammer@gmail.com", // generated ethereal user
-                // pass: "Divyani_1990", // generated ethereal password
-                user: "service@etark.in",   
-                pass: "etarklegal2020"
+                user: config.get("mail.user"),
+                pass: config.get("mail.pass")
             },
         })
     }
 
     public sendHtml = async (from: string, to: string, subject: string, htmlTemplate: string) => {
         try {
+            from = config.get("mail.from");
             let response = await this.transporter.sendMail({
                 from: from, // sender address
                 to: to, // list of receivers
                 subject: subject, // Subject line
                 html: htmlTemplate, // html body
             });
+            console.log("maill response", response);
         } catch (error) {
             console.log(error);
         }
