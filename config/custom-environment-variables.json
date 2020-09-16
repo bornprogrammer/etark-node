@@ -8,10 +8,9 @@
     "mail": {
         "port": "mail_port",
         "host": "mail_host",
-        "secure": "true",
         "user": "mail_user",
         "pass": "mail_password",
-        "from": "mail_user"
+        "from": "mail_from"
     },
     "paytm": {
         "merchant_key": "merchant_key",

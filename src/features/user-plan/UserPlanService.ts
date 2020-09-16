@@ -11,7 +11,9 @@ export class UserPlanService extends BaseService {
 
     public removeOrderPrefixFromOrderNo(orderNo: string): string {
         if (orderNo) {
-            return orderNo.replace(AppConstants.ORDER_ID_PREFIX, "");
+            let val = orderNo.split("-").pop();
+            return val;
+            // return orderNo.replace(AppConstants.ORDER_ID_PREFIX, "");
         }
         return null;
     }

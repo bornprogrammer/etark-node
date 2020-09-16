@@ -5,6 +5,7 @@ import { ServiceCenterActivity } from "./ServiceCenterActivity";
 import { ServiceCenterOrder } from "./ServiceCenterOrder";
 import { DeviceDispatchDetails } from "./DeviceDispatchDetails";
 import { UserAddress } from "./UserAddress";
+import { ServiceCenters } from "./ServiceCenters";
 
 export interface PickupDeliveryAttirbutes {
     id?: number;
@@ -27,10 +28,12 @@ export class PickupDelivery extends Model implements PickupDeliveryAttirbutes {
     public readonly serviceCenterOrder?: ServiceCenterOrder[];
     public readonly deviceDispatchDetails?: DeviceDispatchDetails;
     public readonly userAddress?: UserAddress[];
+    public readonly serviceCenter?: ServiceCenters;
     public static readonly serviceCenterActivityAs: string = "serviceCenterActivity";
     public static readonly serviceCenterOrderAs: string = "serviceCenterOrder";
     public static readonly deviceDispatchDetailsAs: string = "deviceDispatchDetails";
     public static readonly userAddressAs?: string = "userAddress";
+    public static readonly serviceCenterAs?: string = "serviceCenter";
 }
 
 PickupDelivery.init({
