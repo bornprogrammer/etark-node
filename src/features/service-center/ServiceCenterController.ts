@@ -57,7 +57,7 @@ export class ServiceCenterController extends BaseController {
         let params = req.body;
         await this.getCtrlMethodCoordinator().setMethod({ callableFunction: serviceCenterRepositoryServiceIns.paytmCallback, callableFunctionParams: params }).send(req, res);
         const status = params.STATUS === "TXN_SUCCESS" ? "success" : "failure";
-        const queryStr = ObjectHelper.buildStrFromKeyNValueOfObject({ status, id: "null" }, "=", "&");
+        const queryStr = ObjectHelper.buildStrFromKeyNValueOfObject({ type: status, id: "null" }, "=", "&");
         const urlToRedirect = config.get("client_base_url") + "servicePayment?" + queryStr;
         console.log("queryStr", urlToRedirect);
         res.redirect(urlToRedirect);
