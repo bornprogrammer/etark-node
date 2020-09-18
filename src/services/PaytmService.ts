@@ -13,7 +13,6 @@ class PaytmService {
     private paytmParamsBody: any
     private refundParamsBody: any
     private mid: string;
-    // private url: string;// = "https://securegw.paytm.in/";
     private paytmURL: string;// = "https://securegw-stage.paytm.in/";
     private merchantKey: string;// = "t%6_v!wV#lymlZpr";
     /**
@@ -21,7 +20,6 @@ class PaytmService {
      */
     constructor() {
         this.paytmchecksum = paytmchecksum;
-        // this.urlProd = AppConstants.PAYTM_URL;
         this.paytmURL = config.get("paytm.url");
         this.mid = config.get("paytm.merchant_id");
         this.merchantKey = config.get("paytm.merchant_key");
