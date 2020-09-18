@@ -4,7 +4,7 @@ import { DataTypes, Model } from "sequelize";
 
 export interface ServiceCenterPaymentAttributes {
     id?: number;
-    service_center_order_id: number;
+    service_center_order_id?: number;
     gateway_response?: string;
     payment_status?: string;
 }

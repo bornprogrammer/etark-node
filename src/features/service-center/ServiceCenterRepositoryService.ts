@@ -21,6 +21,7 @@ import { PhoneWarrantyTypeEnum } from "@app/enums/PhoneWarrantyTypeEnum";
 import { serviceCenterPaymentRepositoryIns } from "@app/repositories/ServiceCenterPaymentRepository";
 import { StoreResultAs } from "@app/enums/StoreResultAs";
 import { paytmServiceIns } from "@app/services/PaytmService";
+import { ServiceCenterPayment, ServiceCenterPaymentAttributes } from "@app/models/ServiceCenterModel";
 
 export class ServiceCenterRepositoryService extends BaseRepositoryService {
     /**
@@ -242,6 +243,28 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         let paymtResult = await paytmServiceIns.callProcessTransaction({ amount: paymentDetails.amount, orderId: paymentDetails.orderNo, userId: 1, vendorId: paymentDetails.vendorId });
         paymentDetails.txnToken = paymtResult.body.txnToken;
         return paymentDetails;
+    }
+
+    public paytmCallback = async (params: MethodParamEntity) => {
+        let result = this.getMethodCoordinator().setMethod({ callableFunction: this.addPaytmResponse, callableFunctionParams: params.topMethodParam }).setMethod({ callableFunction: this.setUserMadePaymentActivity }).coordinate();
+        return result;
+    }
+
+    public addPaytmResponse = async (params: MethodParamEntity) => {
+        let paytmResp = params.topMethodParam;
+        let updatePaymentStatusParams: ServiceCenterPaymentAttributes = { id: paytmResp.ORDERID, gateway_response: JSON.stringify(paytmResp), payment_status: 'completed' };
+        updatePaymentStatusParams.payment_status = paytmResp.STATUS === "TXN_SUCCESS" ? updatePaymentStatusParams.payment_status : "failure";
+        let result = await serviceCenterPaymentRepositoryIns.updatePaymentStatus(updatePaymentStatusParams);
+        return result;
+    }
+
+    public setUserMadePaymentActivity = async (params: MethodParamEntity) => {
+        let paytmResp = params.topMethodParam;
+        if (paytmResp.STATUS === "TXN_SUCCESS") {
+            let result = await serviceCenterPaymentRepositoryIns.getPickupDeliveryId(paytmResp.ORDERID);
+            await this.addServiceCenterActivity({ activityType: ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT, pickupDeliveryId: result[0]['pickup_delivery_id'] });
+        }
+        return paytmResp;
     }
 }
 
