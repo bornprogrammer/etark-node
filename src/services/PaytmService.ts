@@ -53,6 +53,11 @@ class PaytmService {
         return url;
     }
 
+    private getCallbackForProcessTransaction = () => {
+        let url = AppConstants.SERVER_BASE_URL + "/api/sc/payment/paytm-callback";
+        return url;
+    }
+
     public generatePaytmTxnToken = async (paytmChecksumEntity: PaytmChecksumEntity) => {
         let paytmParamsBody = this.setParams(paytmChecksumEntity);
         let checkSum = await this.paytmchecksum.generateSignature(JSON.stringify(paytmParamsBody), this.merchantKey);
@@ -139,6 +144,9 @@ class PaytmService {
         paytmParamsBody.orderId = paytmChecksumEntity.orderId;
         if (paytmChecksumEntity.splitSettlementInfo) {
             paytmParamsBody.splitSettlementInfo = paytmChecksumEntity.splitSettlementInfo;
+        }
+        if (paytmChecksumEntity.vendorId) {
+            paytmParamsBody.callbackUrl = this.getCallbackForProcessTransaction();
         }
         return paytmParamsBody;
     }
