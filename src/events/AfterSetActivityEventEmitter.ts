@@ -90,7 +90,7 @@ export class AfterSetActivityEventEmitter extends BaseQueue {
             let object: any = await this.getServiceCenterDetails(result);
             object.imei_number = result.userPlan.pickupDeliveryDetail.serviceCenterOrder[0].imei_number;
             object.estimated_due_date = DateHelper.getReadableDateFormat(result.userPlan.pickupDeliveryDetail.serviceCenterOrder[0].due_date);
-            let url = config.get("client_base_url") + "servicePayment/" + params.pickup_delivery_id + "/";
+            let url = config.get("client_base_url") + "servicePayment?id=" + params.pickup_delivery_id + "&type=";
             object.payment_link = url + "accept";
             object.decline_link = url + "deny";
             object.services = result.userPlan.pickupDeliveryDetail.serviceCenterOrder[0].service_to_be_done;
