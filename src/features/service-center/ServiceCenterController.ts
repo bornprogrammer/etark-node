@@ -62,7 +62,6 @@ export class ServiceCenterController extends BaseController {
         console.log("queryStr", urlToRedirect);
         res.redirect(urlToRedirect);
     }
-
 }
 
 export const serviceCenterControllerIns = new ServiceCenterController();
