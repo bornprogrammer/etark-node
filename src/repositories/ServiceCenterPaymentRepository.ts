@@ -1,6 +1,6 @@
 import { ServiceCenterPayment, ServiceCenterPaymentAttributes } from "@app/models/ServiceCenterModel";
 import { sequelizeConnection } from "@app/SequelizeConnection";
-import { QueryTypes } from "sequelize/types";
+import { QueryTypes } from "sequelize";
 import BaseRepository from "./BaseRepository";
 
 
