@@ -94,7 +94,7 @@ export class ServiceCenterService extends BaseService {
     public extractOutPaymentDetailsFromPaymentDetailsToMakePayment = async (pickupDeliveryDetails: PickupDelivery) => {
         let details = null;
         if (pickupDeliveryDetails) {
-            details = { amount: 0, txnToken: "sssssss", orderNo: 0, vendorId: "", payment_requested_at: "" };
+            details = { amount: 0, txnToken: "", orderNo: 0, vendorId: "", payment_requested_at: "" };
             details.amount = pickupDeliveryDetails.serviceCenterOrder[0].invoice_total_amount;
             details.orderNo = pickupDeliveryDetails.serviceCenterOrder[0].serviceCenterPayment[0].id;
             details.vendorId = pickupDeliveryDetails.serviceCenter.vendor_id;

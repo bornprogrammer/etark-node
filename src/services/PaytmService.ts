@@ -62,28 +62,20 @@ class PaytmService {
     }
 
     public callProcessTransaction = async (paytmChecksumEntity: PaytmChecksumEntity) => {
-        // let paytmTxnToken = await this.generatePaytmTxnToken(paytmChecksumEntity);
-        // let paytmParams = { head: { txnToken: paytmTxnToken }, body: {} };
-        paytmChecksumEntity.splitSettlementInfo = {
+        let payload: any = Object.assign({}, paytmChecksumEntity);
+        payload.splitSettlementInfo = {
             "splitMethod": "AMOUNT",
             "splitInfo": [
                 {
-                    "mid": "tsKbGRUZ284879450408",
+                    "mid": paytmChecksumEntity.vendorId,
                     "amount": {
-                        "value": "50",
-                        "currency": "INR"
-                    }
-                },
-                {
-                    "mid": "LjVlQFoR973337648675",
-                    "amount": {
-                        "value": "50",
+                        "value": paytmChecksumEntity.amount,
                         "currency": "INR"
                     }
                 }
             ]
         };
-        let processTransactionResp = await this.generatePaytmTxnToken(paytmChecksumEntity);
+        let processTransactionResp = await this.generatePaytmTxnToken(payload);
         return processTransactionResp;
     }
 

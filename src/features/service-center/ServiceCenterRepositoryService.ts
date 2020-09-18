@@ -239,6 +239,8 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         let topParams = params.topMethodParam;
         let result = await serviceCenterRepositoryIns.getPaymentDetailsToMakePayment(topParams.pickup_delivery_id);
         let paymentDetails = await serviceCenterServiceIns.extractOutPaymentDetailsFromPaymentDetailsToMakePayment(result);
+        let paymtResult = await paytmServiceIns.callProcessTransaction({ amount: paymentDetails.amount, orderId: paymentDetails.orderNo, userId: 1, vendorId: paymentDetails.vendorId });
+        paymentDetails.txnToken = paymtResult.body.txnToken;
         return paymentDetails;
     }
 }
