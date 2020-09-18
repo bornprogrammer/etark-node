@@ -3,6 +3,7 @@ import { ServiceCenterOrderTypeEnum } from "@app/enums/ServiceCenterOrderTypeEnu
 import { ServiceCenterActivityTypeEnum } from "@app/enums/ServiceCenterActivityTypeEnum";
 import { ServiceCenterActivity } from "@app/models/ServiceCenterActivity";
 import ArrayHelper from "@app/helpers/ArrayHelper";
+import { PickupDelivery } from "@app/models/PickupDelivery";
 
 export class ServiceCenterService extends BaseService {
     /**
@@ -88,6 +89,18 @@ export class ServiceCenterService extends BaseService {
             isLastDBActivityValid = activityTypeArray.indexOf(lastDBActivity) !== -1;
         }
         return isLastDBActivityValid;
+    }
+
+    public extractOutPaymentDetailsFromPaymentDetailsToMakePayment = async (pickupDeliveryDetails: PickupDelivery) => {
+        let details = null;
+        if (pickupDeliveryDetails) {
+            details = { amount: 0, txnToken: "sssssss", orderNo: 0, vendorId: "", payment_requested_at: "" };
+            details.amount = pickupDeliveryDetails.serviceCenterOrder[0].invoice_total_amount;
+            details.orderNo = pickupDeliveryDetails.serviceCenterOrder[0].serviceCenterPayment[0].id;
+            details.vendorId = pickupDeliveryDetails.serviceCenter.vendor_id;
+            details.payment_requested_at = pickupDeliveryDetails.serviceCenterOrder[0].serviceCenterPayment['createdAt'];
+        }
+        return details;
     }
 }
 

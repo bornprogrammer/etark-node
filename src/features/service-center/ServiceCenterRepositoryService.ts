@@ -18,6 +18,9 @@ import ArrayHelper from "@app/helpers/ArrayHelper";
 import { Complaint } from "@app/models/Complaint";
 import { pickupDeliveyRepositoryIns } from "@app/repositories/PickupDeliveyRepository";
 import { PhoneWarrantyTypeEnum } from "@app/enums/PhoneWarrantyTypeEnum";
+import { serviceCenterPaymentRepositoryIns } from "@app/repositories/ServiceCenterPaymentRepository";
+import { StoreResultAs } from "@app/enums/StoreResultAs";
+import { paytmServiceIns } from "@app/services/PaytmService";
 
 export class ServiceCenterRepositoryService extends BaseRepositoryService {
     /**
@@ -85,7 +88,7 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
 
     public processServiceCenterOrderDetails = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.addServiceCenterOrderDetails, callableFunctionParams: params }).setMethod({ callableFunction: this.addUserToConfirmServiceCenterActivity, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.afterProcessingServiceCenterOrderDetails }).coordinate();
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.addServiceCenterOrderDetails, callableFunctionParams: params, storeResultAs: StoreResultAs.ADD_SC_ORDER_DETAILS }).setMethod({ callableFunction: this.addUserToConfirmServiceCenterActivity, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.addServiceCenterPaymentDetails }).setMethod({ callableFunction: this.afterProcessingServiceCenterOrderDetails }).coordinate();
         return result;
     }
 
@@ -94,6 +97,16 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         let addServiceCenterOrderDetailsParams: ServiceCenterOrderAttributes = { pickup_delivery_id: topParams.pickup_delivery_id, imei_number: topParams.imei_number, device_front_image: topParams.device_front_image, device_back_image: topParams.device_back_image, phone_warranty: topParams.phone_warranty, service_to_be_done: topParams.service_to_be_done, invoice_total_amount: topParams.invoice_total_amount, proforma_invoice_image: topParams.proforma_invoice_image, due_date: topParams.due_date, device_delivery_date: topParams.device_delivery_date, not_warranty_reason: topParams.not_warranty_reason };
         let result = await serviceCenterOrderRepositoryIns.create(addServiceCenterOrderDetailsParams);
         return result
+    }
+
+    public addServiceCenterPaymentDetails = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let result: any = true;
+        if (params.phone_warranty !== PhoneWarrantyTypeEnum.IN_WARRANTY) {
+            let addSCOrderDetails = methodParamEntity.methodReturnedValContainer[StoreResultAs.ADD_SC_ORDER_DETAILS];
+            result = await serviceCenterPaymentRepositoryIns.create({ service_center_order_id: addSCOrderDetails.id });
+        }
+        return result;
     }
 
     public addUserToConfirmServiceCenterActivity = async (methodParamEntity: MethodParamEntity) => {
@@ -220,6 +233,13 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         let result = await serviceCenterRepositoryIns.doesSCExistsByCityIdNMakerId({ cityId: topParams.city_id, makerId: topParams.maker_id });
         let finalResult = { does_sc_exists: result ? true : false };
         return finalResult;
+    }
+
+    public getPaymentDetailsToMakePayment = async (params: MethodParamEntity) => {
+        let topParams = params.topMethodParam;
+        let result = await serviceCenterRepositoryIns.getPaymentDetailsToMakePayment(topParams.pickup_delivery_id);
+        let paymentDetails = await serviceCenterServiceIns.extractOutPaymentDetailsFromPaymentDetailsToMakePayment(result);
+        return paymentDetails;
     }
 }
 

@@ -4,5 +4,8 @@
     "client_base_url": "http://www.etark.in/",
     "client_url_after_paytm_response": "http://www.etark.in/confirm/",
     "email_temp_path": "public/email-temp/",
-    "file_path": "public/files/"
+    "file_path": "public/files/",
+    "paytm": {
+        "url": "https://securegw.paytm.in"
+    }
 }

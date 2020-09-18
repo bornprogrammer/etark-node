@@ -10,6 +10,7 @@ export class ServiceCenterRoutes extends BaseRoutes {
 
         this.router.post("/:id", this.setCtrlMethod(serviceCenterControllerIns.addServiceCenterOrderDetails));
 
+        this.router.get("/payment/pickup_delivery/:id", this.setCtrlMethod(serviceCenterControllerIns.getPaymentDetailsToMakePayment));
         this.router.patch("/activity/:pickup_delivery_id/:activity_type", this.setCtrlMethod(serviceCenterControllerIns.setActivity));
 
         this.router.get("/activities/:pickup_delivery_id/:activity_type", this.setCtrlMethod(serviceCenterControllerIns.setActivity));
