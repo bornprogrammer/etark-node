@@ -19,6 +19,7 @@ export interface ServiceCentersAttributes {
     email: string;
     service_center_type: string;
     password: string;
+    vendor_id?: string;
 }
 
 
@@ -37,6 +38,7 @@ export class ServiceCenters extends Model implements ServiceCentersAttributes {
     email: string;
     service_center_type: string;
     password: string;
+    vendor_id: string;
     public serviceCenterDetails?: ServiceCenterDetail[];
 }
 
@@ -89,6 +91,9 @@ ServiceCenters.init({
         type: DataTypes.STRING,
     },
     password: {
+        type: DataTypes.STRING,
+    },
+    vendor_id: {
         type: DataTypes.STRING,
     }
 }, {

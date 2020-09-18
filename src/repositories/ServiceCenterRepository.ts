@@ -15,6 +15,9 @@ import { City } from "@app/models/City";
 import { User } from "@app/models/User";
 import { serviceCenterServiceIns } from "@app/features/service-center/ServiceCenterService";
 import { ServiceCenterOrderTypeEnum } from "@app/enums/ServiceCenterOrderTypeEnum";
+import { PickupDelivery } from "@app/models/PickupDelivery";
+import { ServiceCenterOrder } from "@app/models/ServiceCenterOrder";
+import { ServiceCenterPayment } from "@app/models/ServiceCenterModel";
 
 export class ServiceCenterRepository extends BaseRepository {
     /**
@@ -178,6 +181,38 @@ export class ServiceCenterRepository extends BaseRepository {
             where: {
                 city_id: params.cityId,
                 status: 'active'
+            }
+        })
+        return result;
+    }
+
+    public getPaymentDetailsToMakePayment = async (pickupDeliveryId: any) => {
+        let result = await PickupDelivery.findOne({
+            include: [
+                {
+                    model: ServiceCenterOrder,
+                    required: true,
+                    as: PickupDelivery.serviceCenterOrderAs,
+                    include: [
+                        {
+                            model: ServiceCenterPayment,
+                            required: true,
+                            as: ServiceCenterOrder.serviceCenterPaymentAs,
+                            where: {
+                                payment_status: "pending"
+                            }
+                        }
+                    ]
+                },
+                {
+                    model: ServiceCenters,
+                    required: true,
+                    as: PickupDelivery.serviceCenterAs
+                }
+            ],
+            where: {
+                id: pickupDeliveryId,
+                status: "success"
             }
         })
         return result;

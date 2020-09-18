@@ -11,4 +11,5 @@ export enum StoreResultAs {
     INSPECTION_FEE_DETAILS = "inspection_fee_details",
     DENIED_SERVICE_CENTER_LIST = "denied_service_center_list",
     FORGOT_PASSWORD = "forgot_password",
+    ADD_SC_ORDER_DETAILS = "add_sc_order_details",
 }

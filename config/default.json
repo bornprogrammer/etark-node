@@ -2,5 +2,5 @@
     "name": "E-Tark",
     "dialect": "mysql",
     "google_map_api_url": "https://maps.googleapis.com/maps/api/distancematrix/json",
-    "support_email": "no-reply@etark.in"
+    "support_email": "support@etark.in"
 }

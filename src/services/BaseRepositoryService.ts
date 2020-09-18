@@ -1,5 +1,4 @@
 
-
 import MethodCoordinator from "@app/coordinators/method-cordinators/MethodCordinator";
 
 export abstract class BaseRepositoryService {

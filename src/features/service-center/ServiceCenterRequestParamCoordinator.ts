@@ -118,4 +118,9 @@ export class ServiceCenterRequestParamCoordinator extends RequestParamsValidator
         })
         return schema;
     }
+
+    public getPaymentDetailsToMakePaymentParams = async () => {
+        let params = await this.setParamFromParamsAs('id', 'pickup_delivery_id').coordinate();
+        return params;
+    }
 }

@@ -1,5 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelizeConnection } from "@app/SequelizeConnection";
+import { ServiceCenterPayment } from "./ServiceCenterModel";
 
 export interface ServiceCenterOrderAttributes {
     id?: number;
@@ -30,6 +31,8 @@ export class ServiceCenterOrder extends Model implements ServiceCenterOrderAttri
     proforma_invoice_image: string;
     device_delivery_date: string;
     not_warranty_reason?: string;
+    public readonly serviceCenterPayment?: ServiceCenterPayment[];
+    public static readonly serviceCenterPaymentAs?: string = "serviceCenterPayment";
 }
 
 ServiceCenterOrder.init({
@@ -88,3 +91,5 @@ ServiceCenterOrder.init({
     tableName: "service_center_orders",
     underscored: true
 })
+
+ServiceCenterOrder.hasMany(ServiceCenterPayment, { foreignKey: "service_center_order_id", as: ServiceCenterOrder.serviceCenterPaymentAs })
