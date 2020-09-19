@@ -74,7 +74,10 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
                     complainDetails.complainDetail[complainDet.field.field_name] = complainDet['field_val'];
                 })
                 if (complainDetails.complainDetail['invoice_report']) {
-                    complainDetails.complainDetail['invoice_report'] = UtilsHelper.getBaseURLForUploadedImage(complainDetails.complainDetail['invoice_report']);
+                    complainDetails.complainDetail['invoice_report'] = UtilsHelper.getBaseURLForAssetFile() + complainDetails.complainDetail['invoice_report'];
+                }
+                if (complainDetails.complainDetail['uploaed_invoice_copy']) {
+                    complainDetails.complainDetail['uploaed_invoice_copy'] = UtilsHelper.getBaseURLForUploadedImage(complainDetails.complainDetail['uploaed_invoice_copy']);
                 }
                 if (ArrayHelper.isArrayValid(complain.userPlan.pickupDeliveryDetail.serviceCenterOrder)) {
                     complainDetails.serviceCenterOrderDetails = complain.userPlan.pickupDeliveryDetail.serviceCenterOrder[0];
