@@ -61,18 +61,15 @@ export class AfterPaytmCallbackEventEmitter extends BaseQueue {
             let object = { comp_name: "", quantity: "", rate: "", tax: "", gst: "", total_cost: "" };
             object.comp_name = this.getRowHTML(item.planComponent.component_display_name, isNext ? "comp_name" : "");
             object.quantity = this.getRowHTML("1", isNext ? "quantity" : "");
-            let taxAmount: any = "-";
-            let gst: any = "-";
+            let taxAmount: any = "0";
             let componentPrice = item.component_price;
             if (item.planComponent.is_taxable) {
-                gst = AppConstants.CGST;
-                taxAmount = Math.ceil((gst / 100) * componentPrice);
-                componentPrice -= taxAmount;
+                taxAmount = Math.ceil((AppConstants.CGST / 100) * componentPrice);
             }
             object.rate = this.getRowHTML(componentPrice, isNext ? "rate" : "");
-            object.tax = this.getRowHTML(taxAmount, isNext ? "tax" : "");
-            object.gst = this.getRowHTML(gst, isNext ? "gst" : "");
-            object.total_cost = this.getRowHTML(item.component_price, isNext ? "total_cost" : "");
+            object.tax = this.getRowHTML(item.planComponent.is_taxable ? componentPrice : "-", isNext ? "tax" : "");
+            object.gst = this.getRowHTML(item.planComponent.is_taxable ? taxAmount : "-", isNext ? "gst" : "");
+            object.total_cost = this.getRowHTML(item.component_price + parseInt(taxAmount), isNext ? "total_cost" : "");
             billTable = UtilsHelper.replaceAllStr(object, billTable);
         })
         return billTable;
