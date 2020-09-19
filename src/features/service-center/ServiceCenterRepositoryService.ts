@@ -22,6 +22,8 @@ import { serviceCenterPaymentRepositoryIns } from "@app/repositories/ServiceCent
 import { StoreResultAs } from "@app/enums/StoreResultAs";
 import { paytmServiceIns } from "@app/services/PaytmService";
 import { ServiceCenterPayment, ServiceCenterPaymentAttributes } from "@app/models/ServiceCenterModel";
+import { UtilsHelper } from "@app/helpers/UtilsHelper";
+import { DateHelper } from "@app/helpers/DateHelper";
 
 export class ServiceCenterRepositoryService extends BaseRepositoryService {
     /**
@@ -66,13 +68,23 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         if (ArrayHelper.isArrayValid(orderListResponse)) {
             newOrderListResponse = [];
             orderListResponse.forEach((complain) => {
-                let complainDetails = { complainId: complain.id, maker_detail_id: complain.maker_detail_id, complainDetail: {}, serviceCenterOrderDetails: {}, deviceDispatchDetail: {}, userPaymentDetails: {}, orderDetails: {}, pickup_details: {}, serviceCenterActivityDetails: { lastActivityType: null }, userDetails: {}, userAddress: {}, bankDetails: { key1: "Value 1", key2: "Value 2", key3: "Value 3" } };
+                let complainDetails = { complainId: complain.id, maker_detail_id: complain.maker_detail_id, complainDetail: {}, serviceCenterOrderDetails: {}, deviceDispatchDetail: {}, userPaymentDetails: {}, orderDetails: {}, pickup_details: {}, serviceCenterActivityDetails: { lastActivityType: null }, userDetails: {}, userAddress: {}, bankDetails: {} };
                 newOrderListResponse.push(complainDetails);
                 complain.complainDetails.forEach((complainDet) => {
                     complainDetails.complainDetail[complainDet.field.field_name] = complainDet['field_val'];
                 })
+                if (complainDetails.complainDetail['invoice_report']) {
+                    complainDetails.complainDetail['invoice_report'] = UtilsHelper.getBaseURLForUploadedImage(complainDetails.complainDetail['invoice_report']);
+                }
                 if (ArrayHelper.isArrayValid(complain.userPlan.pickupDeliveryDetail.serviceCenterOrder)) {
                     complainDetails.serviceCenterOrderDetails = complain.userPlan.pickupDeliveryDetail.serviceCenterOrder[0];
+                    if (ArrayHelper.isArrayValid(complainDetails.serviceCenterOrderDetails['serviceCenterPayment'])) {
+                        let details = complainDetails.serviceCenterOrderDetails['serviceCenterPayment'][0].gateway_response;
+                        details = JSON.parse(details);
+                        complainDetails.bankDetails['Bank Name'] = details['BANKNAME'];
+                        complainDetails.bankDetails['Amount'] = details['TXNAMOUNT'];
+                        complainDetails.bankDetails['Txn ID'] = details['TXNID'];
+                    }
                 }
                 if (ArrayHelper.isArrayValid(complain.userPlan.userPayments)) {
                     complainDetails.orderDetails = complain.userPlan.userPayments[0];
@@ -166,6 +178,8 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         let topParams = params.topMethodParam;
         if (topParams.activity_type === ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED) {
             await this.removeServiceCenter(topParams.pickup_delivery_id);
+        } else if (topParams.activity_type === ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT) {
+            await this.markServiceCenterPaymentDeclinedByUser(topParams.pickup_delivery_id);
         }
         afterSetActivityEventEmitterIns.emit(EventEmitterIdentifierEnum.AFTER_SET_ACTIVITY_EVENTEMITTER, params.topMethodParam);
     }
@@ -239,9 +253,17 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
     public getPaymentDetailsToMakePayment = async (params: MethodParamEntity) => {
         let topParams = params.topMethodParam;
         let result = await serviceCenterRepositoryIns.getPaymentDetailsToMakePayment(topParams.pickup_delivery_id);
-        let paymentDetails = await serviceCenterServiceIns.extractOutPaymentDetailsFromPaymentDetailsToMakePayment(result);
-        let paymtResult = await paytmServiceIns.callProcessTransaction({ amount: paymentDetails.amount, orderId: paymentDetails.orderNo, userId: 1, vendorId: paymentDetails.vendorId });
-        paymentDetails.txnToken = paymtResult.body.txnToken;
+        let paymentDetails = null;
+        if (result) {
+            paymentDetails = await serviceCenterServiceIns.extractOutPaymentDetailsFromPaymentDetailsToMakePayment(result);
+            let hourDiff = DateHelper.getHourDifference(paymentDetails['payment_requested_at']);
+            if (hourDiff >= 24) {
+                paymentDetails = null;
+                throw new BadHttpRequestError("24 hrs has been expired");
+            }
+            let paymtResult = await paytmServiceIns.callProcessTransaction({ amount: paymentDetails.amount, orderId: paymentDetails.orderNo, userId: 1, vendorId: paymentDetails.vendorId });
+            paymentDetails.txnToken = paymtResult.body.txnToken;
+        }
         return paymentDetails;
     }
 
@@ -265,6 +287,13 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
             await this.addServiceCenterActivity({ activityType: ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT, pickupDeliveryId: result[0]['pickup_delivery_id'] });
         }
         return paytmResp;
+    }
+
+    public markServiceCenterPaymentDeclinedByUser = async (pickup_delivery_id: number) => {
+        let result = await serviceCenterPaymentRepositoryIns.getServiceCenterPaymentId(pickup_delivery_id);
+        if (result) {
+            let result1 = await serviceCenterPaymentRepositoryIns.updatePaymentStatus({ payment_status: ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT, id: result[0]['service_center_payment_id'] });
+        }
     }
 }
 

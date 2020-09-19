@@ -83,7 +83,7 @@ export class ComplaintRepository extends BaseRepository {
                         {
                             model: PickupDelivery,
                             as: UserPlan.pickupDeliveryDetailAs,
-                            required: true,
+                            required: false,
                             where: {
                                 status: ['success', 'service_denied'],
                             },

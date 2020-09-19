@@ -18,6 +18,7 @@ import { City } from "./City";
 import { UserPlanComponent } from "./UserPlanComponent";
 import { PlanComponent } from "./PlanComponents";
 import { UserAddress } from "./UserAddress";
+import { ServiceCenterPayment } from "./ServiceCenterModel";
 
 export interface ComplaintAttributes {
     id: number,
@@ -201,7 +202,7 @@ Complaint.init({
                                 include: [
                                     {
                                         model: ServiceCenterOrder,
-                                        as: PickupDelivery.serviceCenterOrderAs
+                                        as: PickupDelivery.serviceCenterOrderAs,
                                     },
                                     {
                                         model: DeviceDispatchDetails,
@@ -248,6 +249,16 @@ Complaint.init({
                                     {
                                         model: ServiceCenterOrder,
                                         as: PickupDelivery.serviceCenterOrderAs,
+                                        include: [
+                                            {
+                                                model: ServiceCenterPayment,
+                                                as: ServiceCenterOrder.serviceCenterPaymentAs,
+                                                required: false,
+                                                where: {
+                                                    payment_status: "completed"
+                                                }
+                                            }
+                                        ]
                                     },
                                     {
                                         model: DeviceDispatchDetails,

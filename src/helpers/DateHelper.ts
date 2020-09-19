@@ -46,9 +46,17 @@ export class DateHelper {
         return moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
     }
 
-    // public static getCurrentUTCDateAsStrWithFormat(dateFormat): string {
-    //     return moment(new Date()).format(dateFormat);
-    // }
+    public static getCurrentDateTimeObjectAsMysqlStr(dateString): string {
+        return moment(new Date(dateString)).format('YYYY-MM-DD HH:mm:ss');
+    }
+
+    public static getHourDifference(dateString): any {
+        let date1 = moment(new Date(dateString));
+        let date2 = moment(new Date());
+        var duration = moment.duration(date2.diff(date1));
+        var hours = duration.asHours();
+        return hours;
+    }
 
     public static getCurrentUTCDateTimeAsMysqlStr(): string {
         return moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');

@@ -37,9 +37,6 @@ export class AfterAddingAddressEventEmitter extends BaseQueue {
         }
         return result;
     }
-
-
-
 }
 
 export const afterAddingAddressEventEmitterIns = new AfterAddingAddressEventEmitter();
