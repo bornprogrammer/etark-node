@@ -22,8 +22,8 @@ import { serviceCenterPaymentRepositoryIns } from "@app/repositories/ServiceCent
 import { StoreResultAs } from "@app/enums/StoreResultAs";
 import { paytmServiceIns } from "@app/services/PaytmService";
 import { ServiceCenterPayment, ServiceCenterPaymentAttributes } from "@app/models/ServiceCenterModel";
-import { DateHelper } from "@app/helpers/DateHelper";
 import { UtilsHelper } from "@app/helpers/UtilsHelper";
+import { DateHelper } from "@app/helpers/DateHelper";
 
 export class ServiceCenterRepositoryService extends BaseRepositoryService {
     /**
@@ -178,6 +178,8 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         let topParams = params.topMethodParam;
         if (topParams.activity_type === ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_SERVICE_DENIED) {
             await this.removeServiceCenter(topParams.pickup_delivery_id);
+        } else if (topParams.activity_type === ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT) {
+            await this.markServiceCenterPaymentDeclinedByUser(topParams.pickup_delivery_id);
         }
         afterSetActivityEventEmitterIns.emit(EventEmitterIdentifierEnum.AFTER_SET_ACTIVITY_EVENTEMITTER, params.topMethodParam);
     }
@@ -261,8 +263,8 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
             }
             let paymtResult = await paytmServiceIns.callProcessTransaction({ amount: paymentDetails.amount, orderId: paymentDetails.orderNo, userId: 1, vendorId: paymentDetails.vendorId });
             paymentDetails.txnToken = paymtResult.body.txnToken;
-            return paymentDetails;
         }
+        return paymentDetails;
     }
 
     public paytmCallback = async (params: MethodParamEntity) => {
@@ -285,6 +287,13 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
             await this.addServiceCenterActivity({ activityType: ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT, pickupDeliveryId: result[0]['pickup_delivery_id'] });
         }
         return paytmResp;
+    }
+
+    public markServiceCenterPaymentDeclinedByUser = async (pickup_delivery_id: number) => {
+        let result = await serviceCenterPaymentRepositoryIns.getServiceCenterPaymentId(pickup_delivery_id);
+        if (result) {
+            let result1 = await serviceCenterPaymentRepositoryIns.updatePaymentStatus({ payment_status: ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_DECLINED_PAYMENT, id: result[0]['service_center_payment_id'] });
+        }
     }
 }
 
