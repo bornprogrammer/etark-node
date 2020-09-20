@@ -6,6 +6,6 @@
     "email_temp_path": "public/email-temp/",
     "file_path": "public/files/",
     "paytm": {
-        "url": "https://securegw.paytm.in/"
+        "url": "https://securegw-stage.paytm.in/"
     }
 }
