@@ -27,7 +27,7 @@ export class PickupDelivery extends Model implements PickupDeliveryAttirbutes {
     public readonly serviceCenterActivity?: ServiceCenterActivity[];
     public readonly serviceCenterOrder?: ServiceCenterOrder[];
     public readonly deviceDispatchDetails?: DeviceDispatchDetails;
-    public readonly userAddress?: UserAddress[];
+    public readonly userAddress?: UserAddress;
     public readonly serviceCenter?: ServiceCenters;
     public static readonly serviceCenterActivityAs: string = "serviceCenterActivity";
     public static readonly serviceCenterOrderAs: string = "serviceCenterOrder";
