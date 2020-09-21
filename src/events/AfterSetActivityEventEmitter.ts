@@ -93,6 +93,7 @@ export class AfterSetActivityEventEmitter extends BaseQueue {
             let url = config.get("client_base_url") + "servicePayment?id=" + params.pickup_delivery_id + "&type=";
             object.payment_link = url + "accept";
             object.decline_link = url + "deny";
+            object.deadline = DateHelper.addHourToCurDate(24);
             object.services = result.userPlan.pickupDeliveryDetail.serviceCenterOrder[0].service_to_be_done;
             object.warranty = await this.getWarrantyValue(result.userPlan.pickupDeliveryDetail.serviceCenterOrder[0].phone_warranty);
             object.reason_for_non_warranty = result.userPlan.pickupDeliveryDetail.serviceCenterOrder[0].not_warranty_reason ?? "N/A";

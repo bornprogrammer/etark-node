@@ -78,4 +78,10 @@ export class DateHelper {
     public static getCurrentUTCDateAsMysqlStr(): string {
         return moment(new Date()).utc().format('YYYY-MM-DD');
     }
+
+    public static addHourToCurDate(hour: number) {
+        let dateObject = new Date();
+        dateObject.setHours(dateObject.getHours() + hour);
+        return dateObject.getDate() + "/" + (dateObject.getMonth() + 1) + "/" + dateObject.getFullYear() + " " + dateObject.getHours() + ":" + dateObject.getMinutes() + ":00";
+    }
 }
