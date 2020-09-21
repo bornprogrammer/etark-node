@@ -102,5 +102,10 @@ export class UtilsHelper {
         return str;
     }
 
+    public static subtractGatewayCharges(amount: number) {
+        let gatewayCharges = Math.ceil((AppConstants.PAYTM_GATEWAY_CHARGES / 100) * amount);
+        return amount - gatewayCharges;
+    }
+
 
 }

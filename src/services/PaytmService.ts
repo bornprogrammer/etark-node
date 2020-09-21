@@ -113,7 +113,7 @@ class PaytmService {
     }
 
     private getRefundBody = async (params: PaytmRefundParamsEntity) => {
-        let refundBody = { mid: this.mid, txnType: "REFUND", orderId: params.orderId, txnId: params.txnId, refId: params.refundId, refundAmount: params.amount };
+        let refundBody = { mid: this.mid, txnType: "REFUND", orderId: params.orderId, txnId: params.txnId, refId: params.refundId, refundAmount: UtilsHelper.subtractGatewayCharges(params.amount) };
         return refundBody;
     }
 
