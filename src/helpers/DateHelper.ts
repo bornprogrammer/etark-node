@@ -34,6 +34,14 @@ export class DateHelper {
         return null;
     }
 
+    public static getReadableDateTimeFormat(dateStr: string): string {
+        if (dateStr) {
+            let dateObject = new Date(dateStr);
+            return dateObject.getDate() + "/" + (dateObject.getMonth() + 1) + "/" + dateObject.getFullYear() + " " + dateObject.getHours() + " " + dateObject.getMinutes();
+        }
+        return null;
+    }
+
     public static getCurrentDateAsMysqlStr(): string {
         return moment(new Date()).format('YYYY-MM-DD');
     }
@@ -56,6 +64,11 @@ export class DateHelper {
         var duration = moment.duration(date2.diff(date1));
         var hours = duration.asHours();
         return hours;
+    }
+
+    public static convertDateToUTCDate(mysqlStr: string) {
+        let date = new Date(mysqlStr);
+        return moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
     }
 
     public static getCurrentUTCDateTimeAsMysqlStr(): string {

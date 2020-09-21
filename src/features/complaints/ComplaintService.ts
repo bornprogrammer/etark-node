@@ -108,6 +108,7 @@ export class ComplaintService extends BaseService {
                     complaintInfo['sub_total'] = paymentDetails.sub_total;
                     complaintInfo['tax'] = paymentDetails.tax;
                     complaintInfo['gateway_charge'] = paymentDetails.gateway_charge;
+                    complaintInfo['payment_made_at'] = DateHelper.getReadableDateTimeFormat(paymentDetails['createdAt']);
 
                     complaintInfo['plan_name'] = complaintItem.userPlan.plan.plan_name;
                     let userPlanComponents = complaintItem.userPlan['userPlanComponentAs'];
@@ -129,7 +130,7 @@ export class ComplaintService extends BaseService {
                     complaintInfo['service_center_status'] = "";
 
                     pickupDeliveryDetails.serviceCenterActivity.forEach((serviceCenterAct) => {
-                        complaintInfo['service_center_status'] += " " + serviceCenterAct.activity_type + " on " + DateHelper.getReadableDateFormat(serviceCenterAct['createdAt']);
+                        complaintInfo['service_center_status'] += " " + serviceCenterAct.activity_type + " on " + DateHelper.getReadableDateTimeFormat(serviceCenterAct['createdAt']);
                     })
 
                     if (ObjectHelper.isObjectNotEmpty(pickupDeliveryDetails.userAddress)) {
