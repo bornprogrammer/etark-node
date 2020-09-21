@@ -27,7 +27,7 @@ class PaytmService {
             "requestType": "Payment",
             // "mid": "weoglH66146360524361",
             "mid": this.mid,
-            "websiteName": "WEBSTAGING",
+            "websiteName": config.get("paytm.websiteName"),
             "orderId": "",
             "callbackUrl": this.getCallbackURL(),
             "txnAmount": {
