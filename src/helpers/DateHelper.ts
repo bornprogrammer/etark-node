@@ -68,7 +68,7 @@ export class DateHelper {
 
     public static convertDateToUTCDate(mysqlStr: string) {
         let date = new Date(mysqlStr);
-        return moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
+        return moment(date).utc().format('YYYY-MM-DD HH:mm:ss')
     }
 
     public static getCurrentUTCDateTimeAsMysqlStr(): string {
