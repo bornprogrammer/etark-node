@@ -66,15 +66,21 @@ export class DateHelper {
         return hours;
     }
 
-    public static convertDateToUTCDate(mysqlStr: string) {
-        let date = new Date(mysqlStr);
-        return moment(date).utc().format('YYYY-MM-DD HH:mm:ss')
+    public static convertDateToUTCDate(mysqlStr: string, format?: string) {
+        if (mysqlStr) {
+            let date = new Date(mysqlStr);
+            format = format || "YYYY-MM-DD HH:mm:ss";
+            return moment(date).utc().format(format);
+        }
+        return "";
     }
 
     public static convertUTCDateToLocal(mysqlStr: string) {
-        // let date = new Date(mysqlStr);
-        let moment1 = moment.utc(mysqlStr, "YYYY-MM-DD HH:mm:ss");
-        return moment1.local().format('YYYY-MM-DD HH:mm:ss');
+        if (mysqlStr) {
+            let moment1 = moment.utc(mysqlStr, "YYYY-MM-DD HH:mm:ss");
+            return moment1.local().format('MMMM Do, YYYY h:mm A');
+        }
+        return "";
     }
 
     public static getCurrentUTCDateTimeAsMysqlStr(): string {

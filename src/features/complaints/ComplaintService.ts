@@ -7,6 +7,7 @@ import ArrayHelper from "@app/helpers/ArrayHelper";
 import { DateHelper } from "@app/helpers/DateHelper";
 import { UtilsHelper } from "@app/helpers/UtilsHelper";
 import { ObjectHelper } from "@app/helpers/ObjectHelper";
+import { AppConstants } from "@app/constants/AppConstants";
 
 export class ComplaintService extends BaseService {
 
@@ -114,7 +115,7 @@ export class ComplaintService extends BaseService {
                     complaintInfo['sub_total'] = paymentDetails.sub_total;
                     complaintInfo['tax'] = paymentDetails.tax;
                     complaintInfo['gateway_charge'] = paymentDetails.gateway_charge;
-                    complaintInfo['payment_made_at'] = DateHelper.getReadableDateTimeFormat(paymentDetails['createdAt']);
+                    complaintInfo['payment_made_at'] = DateHelper.convertUTCDateToLocal(paymentDetails['createdAt']);
 
                     complaintInfo['plan_name'] = complaintItem.userPlan.plan.plan_name;
                     let userPlanComponents = complaintItem.userPlan['userPlanComponentAs'];
@@ -136,7 +137,7 @@ export class ComplaintService extends BaseService {
                     complaintInfo['service_center_status'] = "";
 
                     pickupDeliveryDetails.serviceCenterActivity.forEach((serviceCenterAct) => {
-                        complaintInfo['service_center_status'] += " " + serviceCenterAct.activity_type + " on " + DateHelper.getReadableDateTimeFormat(serviceCenterAct['createdAt']);
+                        complaintInfo['service_center_status'] += " " + serviceCenterAct.activity_type + " on " + DateHelper.convertUTCDateToLocal(serviceCenterAct['createdAt']);
                     })
 
                     if (ObjectHelper.isObjectNotEmpty(pickupDeliveryDetails.userAddress)) {
@@ -158,10 +159,10 @@ export class ComplaintService extends BaseService {
                         complaintInfo['service_to_be_done'] = serviceCenterOrders.service_to_be_done;
                         complaintInfo['invoice_total_amount'] = serviceCenterOrders.invoice_total_amount;
                         complaintInfo['proforma_invoice_image'] = UtilsHelper.getBaseURLForUploadedImage(serviceCenterOrders.proforma_invoice_image);
-                        complaintInfo['device_delivery_date'] = DateHelper.getReadableDateFormat(serviceCenterOrders.device_delivery_date);
-                        complaintInfo['due_date'] = DateHelper.getReadableDateFormat(serviceCenterOrders.due_date);
+                        complaintInfo['device_delivery_date'] = DateHelper.convertDateToUTCDate(serviceCenterOrders.device_delivery_date, AppConstants.DATE_FORMAT);
+                        complaintInfo['due_date'] = DateHelper.convertDateToUTCDate(serviceCenterOrders.due_date, AppConstants.DATE_FORMAT);
                         complaintInfo['not_warranty_reason'] = serviceCenterOrders.not_warranty_reason;
-                        complaintInfo['sc_order_created_at'] = DateHelper.getReadableDateFormat(serviceCenterOrders['createdAt']);
+                        complaintInfo['sc_order_created_at'] = DateHelper.convertUTCDateToLocal(serviceCenterOrders['createdAt']);
                     }
 
                     if (ObjectHelper.isObjectNotEmpty(pickupDeliveryDetails.deviceDispatchDetails)) {

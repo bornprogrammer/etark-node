@@ -18,4 +18,5 @@ export class AppConstants {
     public static readonly INVOICE_FILE_PREFIX_NAME = "invoice_";
     public static readonly MERCHANT_FIELD_OTHER_VALUE = "other";
     public static readonly COMPANY_NAME = "ETark Tech.Pvt Ltd.";
+    public static readonly DATE_FORMAT = "MMMM Do, YYYY h:mm A";
 }
