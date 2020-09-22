@@ -240,15 +240,15 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
     public refundInspectionFee = async (pickupDeliveryId: number) => {
         let result = await this.getMethodCoordinator().setMethod({
             callableFunction: this.getUserPlanInspectionFeeDetailsForRefund, callableFunctionParams: pickupDeliveryId, storeResultAs: StoreResultAs.INSPECTION_FEE_DETAILS
-        }).setMethod({ callableFunction: this.requestRefundFromPaytm }).setMethod({ callableFunction: this.storeRefundResponses }).setMethod({ callableFunction: this.sendRefundMail }).coordinate();
+        }).setMethod({ callableFunction: this.requestRefundFromPaytm }).setMethod({ callableFunction: this.storeRefundResponses, notBreakWhenReturnedValueNotTruthy: true }).setMethod({ callableFunction: this.sendRefundMail }).coordinate();
         return result;
     }
 
     public sendRefundMail = async (params: MethodParamEntity) => {
         let paytmRefundParamsEntity: PaytmRefundParamsEntity = params.methodReturnedValContainer[StoreResultAs.INSPECTION_FEE_DETAILS];
         let userdetail = await complaintRepositoryIns.getUserDetails(paytmRefundParamsEntity.complain_id);
-        let details = { name: userdetail[0]['name'], base_url: UtilsHelper.getBaseURL(), refund: paytmRefundParamsEntity.amount, order_no: paytmRefundParamsEntity.orderId };
-        fileReaderServiceIns.readEmailTemplate("refund.html", this.sendRefundMailCallback.bind(null, details));
+        let details = { name: userdetail[0]['name'], base_url: UtilsHelper.getBaseURL(), refund: paytmRefundParamsEntity.amount, order_no: paytmRefundParamsEntity.orderId, email: userdetail[0]['email'] };
+        fileReaderServiceIns.readEmailTemplate("Refund.html", this.sendRefundMailCallback.bind(null, details));
     }
 
     public sendRefundMailCallback = async (details, error, data) => {
