@@ -24,6 +24,7 @@ import { paytmServiceIns } from "@app/services/PaytmService";
 import { ServiceCenterPayment, ServiceCenterPaymentAttributes } from "@app/models/ServiceCenterModel";
 import { UtilsHelper } from "@app/helpers/UtilsHelper";
 import { DateHelper } from "@app/helpers/DateHelper";
+import { userPlanRepositoryServiceIns } from "../user-plan/UserPlanRepositoryService";
 
 export class ServiceCenterRepositoryService extends BaseRepositoryService {
     /**
@@ -131,7 +132,10 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         let addServiceCenterOrderDetails = methodParamEntity.topMethodParam;
         let result = await this.addServiceCenterActivity({ activityType: ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_TO_CONFIRM, pickupDeliveryId: addServiceCenterOrderDetails.pickup_delivery_id });
         if (methodParamEntity.topMethodParam.phone_warranty === PhoneWarrantyTypeEnum.IN_WARRANTY) {
+
             await this.addServiceCenterActivity({ activityType: ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT, pickupDeliveryId: addServiceCenterOrderDetails.pickup_delivery_id });
+
+            await userPlanRepositoryServiceIns.refundInspectionFee(addServiceCenterOrderDetails.pickup_delivery_id);
         }
         return result;
     }
@@ -299,6 +303,7 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         if (paytmResp.STATUS === "TXN_SUCCESS") {
             let result = await serviceCenterPaymentRepositoryIns.getPickupDeliveryId(paytmResp.ORDERID);
             await this.addServiceCenterActivity({ activityType: ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT, pickupDeliveryId: result[0]['pickup_delivery_id'] });
+            await userPlanRepositoryServiceIns.refundInspectionFee(result[0]['pickup_delivery_id']);
         }
         return paytmResp;
     }

@@ -285,6 +285,9 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
         let paytmRefundParamsEntity: PaytmRefundParamsEntity = params.methodReturnedValContainer[StoreResultAs.INSPECTION_FEE_DETAILS];
         paytmRefundParamsEntity.refundId = userPlanServiceIns.removeOrderPrefixFromOrderNo(paytmRefundParamsEntity.orderId);
         let result = await paytmServiceIns.generatePaytmTxnTokenForRefund(paytmRefundParamsEntity);
+        if (result.body.resultInfo.resultStatus === "TXN_FAILURE") {
+            result = null;
+        }
         return result;
     }
 
