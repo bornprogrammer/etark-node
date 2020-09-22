@@ -97,8 +97,14 @@ export class ComplaintService extends BaseService {
                     complaintItem.complainDetails.forEach((complaintDetails) => {
                         complaintInfo[complaintDetails.field.field_name] = complaintDetails.field_val;
                     })
+                    complaintInfo['device_front_image'] = `${UtilsHelper.getBaseURLForUploadedImage(complaintInfo['device_front_image'])}`;
+
+                    complaintInfo['device_back_image'] = `${UtilsHelper.getBaseURLForUploadedImage(complaintInfo['device_back_image'])}`;
+
                     complaintInfo['uploaed_invoice_copy'] = `uploaded_invoice_copy :  ${UtilsHelper.getBaseURLForUploadedImage(complaintInfo['uploaed_invoice_copy'])}`;
+
                     complaintInfo['uploaed_invoice_copy'] += ` device_front_image : ${UtilsHelper.getBaseURLForUploadedImage(complaintInfo.device_front_image)} device_back_image : ${UtilsHelper.getBaseURLForUploadedImage(complaintInfo.device_back_image)}`
+
                 }
                 if (ArrayHelper.isArrayValid(complaintItem.userPlan.userPayments)) {
                     let paymentDetails = complaintItem.userPlan.userPayments[0];

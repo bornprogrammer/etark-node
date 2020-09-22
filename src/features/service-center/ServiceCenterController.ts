@@ -55,8 +55,12 @@ export class ServiceCenterController extends BaseController {
 
     public paytmCallback = async (req: Request, res: Response) => {
         let params = req.body;
-        await this.getCtrlMethodCoordinator().setMethod({ callableFunction: serviceCenterRepositoryServiceIns.paytmCallback, callableFunctionParams: params }).send(req, res);
-        const status = params.STATUS === "TXN_SUCCESS" ? "success" : "failure";
+        let status = "failure";
+        if (params.STATUS === "TXN_SUCCESS") {
+            status = "failure";
+            await this.getCtrlMethodCoordinator().setMethod({ callableFunction: serviceCenterRepositoryServiceIns.paytmCallback, callableFunctionParams: params }).send(req, res);
+        }
+        // const status = params.STATUS === "TXN_SUCCESS" ? "success" : "failure";
         const queryStr = ObjectHelper.buildStrFromKeyNValueOfObject({ type: status, id: "null" }, "=", "&");
         const urlToRedirect = config.get("client_base_url") + "servicePayment?" + queryStr;
         console.log("queryStr", urlToRedirect);
