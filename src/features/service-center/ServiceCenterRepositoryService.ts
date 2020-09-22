@@ -283,11 +283,10 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         let result = null;
         if (paytmResp.STATUS === "TXN_SUCCESS") {
             updatePaymentStatusParams.payment_status = "completed";
-        } else {
-            result = await serviceCenterPaymentRepositoryIns.updatePaymentStatus(updatePaymentStatusParams);
-            let serviceCenterPaymentDetails = await serviceCenterPaymentRepositoryIns.getServiceCenterPaymentDetails(paytmResp.ORDERID);
-            await serviceCenterPaymentRepositoryIns.create({ payment_status: "pending", service_center_order_id: serviceCenterPaymentDetails[0]['service_center_order_id'] });
         }
+        result = await serviceCenterPaymentRepositoryIns.updatePaymentStatus(updatePaymentStatusParams);
+        let serviceCenterPaymentDetails = await serviceCenterPaymentRepositoryIns.getServiceCenterPaymentDetails(paytmResp.ORDERID);
+        await serviceCenterPaymentRepositoryIns.create({ payment_status: "pending", service_center_order_id: serviceCenterPaymentDetails[0]['service_center_order_id'] });
         return result;
     }
 
