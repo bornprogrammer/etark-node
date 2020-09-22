@@ -34,6 +34,12 @@ export class ServiceCenterPaymentRepository extends BaseRepository {
         return result;
     }
 
+    public getServiceCenterPaymentDetails = async (servicCenterPayemntId: number) => {
+        let query = `select * from service_center_payments where id=:servicCenterPayemntId`;
+        let result = await sequelizeConnection.connection.query(query, { type: QueryTypes.SELECT, replacements: { servicCenterPayemntId } });
+        return result;
+    }
+
     public getServiceCenterPaymentId = async (pickupDeliveryId: number) => {
         let query = `select service_center_payments.id as service_center_payment_id
         from service_center_orders inner join service_center_payments on service_center_orders.id = service_center_payments.service_center_order_id

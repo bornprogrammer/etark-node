@@ -4,4 +4,5 @@ export interface PaytmRefundParamsEntity {
     txnId: string;
     refundId: string;
     amount: number;
+    complain_id?: number;
 }

@@ -34,6 +34,10 @@ import { ComplaintDetails } from "@app/models/ComplaintDetails";
 import { complaintDetailsRepositoryIns } from "@app/repositories/ComplaintDetailsRepository";
 import { threadId } from "worker_threads";
 import { UtilsHelper } from "@app/helpers/UtilsHelper";
+import { complaintRepositoryIns } from "@app/repositories/ComplaintRepository";
+import { fileReaderServiceIns } from "@app/services/FileReaderService";
+import { nodeMailerServiceIns } from "@app/services/NodeMailerService";
+import config from "config";
 
 export class UserPlanRepositoryService extends BaseRepositoryService {
     /**
@@ -236,8 +240,19 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
     public refundInspectionFee = async (pickupDeliveryId: number) => {
         let result = await this.getMethodCoordinator().setMethod({
             callableFunction: this.getUserPlanInspectionFeeDetailsForRefund, callableFunctionParams: pickupDeliveryId, storeResultAs: StoreResultAs.INSPECTION_FEE_DETAILS
-        }).setMethod({ callableFunction: this.requestRefundFromPaytm }).setMethod({ callableFunction: this.storeRefundResponses }).coordinate();
+        }).setMethod({ callableFunction: this.requestRefundFromPaytm }).setMethod({ callableFunction: this.storeRefundResponses }).setMethod({ callableFunction: this.sendRefundMail }).coordinate();
         return result;
+    }
+
+    public sendRefundMail = async (params: MethodParamEntity) => {
+        let paytmRefundParamsEntity: PaytmRefundParamsEntity = params.methodReturnedValContainer[StoreResultAs.INSPECTION_FEE_DETAILS];
+        let userdetail = await complaintRepositoryIns.getUserDetails(paytmRefundParamsEntity.complain_id);
+        let details = { name: userdetail[0]['name'], base_url: UtilsHelper.getBaseURL(), refund: paytmRefundParamsEntity.amount, order_no: paytmRefundParamsEntity.orderId };
+        fileReaderServiceIns.readEmailTemplate("refund.html", this.sendRefundMailCallback.bind(null, details));
+    }
+
+    public sendRefundMailCallback = async (details, error, data) => {
+        nodeMailerServiceIns.sendHtml(config.get("mail.from"), details.email, "Refund Email", UtilsHelper.replaceAllStr(details, data));
     }
 
     public getUserPlanInspectionFeeDetailsForRefund = async (params: MethodParamEntity) => {
@@ -248,9 +263,10 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
     }
 
     private extractOutInspectionFeeDetails = async (userPlanInspectionFeeDetailsForRefund: UserPlan) => {
-        let details: PaytmRefundParamsEntity = { orderId: null, amount: null, txnId: null, refundId: null };
+        let details: PaytmRefundParamsEntity = { orderId: null, amount: null, txnId: null, refundId: null, complain_id: null };
         if (userPlanInspectionFeeDetailsForRefund) {
             details.orderId = userPlanInspectionFeeDetailsForRefund.userPayments[0].order_no;
+            details.complain_id = userPlanInspectionFeeDetailsForRefund.complain_id;
             let gatewayResponse = JSON.parse(userPlanInspectionFeeDetailsForRefund.userPayments[0].userPaymentDetails[0].gateway_response);
             details.txnId = gatewayResponse.TXNID;
             details.refundId = details.orderId;

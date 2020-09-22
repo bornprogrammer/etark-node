@@ -98,7 +98,7 @@ export class ServiceCenterService extends BaseService {
             details.amount = pickupDeliveryDetails.serviceCenterOrder[0].invoice_total_amount;
             details.orderNo = pickupDeliveryDetails.serviceCenterOrder[0].serviceCenterPayment[0].id;
             details.vendorId = pickupDeliveryDetails.serviceCenter.vendor_id;
-            details.payment_requested_at = pickupDeliveryDetails.serviceCenterOrder[0].serviceCenterPayment[0]['createdAt'];
+            details.payment_requested_at = pickupDeliveryDetails.serviceCenterOrder[0]['createdAt'];
         }
         return details;
     }

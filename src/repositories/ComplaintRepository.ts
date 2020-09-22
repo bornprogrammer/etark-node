@@ -293,6 +293,13 @@ export class ComplaintRepository extends BaseRepository {
         return userPlanIdResult[0]['user_plan_id'];
     }
 
+    public getUserDetails = async (complainId: number) => {
+        let query = `select users.name,users.email
+        from complaints inner join users on complaints.user_id = users.id and complaints.id=:complainId`;
+        let result = await sequelizeConnection.connection.query(query, { type: QueryTypes.SELECT, replacements: { complainId: complainId } });
+        return result;
+    }
+
     public getMerchantDetails = async (merchantId: number): Promise<Merchant> => {
         let result = await Merchant.findOne({
             where: {

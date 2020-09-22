@@ -262,10 +262,12 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
             let hourDiff = DateHelper.getHourDifference(paymentDetails['payment_requested_at']);
             if (hourDiff >= 24) {
                 paymentDetails = null;
+                await this.markServiceCenterPaymentDeclinedByUser(topParams.pickup_delivery_id);
                 throw new BadHttpRequestError("24 hrs has been expired");
+            } else {
+                let paymtResult = await paytmServiceIns.callProcessTransaction({ amount: paymentDetails.amount, orderId: paymentDetails.orderNo, userId: 1, vendorId: paymentDetails.vendorId });
+                paymentDetails.txnToken = paymtResult.body.txnToken;
             }
-            let paymtResult = await paytmServiceIns.callProcessTransaction({ amount: paymentDetails.amount, orderId: paymentDetails.orderNo, userId: 1, vendorId: paymentDetails.vendorId });
-            paymentDetails.txnToken = paymtResult.body.txnToken;
         }
         return paymentDetails;
     }
@@ -277,9 +279,15 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
 
     public addPaytmResponse = async (params: MethodParamEntity) => {
         let paytmResp = params.topMethodParam;
-        let updatePaymentStatusParams: ServiceCenterPaymentAttributes = { id: paytmResp.ORDERID, gateway_response: JSON.stringify(paytmResp), payment_status: 'completed' };
-        updatePaymentStatusParams.payment_status = paytmResp.STATUS === "TXN_SUCCESS" ? updatePaymentStatusParams.payment_status : "failure";
-        let result = await serviceCenterPaymentRepositoryIns.updatePaymentStatus(updatePaymentStatusParams);
+        let updatePaymentStatusParams: ServiceCenterPaymentAttributes = { id: paytmResp.ORDERID, gateway_response: JSON.stringify(paytmResp), payment_status: 'failed' };
+        let result = null;
+        if (paytmResp.STATUS === "TXN_SUCCESS") {
+            updatePaymentStatusParams.payment_status = "completed";
+            result = await serviceCenterPaymentRepositoryIns.updatePaymentStatus(updatePaymentStatusParams);
+        } else {
+            let serviceCenterPaymentDetails = await serviceCenterPaymentRepositoryIns.getServiceCenterPaymentDetails(paytmResp.ORDERID);
+            await serviceCenterPaymentRepositoryIns.create({ payment_status: "pending", service_center_order_id: serviceCenterPaymentDetails[0]['service_center_order_id'] });
+        }
         return result;
     }
 
