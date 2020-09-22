@@ -84,9 +84,11 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
                     if (ArrayHelper.isArrayValid(complainDetails.serviceCenterOrderDetails['serviceCenterPayment'])) {
                         let details = complainDetails.serviceCenterOrderDetails['serviceCenterPayment'][0].gateway_response;
                         details = JSON.parse(details);
-                        complainDetails.bankDetails['Bank Name'] = details['BANKNAME'];
+                        complainDetails.bankDetails['BANKNAME'] = details['BANKNAME'];
+                        complainDetails.bankDetails['PAYMENTMODE'] = details['PAYMENTMODE'];
+                        complainDetails.bankDetails['GATEWAYNAME'] = details['GATEWAYNAME'];
                         complainDetails.bankDetails['Amount'] = details['TXNAMOUNT'];
-                        complainDetails.bankDetails['Txn ID'] = details['TXNID'];
+                        complainDetails.bankDetails['TXNID'] = details['TXNID'];
                     }
                 }
                 if (ArrayHelper.isArrayValid(complain.userPlan.userPayments)) {
