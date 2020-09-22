@@ -71,6 +71,12 @@ export class DateHelper {
         return moment(date).utc().format('YYYY-MM-DD HH:mm:ss')
     }
 
+    public static convertUTCDateToLocal(mysqlStr: string) {
+        // let date = new Date(mysqlStr);
+        let moment1 = moment.utc(mysqlStr, "YYYY-MM-DD HH:mm:ss");
+        return moment1.local().format('YYYY-MM-DD HH:mm:ss');
+    }
+
     public static getCurrentUTCDateTimeAsMysqlStr(): string {
         return moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
     }
