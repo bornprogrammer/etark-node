@@ -76,13 +76,6 @@ class PaytmService {
                         "value": paytmChecksumEntity.amount,
                         "currency": "INR"
                     }
-                },
-                {
-                    "mid": this.mid,
-                    "amount": {
-                        "value": 0,
-                        "currency": "INR"
-                    }
                 }
             ]
         };
