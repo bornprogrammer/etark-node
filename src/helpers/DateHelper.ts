@@ -94,6 +94,6 @@ export class DateHelper {
     public static addHourToCurDate(hour: number) {
         let dateObject = new Date();
         dateObject.setHours(dateObject.getHours() + hour);
-        return dateObject.getDate() + "/" + (dateObject.getMonth() + 1) + "/" + dateObject.getFullYear() + " " + dateObject.getHours() + ":" + dateObject.getMinutes() + ":00";
+        return moment(dateObject).local().format('MMMM Do, YYYY h:mm A');
     }
 }

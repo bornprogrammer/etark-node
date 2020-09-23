@@ -9,6 +9,7 @@ import { sequelizeConnection } from './SequelizeConnection';
 import { Server } from 'http';
 
 import config from 'config';
+import { DateHelper } from './helpers/DateHelper';
 class App {
 
     private app: express.Application;
