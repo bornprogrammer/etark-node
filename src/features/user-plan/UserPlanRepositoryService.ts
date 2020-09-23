@@ -247,9 +247,10 @@ export class UserPlanRepositoryService extends BaseRepositoryService {
     public sendRefundMail = async (params: MethodParamEntity) => {
         let paytmRefundParamsEntity: PaytmRefundParamsEntity = params.methodReturnedValContainer[StoreResultAs.INSPECTION_FEE_DETAILS];
         let paymRefundResponse = params.methodReturnedValContainer[StoreResultAs.REFUND_PAYTM_RESPONSE];
+
         if (paymRefundResponse.body.resultInfo.resultStatus !== "TXN_FAILURE") {
             let userdetail = await complaintRepositoryIns.getUserDetails(paytmRefundParamsEntity.complain_id);
-            let details = { name: userdetail[0]['name'], base_url: UtilsHelper.getBaseURL(), refund: paytmRefundParamsEntity.amount, order_no: paytmRefundParamsEntity.orderId, email: userdetail[0]['email'] };
+            let details = { name: userdetail[0]['name'], base_url: UtilsHelper.getBaseURL(), refund: paytmRefundParamsEntity.amount, order_no: paytmRefundParamsEntity.orderId, email: userdetail[0]['email'], refundId: paymRefundResponse.body.refundId };
             fileReaderServiceIns.readEmailTemplate("Refund.html", this.sendRefundMailCallback.bind(null, details));
         }
     }
