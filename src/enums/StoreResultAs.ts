@@ -12,4 +12,5 @@ export enum StoreResultAs {
     DENIED_SERVICE_CENTER_LIST = "denied_service_center_list",
     FORGOT_PASSWORD = "forgot_password",
     ADD_SC_ORDER_DETAILS = "add_sc_order_details",
+    REFUND_PAYTM_RESPONSE = "refund_paytm_response",
 }
