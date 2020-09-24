@@ -24,7 +24,7 @@ export class AuthRequestParamsCoordinator extends RequestParamsValidatorCoordina
     private getLoginParamsSchema = async () => {
         let schema = Joi.object({
             mobile_number: Joi.string().length(10).required(),
-            password: Joi.string().min(6).max(16).required()
+            password: Joi.string().min(6).max(64).required()
         });
         return schema;
     }

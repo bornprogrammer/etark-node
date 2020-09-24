@@ -87,7 +87,7 @@ export class ServiceCenterRequestParamCoordinator extends RequestParamsValidator
     private getLoginParamsSchema = async () => {
         let schema = await Joi.object({
             email: Joi.string().min(3).email().required(),
-            password: Joi.string().min(6).max(16).required(),
+            password: Joi.string().min(6).max(64).required(),
         })
         return schema;
     }
