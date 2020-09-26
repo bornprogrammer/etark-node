@@ -29,7 +29,7 @@ class App {
         const port = config.get("port");
 
         this.server = this.app.listen(port, () => {
-            console.log(`node app started again at ${port}`);
+            console.log(`node app started again at ${port} and on environment ${config.get("name")}`);
         });
 
         this.dbSetup();
