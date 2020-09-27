@@ -48,12 +48,11 @@ export class UtilsHelper {
 
     public static getBaseURL(): string {
         let url = config.get("server_base_url");
-        return url + "/";
+        return url;
     }
 
     public static getAPIURL(): string {
         let url = UtilsHelper.getBaseURL();
-        url += "api/";
         return url;
     }
 
