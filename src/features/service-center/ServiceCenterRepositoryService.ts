@@ -289,13 +289,14 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
 
     public addPaytmResponse = async (params: MethodParamEntity) => {
         let paytmResp = params.topMethodParam;
-        let updatePaymentStatusParams: ServiceCenterPaymentAttributes = { id: paytmResp.ORDERID, gateway_response: JSON.stringify(paytmResp), payment_status: 'failed' };
+        let orderId: any = UtilsHelper.removeOrderPrefixFromOrderNo(paytmResp.ORDERID);
+        let updatePaymentStatusParams: ServiceCenterPaymentAttributes = { id: orderId, gateway_response: JSON.stringify(paytmResp), payment_status: 'failed' };
         let result = null;
         if (paytmResp.STATUS === "TXN_SUCCESS") {
             updatePaymentStatusParams.payment_status = "completed";
         }
         result = await serviceCenterPaymentRepositoryIns.updatePaymentStatus(updatePaymentStatusParams);
-        let serviceCenterPaymentDetails = await serviceCenterPaymentRepositoryIns.getServiceCenterPaymentDetails(paytmResp.ORDERID);
+        let serviceCenterPaymentDetails = await serviceCenterPaymentRepositoryIns.getServiceCenterPaymentDetails(orderId);
         if (paytmResp.STATUS !== "TXN_SUCCESS") {
             await serviceCenterPaymentRepositoryIns.create({ payment_status: "pending", service_center_order_id: serviceCenterPaymentDetails[0]['service_center_order_id'] });
         }

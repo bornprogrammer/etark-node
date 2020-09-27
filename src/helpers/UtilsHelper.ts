@@ -82,7 +82,7 @@ export class UtilsHelper {
         return prefix;
     }
 
-    public removeOrderPrefixFromOrderNo(orderNo: string): string {
+    public static removeOrderPrefixFromOrderNo(orderNo: string): string {
         if (orderNo) {
             let val = orderNo.split("-").pop();
             return val;
