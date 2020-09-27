@@ -306,7 +306,8 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
     public setUserMadePaymentActivity = async (params: MethodParamEntity) => {
         let paytmResp = params.topMethodParam;
         if (paytmResp.STATUS === "TXN_SUCCESS") {
-            let result = await serviceCenterPaymentRepositoryIns.getPickupDeliveryId(paytmResp.ORDERID);
+            let orderId: any = UtilsHelper.removeOrderPrefixFromOrderNo(paytmResp.ORDERID);
+            let result = await serviceCenterPaymentRepositoryIns.getPickupDeliveryId(orderId);
             await this.addServiceCenterActivity({ activityType: ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_USER_MADE_PAYMENT, pickupDeliveryId: result[0]['pickup_delivery_id'] });
             await userPlanRepositoryServiceIns.refundInspectionFee(result[0]['pickup_delivery_id']);
         }
