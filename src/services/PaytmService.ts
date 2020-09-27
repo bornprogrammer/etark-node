@@ -49,12 +49,12 @@ class PaytmService {
     }
 
     private getCallbackURL = () => {
-        let url = config.get("server_base_url") + "api/user-plan/paytm-callback";
+        let url = config.get("server_base_url") + "user-plan/paytm-callback";
         return url;
     }
 
     private getCallbackForProcessTransaction = () => {
-        let url = config.get("server_base_url") + "api/sc/payment/paytm-callback";
+        let url = config.get("server_base_url") + "sc/payment/paytm-callback";
         return url;
     }
 
