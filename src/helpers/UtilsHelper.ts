@@ -2,7 +2,6 @@ import { ObjectHelper } from "./ObjectHelper";
 import { AppConstants } from "@app/constants/AppConstants";
 import config from "config";
 
-
 export class UtilsHelper {
 
     public static isMethodReturnedValueTruthy(methoReturnedValue: any): boolean {
@@ -48,7 +47,7 @@ export class UtilsHelper {
     }
 
     public static getBaseURL(): string {
-        let url = AppConstants.SERVER_BASE_URL;
+        let url = config.get("server_base_url");
         return url + "/";
     }
 
@@ -69,6 +68,27 @@ export class UtilsHelper {
         let nextYear = curYear + 1;
         prefix += curYear + "-" + nextYear + "-" + orderId;
         return prefix;
+    }
+
+    public static buildOrderPrefixForSC(orderId: number): string {
+        let prefix = "ETARK-SC-";
+        let curYear = new Date().getFullYear();
+        let curMonth = new Date().getMonth();
+        curYear -= 2000;
+        if (curMonth >= 0 && curMonth <= 2) {
+            curYear -= 1;
+        }
+        let nextYear = curYear + 1;
+        prefix += curYear + "-" + nextYear + "-" + orderId;
+        return prefix;
+    }
+
+    public removeOrderPrefixFromOrderNo(orderNo: string): string {
+        if (orderNo) {
+            let val = orderNo.split("-").pop();
+            return val;
+        }
+        return null;
     }
 
     public static getBaseURLForAssetImage(): string {

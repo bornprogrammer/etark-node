@@ -2,6 +2,7 @@
     "name": "E-Tark Production",
     "upload_path": "public/uploads/",
     "client_base_url": "https://www.etark.in/",
+    "server_base_url": "https://api.etark.in/api/",
     "client_url_after_paytm_response": "https://www.etark.in/confirm/",
     "email_temp_path": "public/email-temp/",
     "file_path": "public/files/",

@@ -13,6 +13,18 @@ export class ServiceCenterPaymentRepository extends BaseRepository {
         return result;
     }
 
+    public updateOrderNo = async (params: ServiceCenterPaymentAttributes) => {
+        let result = await ServiceCenterPayment.update({
+            order_no: params.order_no
+        }, {
+            where: {
+                id: params.id,
+                payment_status: 'pending'
+            }
+        })
+        return result;
+    }
+
     public updatePaymentStatus = async (params: ServiceCenterPaymentAttributes) => {
         let result = await ServiceCenterPayment.update({
             payment_status: params.payment_status,

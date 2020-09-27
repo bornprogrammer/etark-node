@@ -7,6 +7,7 @@ export interface ServiceCenterPaymentAttributes {
     service_center_order_id?: number;
     gateway_response?: string;
     payment_status?: string;
+    order_no?: string;
 }
 
 export class ServiceCenterPayment extends Model implements ServiceCenterPaymentAttributes {
@@ -14,6 +15,7 @@ export class ServiceCenterPayment extends Model implements ServiceCenterPaymentA
     service_center_order_id: number;
     gateway_response: string;
     payment_status: string;
+    order_no?: string;
 }
 
 ServiceCenterPayment.init({
@@ -28,6 +30,10 @@ ServiceCenterPayment.init({
     },
     gateway_response: {
         type: DataTypes.TEXT,
+        allowNull: true
+    },
+    order_no: {
+        type: DataTypes.STRING,
         allowNull: true
     },
     payment_status: {

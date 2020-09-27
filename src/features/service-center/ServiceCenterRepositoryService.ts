@@ -127,6 +127,7 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
         if (params.phone_warranty !== PhoneWarrantyTypeEnum.IN_WARRANTY) {
             let addSCOrderDetails = methodParamEntity.methodReturnedValContainer[StoreResultAs.ADD_SC_ORDER_DETAILS];
             result = await serviceCenterPaymentRepositoryIns.create({ service_center_order_id: addSCOrderDetails.id });
+            await serviceCenterPaymentRepositoryIns.updateOrderNo({ order_no: UtilsHelper.buildOrderPrefixForSC(result.id) });
         }
         return result;
     }
