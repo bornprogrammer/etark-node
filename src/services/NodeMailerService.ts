@@ -12,11 +12,13 @@ export class NodeMailerService {
             // host: "smtp.gmail.com",
             host: config.get("mail.host"),
             port: config.get("mail.port"),
-            // port: 587,
+            // port: 465,
             secure: true, // true for 465, false for other ports
             auth: {
                 user: config.get("mail.user"),
                 pass: config.get("mail.pass")
+                // user: "services@etark.in",
+                // pass: "Etark2020"
             },
         })
     }
