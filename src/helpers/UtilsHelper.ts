@@ -59,7 +59,7 @@ export class UtilsHelper {
     }
 
     public static buildOrderPrefix(orderId: number): string {
-        let prefix = "ETARK-";
+        let prefix = "ETARK--";
         let curYear = new Date().getFullYear();
         let curMonth = new Date().getMonth();
         curYear -= 2000;
