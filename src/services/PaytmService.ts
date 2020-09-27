@@ -3,9 +3,7 @@ import paytmchecksum from 'paytmchecksum';
 import { PaytmChecksumEntity } from '@app/entities/PaytmChecksumEntity';
 import { httpPostServiceIns } from '@app/http-services/HttpPostService';
 import config from 'config';
-import { AppConstants } from '@app/constants/AppConstants';
 import { PaytmRefundParamsEntity } from '@app/entities/PaytmRefundParamsEntity';
-import { UtilsHelper } from '@app/helpers/UtilsHelper';
 
 class PaytmService {
 
