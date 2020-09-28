@@ -7,6 +7,7 @@ import { complaintRoutesIns } from './complaints/ComplaintRoutes';
 import { userPlanRoutesIns } from './user-plans/UserPlanRoutes';
 import { userRoutesIns } from './user/UserRoutes';
 import { serviceCenterRoutesIns } from './service-center/ServiceCenterRoutes';
+import { retailerRoutesIns } from './retailer/RetailerRoutes';
 
 export default class AppRoutes {
 
@@ -25,6 +26,8 @@ export default class AppRoutes {
         router.use("/users", userRoutesIns.setRoutes());
 
         router.use("/sc", serviceCenterRoutesIns.setRoutes());
+
+        router.use("/retailer", retailerRoutesIns.setRoutes());
 
         return router;
     }
