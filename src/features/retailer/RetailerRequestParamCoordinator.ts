@@ -32,5 +32,22 @@ export class RetailerRequestParamCoordinator extends RequestParamsValidatorCoord
         })
     }
 
+    public getAddCustomerDetailsParams = async () => {
+        let schema = await this.getAddCustomerDetailsParamsSchema();
+        let params = await this.setParamFromParamsAs("id", "retailer_id").validateRequestContainerNBody(schema);
+        return params;
+    }
+
+    private getAddCustomerDetailsParamsSchema = async () => {
+        return Joi.object({
+            customer_name: Joi.string().min(2).max(50).required(),
+            email: Joi.string().min(3).max(50).email().required(),
+            contact: Joi.string().length(10).required(),
+            bill_id: Joi.string().alphanum().required(),
+            maker_id: Joi.string().min(1).required(),
+            retailer_id: Joi.string().min(1).required(),
+        })
+    }
+
 
 }

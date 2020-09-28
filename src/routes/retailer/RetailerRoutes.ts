@@ -11,6 +11,8 @@ export class RetailerRoutes extends BaseRoutes {
 
         this.router.post("/login", this.setCtrlMethod(retailerControllerIns.retailerLogin));
 
+        this.router.post("/:id/customer", this.setCtrlMethod(retailerControllerIns.addCustomerDetails));
+
         return this.router;
     }
 }
