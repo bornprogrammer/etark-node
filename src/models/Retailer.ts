@@ -9,6 +9,8 @@ export interface RetailerAttribute {
     phone_number: string;
     password: string;
     status: string;
+    zip_code?: string;
+    address?: string;
 }
 
 export class Retailer extends Model implements RetailerAttribute {
@@ -18,6 +20,8 @@ export class Retailer extends Model implements RetailerAttribute {
     phone_number: string;
     password: string;
     status: string;
+    zip_code?: string;
+    address?: string;
 }
 
 Retailer.init({
@@ -41,6 +45,14 @@ Retailer.init({
         type: DataTypes.ENUM('active', 'inactive'),
         allowNull: true,
         defaultValue: "active"
+    },
+    zip_code: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    address: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
 }, {
     sequelize: sequelizeConnection.connection,
