@@ -33,6 +33,12 @@ export class RetailerRepositoryService extends BaseRepositoryService {
         let result = await retailCustomerDetailRepositoryIns.create({ customer_name: params.customer_name, bill_id: params.bill_id, contact: params.contact, email: params.email, maker_id: params.maker_id });
         return result;
     }
+
+    public getRetailerList = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let result = await retailerRepositoryIns.getRetailerList(params);
+        return result;
+    }
 }
 
 export const retailerRepositoryServiceIns = new RetailerRepositoryService();

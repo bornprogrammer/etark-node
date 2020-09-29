@@ -22,8 +22,8 @@ export class RetailerController extends BaseController {
     }
 
     public getRetailerList = async (req: Request, res: Response) => {
-        let params = await RetailerRequestParamCoordinator.getInstance(req).getAddCustomerDetailsParams();
-        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: retailerRepositoryServiceIns.processCustomerDetails, callableFunctionParams: params }).send(req, res);
+        let params = await RetailerRequestParamCoordinator.getInstance(req).getRetailerListParams();
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: retailerRepositoryServiceIns.getRetailerList, callableFunctionParams: params }).send(req, res);
     }
 
 }

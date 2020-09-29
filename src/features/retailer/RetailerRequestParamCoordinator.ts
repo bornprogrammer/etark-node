@@ -49,5 +49,10 @@ export class RetailerRequestParamCoordinator extends RequestParamsValidatorCoord
         })
     }
 
+    public getRetailerListParams = async () => {
+        let params = await this.setParamFromQueryStr("maker_id").setParamFromQueryStr("city_id").coordinate();
+        return params;
+    }
+
 
 }
