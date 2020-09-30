@@ -37,6 +37,11 @@ export class UserRequestParamsCoordinator extends RequestParamsCoordinator {
         return params;
     }
 
+    public getUserOrderCountsParams = async () => {
+        let params = await this.setParamFromParamsAs("id", "user_id").coordinate();
+        return params;
+    }
+
 
 
 

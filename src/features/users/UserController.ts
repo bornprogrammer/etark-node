@@ -37,7 +37,8 @@ export class UserController extends BaseController {
     }
 
     public getUserOrderCounts = async (req: Request, res: Response) => {
-        return { total_complaints: 0, completed: 0, in_progress: 0, incomplete: 0 };
+        let params = await UserRequestParamsCoordinator.getInstance(req).getUserOrderCountsParams();
+        return await this.getCtrlMethodCoordinator().setMethod({ callableFunction: userRepositoryServiceIns.getUserOrderCounts, callableFunctionParams: params }).send(req, res);
     }
 
 }

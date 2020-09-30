@@ -49,8 +49,11 @@ export class UserService extends BaseService {
                     complainDetails.orderDetails = complain.userPlan.userPayments[0];
                 }
                 complainDetails.pickup_details['id'] = complain.userPlan.pickupDeliveryDetail.id;
-                complainDetails.serviceCenterActivityDetails.lastActivityType = complain.userPlan.pickupDeliveryDetail.serviceCenterActivity[0].activity_type;
-                complainDetails.serviceCenterActivityDetails['status'] = "Order Status";
+                if (ArrayHelper.isArrayValid(complain.userPlan.pickupDeliveryDetail.serviceCenterActivity)) {
+                    let activity = complain.userPlan.pickupDeliveryDetail.serviceCenterActivity[complain.userPlan.pickupDeliveryDetail.serviceCenterActivity.length - 1];
+                    complainDetails.serviceCenterActivityDetails.lastActivityType = activity.activity_type;
+                    // complainDetails.serviceCenterActivityDetails['status'] = "Order Status";
+                }
                 complainDetails.userDetails = complain.user;
                 complainDetails.userAddress = complain.userPlan.pickupDeliveryDetail.userAddress;
             })
