@@ -21,6 +21,7 @@ import { UpdateComponentPriceForPickupNDeliveryEntity } from "@app/entities/Upda
 import ArrayHelper from "@app/helpers/ArrayHelper";
 import { complaintServiceIns1 } from "../complaints/ComplaintService";
 import { SmartphoneComplainFieldsEnum } from "@app/enums/SmartphoneComplainFieldsEnum";
+import { userServiceIns } from "./UserService";
 
 class UserRepositoryService extends BaseRepositoryService {
     /**
@@ -178,6 +179,13 @@ class UserRepositoryService extends BaseRepositoryService {
             throw new ServiceCenterNotFound();
         }
         return serviceCenterList;
+    }
+
+    public getUserListing = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+        let result: any = await complaintRepositoryIns.getUserComplainListing(params.user_id);
+        result = userServiceIns.convertOrderListResponse(result);
+        return result;
     }
 }
 

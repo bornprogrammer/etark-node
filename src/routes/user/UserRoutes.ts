@@ -19,6 +19,10 @@ export class UserRoutes extends BaseRoutes {
 
         this.router.get("/:id/sc/:sc_id/payment", this.setCtrlMethod(userControllerIns.scPayment));
 
+        this.router.get("/:id", this.setCtrlMethod(userControllerIns.getUserListing));
+
+        this.router.get("/:id/order-counts", this.setCtrlMethod(userControllerIns.getUserOrderCounts));
+
         return this.router;
     }
 

@@ -26,6 +26,8 @@ import { UserPayment } from "@app/models/UserPayment";
 import { ServiceCenters } from "@app/models/ServiceCenters";
 import { City } from "@app/models/City";
 import { ServiceCenterDetail } from "@app/models/ServiceCenterDetail";
+import { CommaListExpression } from "typescript";
+import { ServiceCenterPayment } from "@app/models/ServiceCenterModel";
 
 export class ComplaintRepository extends BaseRepository {
     /**
@@ -322,6 +324,73 @@ export class ComplaintRepository extends BaseRepository {
         });
         return result;
     }
+
+    public getUserComplainListing = async (userId: number): Promise<Complaint[]> => {
+        let where = { payment_status: "completed" };
+        let result = await Complaint.scope(['defaultScope', 'complainDetails', { method: ['getSuccessUserPlan', where] }]).findAll({
+            include: [
+                {
+                    model: UserPlan,
+                    required: true,
+                    as: "userPlan",
+                    include: [
+                        {
+                            model: PickupDelivery,
+                            as: UserPlan.pickupDeliveryDetailAs,
+                            required: true,
+                            where: {
+                                status: ['success'],
+                            },
+                            include: [
+                                {
+                                    model: ServiceCenterActivity,
+                                    as: PickupDelivery.serviceCenterActivityAs,
+                                    required: true,
+                                },
+                                {
+                                    model: UserAddress,
+                                    as: PickupDelivery.userAddressAs,
+                                    required: true
+                                },
+                                {
+                                    model: ServiceCenterOrder,
+                                    as: PickupDelivery.serviceCenterOrderAs,
+                                    include: [
+                                        {
+                                            model: ServiceCenterPayment,
+                                            as: ServiceCenterOrder.serviceCenterPaymentAs,
+                                            required: false,
+                                            where: {
+                                                payment_status: "completed"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    model: DeviceDispatchDetails,
+                                    as: PickupDelivery.deviceDispatchDetailsAs,
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    required: true,
+                    model: MakerDetails,
+                    as: "makerDetail",
+                    attributes: [
+                        'display_name'
+                    ]
+                }
+            ],
+            where: {
+                user_id: userId
+            }
+        })
+        return result;
+    }
+
+
 }
 
 

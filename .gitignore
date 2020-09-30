@@ -4,3 +4,4 @@ node_modules
 dist
 src/public/uploads
 src/public/files
+.DS_Store

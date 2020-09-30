@@ -32,6 +32,11 @@ export class UserRequestParamsCoordinator extends RequestParamsCoordinator {
         return params;
     }
 
+    public getUserListingParams = async () => {
+        let params = await this.setParamFromParamsAs("id", "user_id").coordinate();
+        return params;
+    }
+
 
 
 
