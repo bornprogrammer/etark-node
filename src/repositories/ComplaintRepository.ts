@@ -343,6 +343,11 @@ export class ComplaintRepository extends BaseRepository {
                             },
                             include: [
                                 {
+                                    model: ServiceCenters,
+                                    required: true,
+                                    as: PickupDelivery.serviceCenterAs
+                                },
+                                {
                                     model: ServiceCenterActivity,
                                     as: PickupDelivery.serviceCenterActivityAs,
                                     required: true,

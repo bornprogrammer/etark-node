@@ -19,7 +19,7 @@ export class UserService extends BaseService {
         if (ArrayHelper.isArrayValid(orderListResponse)) {
             newOrderListResponse = [];
             orderListResponse.forEach((complain) => {
-                let complainDetails = { complainId: complain.id, maker_detail_id: complain.maker_detail_id, complainDetail: {}, serviceCenterOrderDetails: {}, deviceDispatchDetail: {}, userPaymentDetails: {}, orderDetails: {}, pickup_details: {}, serviceCenterActivityDetails: { lastActivityType: null }, userDetails: {}, userAddress: {}, bankDetails: {}, maker_name: complain.makerDetail.display_name };
+                let complainDetails = { complainId: complain.id, maker_detail_id: complain.maker_detail_id, complainDetail: {}, serviceCenterOrderDetails: {}, deviceDispatchDetail: {}, userPaymentDetails: {}, orderDetails: {}, pickup_details: {}, serviceCenterActivityDetails: { lastActivityType: null }, userDetails: {}, userAddress: {}, bankDetails: {}, maker_name: complain.makerDetail.display_name, sc_name: "", sc_address: "", sc_phone: "" };
                 newOrderListResponse.push(complainDetails);
                 complain.complainDetails.forEach((complainDet) => {
                     complainDetails.complainDetail[complainDet.field.field_name] = complainDet['field_val'];
@@ -34,6 +34,10 @@ export class UserService extends BaseService {
                     complainDetails.serviceCenterOrderDetails = complain.userPlan.pickupDeliveryDetail.serviceCenterOrder[0];
                     complainDetails.serviceCenterOrderDetails['due_date'] = DateHelper.convertDateToUTCDate(complainDetails.serviceCenterOrderDetails['due_date']);
                     complainDetails.serviceCenterOrderDetails['device_delivery_date'] = DateHelper.convertDateToUTCDate(complainDetails.serviceCenterOrderDetails['device_delivery_date']);
+
+                    complainDetails.sc_name = complain.userPlan.pickupDeliveryDetail.serviceCenter.name;
+                    complainDetails.sc_address = complain.userPlan.pickupDeliveryDetail.serviceCenter.address;
+                    complainDetails.sc_phone = complain.userPlan.pickupDeliveryDetail.serviceCenter.store_contact_no;
 
                     if (ArrayHelper.isArrayValid(complainDetails.serviceCenterOrderDetails['serviceCenterPayment'])) {
                         let details = complainDetails.serviceCenterOrderDetails['serviceCenterPayment'][0].gateway_response;
@@ -52,7 +56,6 @@ export class UserService extends BaseService {
                 if (ArrayHelper.isArrayValid(complain.userPlan.pickupDeliveryDetail.serviceCenterActivity)) {
                     let activity = complain.userPlan.pickupDeliveryDetail.serviceCenterActivity[complain.userPlan.pickupDeliveryDetail.serviceCenterActivity.length - 1];
                     complainDetails.serviceCenterActivityDetails.lastActivityType = activity.activity_type;
-                    // complainDetails.serviceCenterActivityDetails['status'] = "Order Status";
                 }
                 complainDetails.userDetails = complain.user;
                 complainDetails.userAddress = complain.userPlan.pickupDeliveryDetail.userAddress;
