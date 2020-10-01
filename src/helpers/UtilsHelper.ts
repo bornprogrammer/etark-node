@@ -53,7 +53,7 @@ export class UtilsHelper {
 
     public static getAPIURL(): string {
         let url = UtilsHelper.getBaseURL();
-        return url;
+        return url + "api/";
     }
 
     public static buildOrderPrefix(orderId: number): string {

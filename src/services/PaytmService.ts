@@ -4,6 +4,7 @@ import { PaytmChecksumEntity } from '@app/entities/PaytmChecksumEntity';
 import { httpPostServiceIns } from '@app/http-services/HttpPostService';
 import config from 'config';
 import { PaytmRefundParamsEntity } from '@app/entities/PaytmRefundParamsEntity';
+import { UtilsHelper } from '@app/helpers/UtilsHelper';
 
 class PaytmService {
 
@@ -47,12 +48,12 @@ class PaytmService {
     }
 
     private getCallbackURL = () => {
-        let url = config.get("server_base_url") + "user-plan/paytm-callback";
+        let url = UtilsHelper.getAPIURL() + "user-plan/paytm-callback";
         return url;
     }
 
     private getCallbackForProcessTransaction = () => {
-        let url = config.get("server_base_url") + "sc/payment/paytm-callback";
+        let url = UtilsHelper.getAPIURL() + "sc/payment/paytm-callback";
         return url;
     }
 

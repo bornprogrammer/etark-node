@@ -4,7 +4,7 @@
     "client_url_after_paytm_response": "http://etark-beta.s3-website.ap-south-1.amazonaws.com/confirm/",
     "client_base_url": "http://etark-beta.s3-website.ap-south-1.amazonaws.com/",
     "email_temp_path": "public/email-temp/",
-    "server_base_url": "http://13.235.104.121:5000/api/",
+    "server_base_url": "http://13.235.104.121:5000/",
     "file_path": "public/files/",
     "paytm": {
         "url": "https://securegw-stage.paytm.in/",
