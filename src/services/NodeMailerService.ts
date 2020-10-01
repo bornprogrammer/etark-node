@@ -3,7 +3,7 @@ import config from 'config';
 import nodemailer from 'nodemailer';
 export class NodeMailerService {
 
-    private transporter: any
+    private transporter: any;
     /**
      *
      */
