@@ -1,8 +1,12 @@
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import UnAuthorized from "@app/errors/UnAuthorized";
+import { UtilsHelper } from "@app/helpers/UtilsHelper";
 import { retailCustomerDetailRepositoryIns } from "@app/repositories/RetailCustomerDetailRepository";
 import { retailerRepositoryIns } from "@app/repositories/RetailerRepository";
 import { BaseRepositoryService } from "@app/services/BaseRepositoryService";
+import { fileReaderServiceIns } from "@app/services/FileReaderService";
+import { nodeMailerServiceIns } from "@app/services/NodeMailerService";
+import config from "config";
 
 export class RetailerRepositoryService extends BaseRepositoryService {
 
@@ -21,7 +25,7 @@ export class RetailerRepositoryService extends BaseRepositoryService {
 
     public processCustomerDetails = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.addCustomerDetails, callableFunctionParams: params }).coordinate();
+        let result = await this.getMethodCoordinator().setMethod({ callableFunction: this.addCustomerDetails, callableFunctionParams: params, resultToBeReturnedAsFinalResult: true }).setMethod({ callableFunction: this.sendEmail }).coordinate();
         if (!result) {
             throw new UnAuthorized();
         }
@@ -34,10 +38,29 @@ export class RetailerRepositoryService extends BaseRepositoryService {
         return result;
     }
 
+    public sendEmail = async (methodParamEntity: MethodParamEntity) => {
+        let params = methodParamEntity.topMethodParam;
+
+        let retailerDetails = await retailerRepositoryIns.getRetailerDetailById(params.retailer_id);
+
+        fileReaderServiceIns.readEmailTemplate("coupon.html", (error, htmlStr) => {
+            let htmlStrWithData = UtilsHelper.replaceAllStr({ base_url: UtilsHelper.getBaseURL(), user: params.customer_name, retail_coupon: params.bill_id, support_email: config.get("mail.from") }, htmlStr);
+            nodeMailerServiceIns.sendMarketing(null, params.email, "Retail Coupon", htmlStrWithData);
+        })
+
+        fileReaderServiceIns.readEmailTemplate("retailer_customer.html", (error, htmlStr) => {
+            let htmlStrWithData = UtilsHelper.replaceAllStr({ base_url: UtilsHelper.getBaseURL(), user: params.customer_name, email: params.email, contact: params.contact, bill_id: params.bill_id, retailer_name: retailerDetails.retailer_name, retailer_number: retailerDetails.phone_number }, htmlStr);
+            nodeMailerServiceIns.sendMarketing(null, "marketing@etark.in", "Retail Coupon", htmlStrWithData);
+        })
+    }
+
     public getRetailerList = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let result = await retailerRepositoryIns.getRetailerList(params);
-        return result;
+        if (params.email) {
+            let result = await retailerRepositoryIns.getRetailerList(params);
+            return result;
+        }
+
     }
 }
 

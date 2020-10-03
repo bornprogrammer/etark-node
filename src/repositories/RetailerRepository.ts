@@ -38,6 +38,15 @@ export class RetailerRepository extends BaseRepository {
         return result;
     }
 
+    public getRetailerDetailById = async (retailerId: number): Promise<Retailer> => {
+        let result = await Retailer.findOne({
+            where: {
+                id: retailerId
+            }
+        })
+        return result;
+    }
+
 
 
 

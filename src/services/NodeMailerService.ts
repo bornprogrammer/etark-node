@@ -34,6 +34,31 @@ export class NodeMailerService {
             console.log(error);
         }
     }
+
+    public sendMarketing = async (from: string, to: string, subject: string, htmlTemplate: string) => {
+        try {
+            from = "marketing@etark.in";
+            let transporter1 = nodemailer.createTransport({
+                host: config.get("mail.host"),
+                port: config.get("mail.port"),
+                // port: 465,587
+                secure: true, // true for 465, false for other ports
+                auth: {
+                    user: from,
+                    pass: "etark2020"
+                },
+            })
+            let response = await transporter1.sendMail({
+                from: from, // sender address
+                to: to, // list of receivers
+                subject: subject, // Subject line
+                html: htmlTemplate, // html body
+            });
+            console.log("maill response", response);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 export const nodeMailerServiceIns = new NodeMailerService();

@@ -1,0 +1,103 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+  <title>E-tark | Invoice</title>
+</head>
+
+<body style="
+      margin-top: 0;
+      margin-bottom: 0;
+      margin-right: 0;
+      margin-left: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      padding-right: 0;
+      padding-left: 0;
+      font-family: 'Poppins', sans-serif;
+    ">
+  <table style="border-collapse: collapse" align="center" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <td>
+        <table>
+          <tr>
+            <td>
+              <table cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td style="width: 100px; align-content: flex-end">
+                    <img src="{{base_url}}images/logo.png" />
+                  </td>
+                  <td style="width: 600px">
+                    <h1 style="color: red; font-size: 1.5em; text-align: center">
+                      RETAIL COUPON
+                    </h1>
+                  </td>
+                  <td style="
+                        text-align: center;
+                        align-content: right;
+                        border: dashed 1px black;
+                        padding: 0 10px;
+                      ">
+                    <h1 style="font-size: 1.1em">ORIGINAL</h1>
+                    <hr style="height: 2px; background-color: red; border: none" />
+                    <p>For Recipient</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- details -->
+          <tr>
+            <td>
+              <table cellpadding="0" cellspacing="0" width="100%">Dear {{user}}</table>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <table cellpadding="0" cellspacing="0" width="100%">Your Retail Coupon : <strong>{{retail_coupon}}
+                  <br><br> </strong></table>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: left; word-break: break-all; width:830px">
+              <p>
+                Congratulations of availing ETark Retail Coupon on your purchase.
+                You can use this coupon to get zero delivery charges for roundtrip
+                between your location and authorized service center for our Pickup
+                and Delivery service taken either solo or in combination in our
+                other services.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <table cellpadding="0" cellspacing="0" width="100%">For more information, please refer to <a
+                  style="text-decoration: none" href="https://www.etark.in/retailcoupon">Retail
+                  Coupon</a></strong><br><br></table>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <table cellpadding="0" cellspacing="0" width="100%">Do rate and review us on our social media handles.
+                Your feedback will help us perform better!</table>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right">
+              <p style="font-size: 9px">Terms & Conditions Applied</p>
+              <p style="font-size: 9px">
+                for any queries, please write to us at {{support_email}}
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <!-- heading -->
+</body>
+
+</html>
