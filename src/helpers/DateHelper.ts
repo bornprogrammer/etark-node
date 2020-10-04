@@ -96,4 +96,10 @@ export class DateHelper {
         dateObject.setHours(dateObject.getHours() + hour);
         return moment(dateObject).format('MMMM Do, YYYY h:mm A');
     }
+
+    public static addDayToCurDate(days: number) {
+        let dateObject = new Date();
+        dateObject.setDate(dateObject.getDate() + days);
+        return moment(dateObject).format('MMMM Do, YYYY h:mm A');
+    }
 }

@@ -1,5 +1,6 @@
 import MethodParamEntity from "@app/entities/MethodParamEntity";
 import UnAuthorized from "@app/errors/UnAuthorized";
+import { DateHelper } from "@app/helpers/DateHelper";
 import { UtilsHelper } from "@app/helpers/UtilsHelper";
 import { retailCustomerDetailRepositoryIns } from "@app/repositories/RetailCustomerDetailRepository";
 import { retailerRepositoryIns } from "@app/repositories/RetailerRepository";
@@ -44,7 +45,7 @@ export class RetailerRepositoryService extends BaseRepositoryService {
         let retailerDetails = await retailerRepositoryIns.getRetailerDetailById(params.retailer_id);
 
         fileReaderServiceIns.readEmailTemplate("coupon.html", (error, htmlStr) => {
-            let htmlStrWithData = UtilsHelper.replaceAllStr({ base_url: UtilsHelper.getBaseURL(), user: params.customer_name, retail_coupon: params.bill_id, support_email: config.get("mail.from") }, htmlStr);
+            let htmlStrWithData = UtilsHelper.replaceAllStr({ base_url: UtilsHelper.getBaseURL(), user: params.customer_name, retail_coupon: params.bill_id, support_email: config.get("mail.from"), expire_date: DateHelper.addDayToCurDate(90) }, htmlStr);
             nodeMailerServiceIns.sendMarketing(null, params.email, "Retail Coupon", htmlStrWithData);
         })
 
