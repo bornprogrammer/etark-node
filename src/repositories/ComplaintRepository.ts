@@ -335,6 +335,14 @@ export class ComplaintRepository extends BaseRepository {
                     as: "userPlan",
                     include: [
                         {
+                            model: UserPayment,
+                            required: true,
+                            as: UserPlan.userPaymentsAs,
+                            where: {
+                                payment_status: "completed"
+                            }
+                        },
+                        {
                             model: PickupDelivery,
                             as: UserPlan.pickupDeliveryDetailAs,
                             required: true,

@@ -102,7 +102,7 @@ export class UserRepository extends BaseRepository {
         let complaintStatusStr = ArrayHelper.convertArrayToMysqlInOpStr(complaintStatus);
         let query = `select count(activities.activity_id) as order_count from pickup_deliveries inner join (select max(id) as activity_id,pickup_delivery_id from service_center_activities group by pickup_delivery_id) as activities on pickup_deliveries.id = activities.pickup_delivery_id inner join service_center_activities on activities.activity_id=service_center_activities.id and service_center_activities.activity_type in ${activityTypes} inner join user_plan on pickup_deliveries.user_plan_id = user_plan.id inner join user_payment on user_plan.id=user_payment.user_plan_id inner join complaints on user_plan.complain_id = complaints.id
         where pickup_deliveries.status='success' and user_plan.status='success'
-        and user_payment.payment_status="success"
+        and user_payment.payment_status="completed"
         and complaints.user_id=:user_id and complaints.status in ${complaintStatusStr}`;
         let result = await sequelizeConnection.connection.query(query, { type: QueryTypes.SELECT, replacements: { user_id: userId } });
         return result;
