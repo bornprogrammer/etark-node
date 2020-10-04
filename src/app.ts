@@ -42,6 +42,7 @@ class App {
         this.app.use(express.static(path.join(__dirname, "./public")));
 
         this.app.use('/api', AppRoutes.routes());
+
     }
 
     private dbSetup(): void {
