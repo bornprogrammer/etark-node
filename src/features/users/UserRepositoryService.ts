@@ -196,9 +196,9 @@ class UserRepositoryService extends BaseRepositoryService {
             "in_progress": 0,
             "incomplete": 0
         }
-        orderCounts.total_complaints = await userRepositoryIns.getAllOrderCount(params.user_id);
-        orderCounts.completed = await userRepositoryIns.getCompletedOrderCount(params.user_id);
-        orderCounts.incomplete = await userRepositoryIns.getDeclinedOrderCount(params.user_id);
+        // orderCounts.total_complaints = await userRepositoryIns.getAllOrderCount(params.user_id);
+        // orderCounts.completed = await userRepositoryIns.getCompletedOrderCount(params.user_id);
+        // orderCounts.incomplete = await userRepositoryIns.getDeclinedOrderCount(params.user_id);
         orderCounts.in_progress = await userRepositoryIns.getInProcessOrderCount(params.user_id);
         return orderCounts;
     }
