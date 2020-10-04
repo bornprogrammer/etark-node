@@ -106,6 +106,14 @@ export class ComplaintService extends BaseService {
 
                     complaintInfo['uploaed_invoice_copy'] += ` device_front_image : ${UtilsHelper.getBaseURLForUploadedImage(complaintInfo.device_front_image)} device_back_image : ${UtilsHelper.getBaseURLForUploadedImage(complaintInfo.device_back_image)}`
 
+                    if (complaintInfo['complaint_report']) {
+                        complaintInfo['complaint_report'] = UtilsHelper.getBaseURLForAssetFile() + complaintInfo['complaint_report'];
+                    }
+
+                    if (complaintInfo['invoice_report']) {
+                        complaintInfo['invoice_report'] = UtilsHelper.getBaseURLForAssetFile() + complaintInfo['invoice_report'];
+                    }
+
                 }
                 if (ArrayHelper.isArrayValid(complaintItem.userPlan.userPayments)) {
                     let paymentDetails = complaintItem.userPlan.userPayments[0];

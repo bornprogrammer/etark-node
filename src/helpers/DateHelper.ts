@@ -78,7 +78,7 @@ export class DateHelper {
     public static convertUTCDateToLocal(mysqlStr: string) {
         if (mysqlStr) {
             let moment1 = moment.utc(mysqlStr, "YYYY-MM-DD HH:mm:ss");
-            return moment1.local().format('MMMM Do, YYYY h:mm A');
+            return moment1.utcOffset("+0530").format('MMMM Do, YYYY h:mm A');
         }
         return "";
     }
