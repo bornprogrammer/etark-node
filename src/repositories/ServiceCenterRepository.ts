@@ -18,6 +18,8 @@ import { ServiceCenterOrderTypeEnum } from "@app/enums/ServiceCenterOrderTypeEnu
 import { PickupDelivery } from "@app/models/PickupDelivery";
 import { ServiceCenterOrder } from "@app/models/ServiceCenterOrder";
 import { ServiceCenterPayment } from "@app/models/ServiceCenterModel";
+import { Maker } from "@app/models/Maker";
+import { MakerDetails } from "@app/models/MakerDetails";
 
 export class ServiceCenterRepository extends BaseRepository {
     /**
@@ -157,8 +159,8 @@ export class ServiceCenterRepository extends BaseRepository {
         return result;
     }
 
-    public doesSCExistsByCityIdNMakerId = async (params: DoesSCExistsByCityIdNMakerIdEntityParams): Promise<ServiceCenters> => {
-        let result = await ServiceCenters.findOne({
+    public doesSCExistsByCityIdNMakerId = async (params: DoesSCExistsByCityIdNMakerIdEntityParams): Promise<ServiceCenters[]> => {
+        let result = await ServiceCenters.findAll({
             include: [
                 {
                     model: ServiceCenterDetail,
@@ -182,6 +184,11 @@ export class ServiceCenterRepository extends BaseRepository {
                 city_id: params.cityId,
                 status: 'active'
             }
+            , attributes: [
+                'name',
+                'store_contact_no',
+                'manager_contact_no'
+            ]
         })
         return result;
     }
@@ -213,6 +220,16 @@ export class ServiceCenterRepository extends BaseRepository {
             where: {
                 id: pickupDeliveryId,
                 status: "success"
+            }
+        })
+        return result;
+    }
+
+    public getInspectionFee = async (makerId: number) => {
+        let result = await MakerDetails.findOne({
+            where: {
+                maker_id: makerId,
+                category_id: 1
             }
         })
         return result;

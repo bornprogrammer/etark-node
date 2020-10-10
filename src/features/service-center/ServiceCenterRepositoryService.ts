@@ -259,8 +259,12 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
     public doesSCExists = async (params: MethodParamEntity) => {
         let topParams = params.topMethodParam;
         let result = await serviceCenterRepositoryIns.doesSCExistsByCityIdNMakerId({ cityId: topParams.city_id, makerId: topParams.maker_id });
-        let finalResult = { does_sc_exists: result ? true : false };
-        return finalResult;
+        let inspectionFees = await serviceCenterRepositoryIns.getInspectionFee(topParams.maker_id);
+        let result1 = {};
+        if (ArrayHelper.isArrayValid(result)) {
+            result1 = { inspection_fees: inspectionFees.inspection_charges, sc: result };
+        }
+        return result1;
     }
 
     public getPaymentDetailsToMakePayment = async (params: MethodParamEntity) => {
