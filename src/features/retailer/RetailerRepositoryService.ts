@@ -41,17 +41,17 @@ export class RetailerRepositoryService extends BaseRepositoryService {
 
     public sendEmail = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-
         let retailerDetails = await retailerRepositoryIns.getRetailerDetailById(params.retailer_id);
-
         fileReaderServiceIns.readEmailTemplate("coupon.html", (error, htmlStr) => {
             let htmlStrWithData = UtilsHelper.replaceAllStr({ base_url: UtilsHelper.getBaseURL(), user: params.customer_name, retail_coupon: params.bill_id, support_email: config.get("mail.from"), expire_date: DateHelper.addDayToCurDate(90) }, htmlStr);
             nodeMailerServiceIns.sendMarketing(null, params.email, "Retail Coupon", htmlStrWithData);
         })
 
         fileReaderServiceIns.readEmailTemplate("retailer_customer.html", (error, htmlStr) => {
-            let htmlStrWithData = UtilsHelper.replaceAllStr({ base_url: UtilsHelper.getBaseURL(), user: params.customer_name, email: params.email, contact: params.contact, bill_id: params.bill_id, retailer_name: retailerDetails.retailer_name, retailer_number: retailerDetails.phone_number }, htmlStr);
-            nodeMailerServiceIns.sendMarketing(null, "marketing@etark.in", "Retail Coupon", htmlStrWithData);
+            let htmlStrWithData = UtilsHelper.replaceAllStr({ base_url: UtilsHelper.getBaseURL(), user: params.customer_name, email: params.email, contact: params.contact, bill_id: params.bill_id, retailer_name: retailerDetails.retailer_name, retailer_number: retailerDetails.phone_number, imei: params.imei, expiration_time: DateHelper.addDayToCurDate(90) }, htmlStr);
+            let email = "marketing@etark.in";
+            // let email = "iamabornprogrammer@gmail.com";
+            nodeMailerServiceIns.sendMarketing(null, email, "Retail Coupon", htmlStrWithData);
         })
     }
 
