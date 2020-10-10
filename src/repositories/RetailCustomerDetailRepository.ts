@@ -13,6 +13,7 @@ export class RetailCustomerDetailRepository extends BaseRepository {
             contact: params.contact,
             bill_id: params.bill_id,
             maker_id: params.maker_id,
+            imei: params.imei,
         })
         return result;
     }

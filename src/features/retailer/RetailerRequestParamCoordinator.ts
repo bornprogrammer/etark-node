@@ -46,6 +46,7 @@ export class RetailerRequestParamCoordinator extends RequestParamsValidatorCoord
             bill_id: Joi.string().alphanum().required(),
             maker_id: Joi.string().min(1).required(),
             retailer_id: Joi.string().min(1).required(),
+            imei: Joi.string().min(1).required(),
         })
     }
 

@@ -35,7 +35,7 @@ export class RetailerRepositoryService extends BaseRepositoryService {
 
     public addCustomerDetails = async (methodParamEntity: MethodParamEntity) => {
         let params = methodParamEntity.topMethodParam;
-        let result = await retailCustomerDetailRepositoryIns.create({ customer_name: params.customer_name, bill_id: params.bill_id, contact: params.contact, email: params.email, maker_id: params.maker_id });
+        let result = await retailCustomerDetailRepositoryIns.create({ customer_name: params.customer_name, bill_id: params.bill_id, contact: params.contact, email: params.email, maker_id: params.maker_id, imei: params.imei });
         return result;
     }
 

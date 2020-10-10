@@ -9,6 +9,7 @@ export interface RetailCustomerDetailAttributes {
     contact: string;
     bill_id: string;
     maker_id: number;
+    imei?: number;
 }
 
 export class RetailCustomerDetail extends Model implements RetailCustomerDetailAttributes {
@@ -18,6 +19,7 @@ export class RetailCustomerDetail extends Model implements RetailCustomerDetailA
     contact: string;
     bill_id: string;
     maker_id: number;
+    imei?: number;
 }
 
 RetailCustomerDetail.init({
@@ -44,6 +46,10 @@ RetailCustomerDetail.init({
     },
     maker_id: {
         type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+    },
+    imei: {
+        type: DataTypes.STRING,
         allowNull: false,
     }
 }, {
