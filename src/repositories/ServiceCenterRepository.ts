@@ -83,6 +83,18 @@ export class ServiceCenterRepository extends BaseRepository {
         return result[0]['order_count'];
     }
 
+    public getAllOrderCountForCurrentWeek = async (scId: number) => {
+        let query = `select count(activities.activity_id) as order_count from pickup_deliveries inner join (select min(id) as activity_id,pickup_delivery_id from service_center_activities group by pickup_delivery_id) as activities on pickup_deliveries.id = activities.pickup_delivery_id inner join service_center_activities on activities.activity_id=service_center_activities.id where service_center_id =:service_center_id and YEARWEEK(service_center_activities.created_at)=YEARWEEK(now())`;
+        let result = await sequelizeConnection.connection.query(query, { type: QueryTypes.SELECT, replacements: { service_center_id: scId } });
+        return result[0]['order_count'];
+    }
+
+    public getAllOrderCountForLastWeek = async (scId: number) => {
+        let query = `select count(activities.activity_id) as order_count from pickup_deliveries inner join (select min(id) as activity_id,pickup_delivery_id from service_center_activities group by pickup_delivery_id) as activities on pickup_deliveries.id = activities.pickup_delivery_id inner join service_center_activities on activities.activity_id=service_center_activities.id where service_center_id =:service_center_id and YEARWEEK(service_center_activities.created_at)=YEARWEEK(now() - INTERVAL 1 WEEK)`;
+        let result = await sequelizeConnection.connection.query(query, { type: QueryTypes.SELECT, replacements: { service_center_id: scId } });
+        return result[0]['order_count'];
+    }
+
     public getCompletedOrderCount = async (scId: number) => {
         let result = await this.getOrderCountByType(scId, [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_DISPATCHED]);
         return result[0]['order_count'];
@@ -233,6 +245,44 @@ export class ServiceCenterRepository extends BaseRepository {
             }
         })
         return result;
+    }
+
+    public getOrderCountForCurrentWeekByType = async (scId: number, lastActivityType: any) => {
+        let activityTypes = ArrayHelper.convertArrayToMysqlInOpStr(lastActivityType);
+        let query = `select count(activities.activity_id) as order_count from pickup_deliveries inner join (select max(id) as activity_id,pickup_delivery_id from service_center_activities group by pickup_delivery_id) as activities on pickup_deliveries.id = activities.pickup_delivery_id inner join service_center_activities on activities.activity_id=service_center_activities.id and service_center_activities.activity_type in ${activityTypes}
+        where YEARWEEK(service_center_activities.created_at)=YEARWEEK(now()) and service_center_id =:service_center_id and status in ('success','service_denied')`;
+        let result = await sequelizeConnection.connection.query(query, { type: QueryTypes.SELECT, replacements: { service_center_id: scId } });
+        return result;
+    }
+
+    public getOrderCountForLastWeekByType = async (scId: number, lastActivityType: any) => {
+        let activityTypes = ArrayHelper.convertArrayToMysqlInOpStr(lastActivityType);
+        let query = `select count(activities.activity_id) as order_count from pickup_deliveries inner join (select max(id) as activity_id,pickup_delivery_id from service_center_activities group by pickup_delivery_id) as activities on pickup_deliveries.id = activities.pickup_delivery_id inner join service_center_activities on activities.activity_id=service_center_activities.id and service_center_activities.activity_type in ${activityTypes}
+        where YEARWEEK(service_center_activities.created_at)=YEARWEEK(now()  - INTERVAL 1 WEEK) and service_center_id =:service_center_id and status in ('success','service_denied')`;
+        let result = await sequelizeConnection.connection.query(query, { type: QueryTypes.SELECT, replacements: { service_center_id: scId } });
+        return result;
+    }
+
+    public getOngoingOrderCountForCurrentWeek = async (scId: number) => {
+        let scActivities = await serviceCenterServiceIns.getServiceCenterActivityTypeByOrderType(ServiceCenterOrderTypeEnum.ORDER_TYPE_IN_PROCESS);
+        let result = await this.getOrderCountForCurrentWeekByType(scId, scActivities);
+        return result[0]['order_count'];
+    }
+
+    public getOngoingOrderCountForLastWeek = async (scId: number) => {
+        let scActivities = await serviceCenterServiceIns.getServiceCenterActivityTypeByOrderType(ServiceCenterOrderTypeEnum.ORDER_TYPE_IN_PROCESS);
+        let result = await this.getOrderCountForLastWeekByType(scId, scActivities);
+        return result[0]['order_count'];
+    }
+
+    public getCompletedOrderCountForCurrentWeek = async (scId: number) => {
+        let result = await this.getOrderCountForCurrentWeekByType(scId, [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_DISPATCHED]);
+        return result[0]['order_count'];
+    }
+
+    public getCompletedOrderCountForLastWeek = async (scId: number) => {
+        let result = await this.getOrderCountForLastWeekByType(scId, [ServiceCenterActivityTypeEnum.ACTIVITY_TYPE_DISPATCHED]);
+        return result[0]['order_count'];
     }
 }
 

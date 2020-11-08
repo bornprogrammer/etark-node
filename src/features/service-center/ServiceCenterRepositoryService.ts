@@ -248,6 +248,34 @@ export class ServiceCenterRepositoryService extends BaseRepositoryService {
             },
             order_type_count_details: { all: 0, completed: 0, order_request: 0, in_process: 0, decline: 0 }
         }
+
+        let totalOrderForCurrentWeek = await serviceCenterRepositoryIns.getAllOrderCountForCurrentWeek(topParams.sc_id);
+
+        let totalOrderForLastWeek = await serviceCenterRepositoryIns.getAllOrderCountForLastWeek(topParams.sc_id);
+
+        let ongoingOrderForCurrentWeek = await serviceCenterRepositoryIns.getOngoingOrderCountForCurrentWeek(topParams.sc_id);
+
+        let ongoingOrderForLastWeek = await serviceCenterRepositoryIns.getOngoingOrderCountForLastWeek(topParams.sc_id);
+
+        let completedOrderForCurrentWeek = await serviceCenterRepositoryIns.getCompletedOrderCountForCurrentWeek(topParams.sc_id);
+
+        let completedOrderForLastWeek = await serviceCenterRepositoryIns.getCompletedOrderCountForLastWeek(topParams.sc_id);
+
+        result.trends_detais.total_order = totalOrderForCurrentWeek;
+
+        result.trends_detais.total_order_percentage = totalOrderForLastWeek > 0 ? (totalOrderForCurrentWeek - totalOrderForLastWeek) / totalOrderForLastWeek * 100 : (totalOrderForCurrentWeek - totalOrderForLastWeek) * 100;
+
+        result.trends_detais.order_ongoing = ongoingOrderForCurrentWeek;
+
+        result.trends_detais.order_ongoing_percentage = ongoingOrderForLastWeek > 0 ? (ongoingOrderForCurrentWeek - ongoingOrderForLastWeek) / ongoingOrderForLastWeek * 100 : (ongoingOrderForCurrentWeek - 0) * 100;
+
+
+        result.trends_detais.order_completed = completedOrderForCurrentWeek;
+
+        result.trends_detais.order_completed_percentage = completedOrderForLastWeek > 0 ? (completedOrderForCurrentWeek - completedOrderForLastWeek) / completedOrderForLastWeek * 100 : (ongoingOrderForCurrentWeek - 0) * 100;
+
+
+
         result.order_type_count_details.all = await serviceCenterRepositoryIns.getAllOrderCount(topParams.sc_id);
         result.order_type_count_details.completed = await serviceCenterRepositoryIns.getCompletedOrderCount(topParams.sc_id);
         result.order_type_count_details.order_request = await serviceCenterRepositoryIns.getOrderRequestOrderCount(topParams.sc_id);
